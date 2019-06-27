@@ -13,6 +13,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -96,11 +97,12 @@ class GlobalHandlerCommon {
                 DataBufferUtils.release(buffer);
                 bodyRef.set(charBuffer.toString());
             });
-            log.info("{} {} {} {} {}",
-                    "Gateway Response ",
+            log.info("{} method:{} url:{} body:{} rsp:{} timeOff:{}",
+                    "The Gateway Global Handler",
                     exchange.getRequest().getMethodValue(),
                     exchange.getRequest().getURI().toString(),
                     bodyRef.get(),
+                    "",
                     (System.currentTimeMillis() - startTime) + "ms"
             );
         }
