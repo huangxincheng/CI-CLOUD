@@ -65,7 +65,8 @@ public class GlobalApiResponse<T> implements Serializable {
     public static GlobalApiResponse toFail(Exception e) {
         log.error("The GlobalApiResponse toFail code = "+UNKNOW_CODE+" msg = " + UNKONW_CODE_MSG, e);
         return new GlobalApiResponse()
-                .setCode(UNKNOW_CODE).setMsg(UNKONW_CODE_MSG)
+                .setCode(UNKNOW_CODE)
+                .setMsg(UNKONW_CODE_MSG)
                 .setTraceId(MDC.get("X-B3-TraceId"));
     }
 
@@ -78,6 +79,19 @@ public class GlobalApiResponse<T> implements Serializable {
      */
     public static GlobalApiResponse toFail(int code, String errorMsg) {
         log.error("The GlobalApiResponse toFail code = {} msg = {}", code, errorMsg);
+        return new GlobalApiResponse().setCode(code).setMsg(errorMsg).setTraceId(MDC.get("X-B3-TraceId"));
+    }
+
+
+    /**
+     * 失败时返回
+     *
+     * @param code
+     * @param errorMsg
+     * @return
+     */
+    public static GlobalApiResponse toFail(int code, String errorMsg, Throwable throwable) {
+        log.error("The GlobalApiResponse toFail code = " + code + " msg = " + errorMsg, throwable);
         return new GlobalApiResponse().setCode(code).setMsg(errorMsg).setTraceId(MDC.get("X-B3-TraceId"));
     }
 }

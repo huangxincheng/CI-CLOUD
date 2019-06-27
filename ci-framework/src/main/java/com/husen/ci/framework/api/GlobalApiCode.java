@@ -39,7 +39,17 @@ public interface GlobalApiCode {
     /**
      * 业务未知错误响应码信息
      */
-    String UNKONW_CODE_MSG = "UNKNOW";
+    String UNKONW_CODE_MSG = "BUSIN_UNKNOW";
+
+    /**
+     * 业务Hystrix未知错误响应码
+     */
+    int HYSTRIX_UNKNOW_CODE = -10003;
+
+    /**
+     * 业务Hystrix未知错误响应码信息
+     */
+    String HYSTRIX_UNKNOW_CODE_MSG = "HYSTRIX_UNKNOW";
 
     /**
      * 鉴权失败

@@ -33,5 +33,5 @@ public interface OrderClient {
      * @return
      */
     @PostMapping("api/v1/order/save")
-    GlobalApiResponse<Boolean> saveOrder(@RequestBody GlobalApiRequest request);
+    GlobalApiResponse saveOrder(@RequestBody GlobalApiRequest request);
 }
