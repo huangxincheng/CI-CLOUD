@@ -27,7 +27,7 @@ public class OrderClientFallbackFactory implements FallbackFactory<OrderClient> 
 
             @Override
             public GlobalApiResponse<Boolean> saveOrder(GlobalApiRequest request) {
-                return GlobalApiResponse.toFail(HYSTRIX_UNKNOW_CODE,HYSTRIX_UNKNOW_CODE_MSG, throwable);
+                return GlobalApiResponse.toFail(HYSTRIX_UNKNOW_CODE, HYSTRIX_UNKNOW_CODE_MSG, throwable);
             }
         };
     }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  @DESC: TODO
  @VERSION: 1.0
  ***/
-@FeignClient(name = ProjectCommon.ORDER_SERVICE)
+@FeignClient(name = ProjectCommon.ORDER_SERVICE, fallbackFactory = OrderClientFallbackFactory.class)
 public interface OrderClient {
 
     /**
