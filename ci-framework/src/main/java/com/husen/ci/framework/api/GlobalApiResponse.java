@@ -94,4 +94,8 @@ public class GlobalApiResponse<T> implements Serializable {
         log.error("The GlobalApiResponse toFail code = " + code + " msg = " + errorMsg, throwable);
         return new GlobalApiResponse().setCode(code).setMsg(errorMsg).setTraceId(MDC.get("X-B3-TraceId"));
     }
+
+    public boolean ok() {
+        return this.code == SUCCESS_CODE;
+    }
 }
