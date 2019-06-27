@@ -95,6 +95,10 @@ public class GlobalApiResponse<T> implements Serializable {
         return new GlobalApiResponse().setCode(code).setMsg(errorMsg).setTraceId(MDC.get("X-B3-TraceId"));
     }
 
+    /**
+     * 判断是否请求成功
+     * @return
+     */
     public boolean ok() {
         return this.code == SUCCESS_CODE;
     }
