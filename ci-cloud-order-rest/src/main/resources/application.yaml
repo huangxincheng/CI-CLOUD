@@ -19,3 +19,8 @@ spring:
     nacos:
       discovery:
         server-addr: www.limaila.com:8848
+
+
+feign:
+  hystrix:
+    enabled: true
