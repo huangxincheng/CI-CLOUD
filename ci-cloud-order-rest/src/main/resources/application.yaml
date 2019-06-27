@@ -19,6 +19,8 @@ spring:
     nacos:
       discovery:
         server-addr: www.limaila.com:8848
+  jackson:
+    default-property-inclusion: non_null
 
 
 feign:
