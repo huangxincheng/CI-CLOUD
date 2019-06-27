@@ -1,0 +1,49 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: www.limaila.com:8848
+    gateway:
+      default-filters:
+      - name: Hystrix
+        args:
+          name: fallbackCmd
+          fallbackUri: forward:/fallbackCmd
+      - name: Global
+        args:
+          handler: true
+      routes:
+      - id: ci-cloud-order
+        uri: lb://ci-cloud-order
+        predicates:
+        - name: Path
+          args[pattern]: /order/**
+        filters:
+        - StripPrefix=1
+        - AddRequestHeader=X-Request-Foo, Bar
+      - id: ci-cloud-user
+        uri: lb://ci-cloud-user
+        predicates:
+        - name: Path
+          args[pattern]: /user/**
+        filters:
+        - StripPrefix=1
+        - AddRequestHeader=X-Request-Foo, Bar
+
+logging:
+  path: ${user.home}/${spring.application.name}
+  level:
+    root: info
+    com:
+      alibaba:
+        nacos:
+          client:
+            naming: error
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 8000

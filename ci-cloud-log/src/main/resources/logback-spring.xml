@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--
+       说明：
+       1、日志级别及文件
+           日志记录采用分级记录，级别与日志文件名相对应，不同级别的日志信息记录到不同的日志文件中
+           例如：error级别记录到log_error_xxx.log或log_error.log（该文件为当前记录的日志文件），而log_error_xxx.log为归档日志，
+           日志文件按日期记录，同一天内，若日志文件大小等于或大于2M，则按0、1、2...顺序分别命名
+           例如log-level-2013-12-21.0.log
+           其它级别的日志也是如此。
+       2、文件路径
+           若开发、测试用，在Eclipse中运行项目，则到Eclipse的安装路径查找logs文件夹，以相对路径../logs。
+           若部署到Tomcat下，则在Tomcat下的logs文件中
+       3、Appender
+           FILEERROR对应error级别，文件名以log-error-xxx.log形式命名
+           FILEWARN对应warn级别，文件名以log-warn-xxx.log形式命名
+           FILEINFO对应info级别，文件名以log-info-xxx.log形式命名
+           FILEDEBUG对应debug级别，文件名以log-debug-xxx.log形式命名
+           stdout将日志信息输出到控制上，为方便开发测试使用
+    -->
+
+    <!-- 读取application.properties的变量 -->
+    <springProperty scope="context" name="logPath" source="logging.path" defaultValue="app/logs"/>
+    <springProperty scope="context" name="applicationName" source="spring.application.name" defaultValue="undefined"/>
+    <springProperty scope="context" name="logLevel" source="logging.level.root" defaultValue="debug"/>
+
+    <contextName>${applicationName}</contextName>
+    <!--设置系统日志路径 -->
+    <property name="LOG_PATH" value="${logPath}" />
+    <!--设置系统日志目录-->
+    <property name="LOG_DIR" value="${applicationName}"/>
+
+    <conversionRule conversionWord="IP" converterClass="com.husen.ci.log.logback.IpConvent"/>
+
+    <!-- 输出到文件 -->
+    <!--
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+         <file>${LOG_PATH}/${LOG_DIR}/service.log</file>
+         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+             <fileNamePattern>${LOG_PATH}/${LOG_DIR}/archive/service-%d{yyyy-MM-dd}-%i.log.gz</fileNamePattern>
+             <maxHistory>30</maxHistory>
+             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                 <maxFileSize>1GB</maxFileSize>
+             </timeBasedFileNamingAndTriggeringPolicy>
+         </rollingPolicy>
+         <append>true</append>
+         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+             <customFields>{"appname":"${applicationName}"}</customFields>
+         </encoder>
+     </appender>
+     -->
+
+    <!-- 输出到桌面 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!--encoder 默认配置为PatternLayoutEncoder-->
+        <encoder>
+            <pattern>
+                [%IP] [%X{X-B3-TraceId:-}] [%X{X-B3-SpanId:-}] [%d{yyyyMMdd:HH:mm:ss.SSS}] [%logger] [%thread] %-5level %msg%n
+            </pattern>
+            <charset>utf-8</charset>
+        </encoder>
+        <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>debug</level>
+        </filter>
+    </appender>
+
+    <!-- 输出到logstash -->
+    <!--
+    <appender name="logStashAppender" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+         <destination>www.limaila.com:9250</destination>
+         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+             <customFields>{"appname":"${applicationName}"}</customFields>
+         </encoder>
+     </appender>
+     -->
+
+    <!-- 输出到kafka -->
+    <appender name="kafkaAppender" class="com.github.danielwegener.logback.kafka.KafkaAppender">
+        <topic>ci-log-kafka-topic</topic>
+        <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.NoKeyKeyingStrategy"/>
+        <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy"/>
+        <producerConfig>bootstrap.servers=single.kafka.sizne.net:9092</producerConfig>
+        <producerConfig>acks=0</producerConfig>
+        <producerConfig>linger.ms=1000</producerConfig>
+        <producerConfig>max.block.ms=0</producerConfig>
+        <producerConfig>client.id=${HOSTNAME}-${CONTEXT_NAME}-logback-relaxed</producerConfig>
+        <!--
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"appname":"${applicationName}","ctime":"%d{yyyy-MM-dd HH:mm:ss.SSS}"}</customFields>
+            <timeZone>UTC+8</timeZone>
+        </encoder>
+        -->
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC+8</timeZone>
+                </timestamp>
+                <mdc/>
+                <pattern>
+                    <pattern>
+                        {"HOSTNAME":"${HOSTNAME}","IP":"%IP","APPNAME":"${applicationName}","X-B3-TraceId":"[%X{X-B3-TraceId:-}]","X-B3-SpanId":"[%X{X-B3-SpanId:-}]", "ctime":"%d{yyyy-MM-dd HH:mm:ss.SSS}","thread":"[%thread]","level":"%-5level","logger":"%logger","msg":"%msg"}%n
+                    </pattern>
+                </pattern>
+                <stackTrace>
+                    <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                        <maxDepthPerThrowable>30</maxDepthPerThrowable>
+                        <maxLength>2048</maxLength>
+                        <shortenedClassNameLength>20</shortenedClassNameLength>
+                        <exclude>^sun\.reflect\..*\.invoke</exclude>
+                        <exclude>^net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
+                        <rootCauseFirst>true</rootCauseFirst>
+                    </throwableConverter>
+                </stackTrace>
+            </providers>
+        </encoder>
+    </appender>
+
+    <!-- TRACE, DEBUG, INFO, WARN, ERROR, ALL, OFF -->
+    <!-- 生产环境下，将此级别配置为适合的级别，以免日志文件太多或影响程序性能 -->
+    <root level="${logLevel}">
+        <!-- 生产环境将请stdout,testfile去掉 -->
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="kafkaAppender"/>
+    </root>
+
+</configuration>

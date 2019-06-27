@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ci-cloud-gateway
+
+server:
+  port: 80

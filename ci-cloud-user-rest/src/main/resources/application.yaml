@@ -1,0 +1,22 @@
+server:
+  port: 30081
+
+logging:
+  path: ${user.home}/${spring.application.name}
+  level:
+    root: info
+    com:
+      alibaba:
+        nacos:
+          client:
+            naming: error
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://mongo.limaila.com/ci-user
+      port: 27017
+  cloud:
+    nacos:
+      discovery:
+        server-addr: www.limaila.com:8848
