@@ -1,6 +1,5 @@
 package com.husen.ci.gateway;
 
-import com.auth0.jwt.JWT;
 import com.husen.ci.framework.api.GlobalApiCode;
 import com.husen.ci.framework.api.GlobalApiResponse;
 import com.husen.ci.framework.auth.JwtUtils;
@@ -15,7 +14,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -40,7 +38,7 @@ class GlobalHandlerCommon {
      * @param exchange
      * @return
      */
-    public static boolean isPassAuth(ServerWebExchange exchange) {
+    static boolean isPassAuth(ServerWebExchange exchange) {
         List<String> authList = exchange.getRequest().getHeaders().get(PASS_AUTH);
         if (authList != null && authList.size() > 0) {
             return true;
@@ -57,7 +55,7 @@ class GlobalHandlerCommon {
      * @param exchange
      * @return
      */
-    public static boolean isAuth(ServerWebExchange exchange) {
+    static boolean isAuth(ServerWebExchange exchange) {
         List<String> authTokenList = exchange.getRequest().getHeaders().get(AUTH_TOKEN);
         String authToken;
         if (authTokenList != null && authTokenList.size() > 0) {
@@ -74,7 +72,7 @@ class GlobalHandlerCommon {
      * @param exchange
      * @return
      */
-    public static Mono<Void> returnAuthFail(ServerWebExchange exchange) {
+    static Mono<Void> returnAuthFail(ServerWebExchange exchange) {
         // 不能pass的直接失败
         exchange.getResponse().setStatusCode(HttpStatus.OK);
         exchange.getResponse().getHeaders().add("Content-Type", "application/json;charset=UTF-8");
@@ -93,7 +91,7 @@ class GlobalHandlerCommon {
      * @param result
      * @return
      */
-    public static DataBuffer getBodyBuffer(ServerHttpResponse response, GlobalApiResponse result) {
+    private static DataBuffer getBodyBuffer(ServerHttpResponse response, GlobalApiResponse result) {
         return response.bufferFactory().wrap(JSONUtils.object2Bytes(result));
     }
 
@@ -101,7 +99,7 @@ class GlobalHandlerCommon {
      * 处理前存入请求时间
      * @param exchange
      */
-    public static void handlerPre(ServerWebExchange exchange) {
+    static void handlerPre(ServerWebExchange exchange) {
         exchange.getAttributes().put(GATEWAY_START_TIME, System.currentTimeMillis());
     }
 
@@ -109,7 +107,7 @@ class GlobalHandlerCommon {
      * 处理后打印日志
      * @param exchange
      */
-    public static void handlerPost(ServerWebExchange exchange) {
+    static void handlerPost(ServerWebExchange exchange) {
         Long startTime = exchange.getAttribute(GATEWAY_START_TIME);
         if (startTime != null) {
             Flux<DataBuffer> body = exchange.getRequest().getBody();
