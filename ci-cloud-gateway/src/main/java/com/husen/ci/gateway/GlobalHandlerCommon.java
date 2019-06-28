@@ -1,7 +1,9 @@
 package com.husen.ci.gateway;
 
+import com.auth0.jwt.JWT;
 import com.husen.ci.framework.api.GlobalApiCode;
 import com.husen.ci.framework.api.GlobalApiResponse;
+import com.husen.ci.framework.auth.JwtUtils;
 import com.husen.ci.framework.json.JSONUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -31,6 +33,8 @@ class GlobalHandlerCommon {
 
     private static final String PASS_AUTH = "I_PASS_AUTH";
 
+    private static final String AUTH_TOKEN = "AUTH_TOKEN";
+
     /**
      * 判断是否Pass认证
      * @param exchange
@@ -49,6 +53,23 @@ class GlobalHandlerCommon {
     }
 
     /**
+     * 判断是否正常成功
+     * @param exchange
+     * @return
+     */
+    public static boolean isAuth(ServerWebExchange exchange) {
+        List<String> authTokenList = exchange.getRequest().getHeaders().get(AUTH_TOKEN);
+        String authToken;
+        if (authTokenList != null && authTokenList.size() > 0) {
+             authToken = authTokenList.get(0);
+        } else {
+            authToken = exchange.getRequest().getQueryParams().getFirst(AUTH_TOKEN);
+        }
+        //TODO 这里只简单判断校验就行, 后面可以增加判断Redis中是否存在
+        return JwtUtils.checkFormToken(authToken);
+    }
+
+    /**
      * 返回认证失败
      * @param exchange
      * @return
@@ -63,6 +84,7 @@ class GlobalHandlerCommon {
                                 GlobalApiResponse.toFail(GlobalApiCode.UNAUTH_CODE, GlobalApiCode.UNAUTH_CODE_MSG)))
                 ).then(Mono.fromRunnable(() ->  GlobalHandlerCommon.handlerPost(exchange)));
     }
+
 
     /**
      * 封装返回值
