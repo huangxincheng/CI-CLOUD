@@ -21,14 +21,20 @@ public class JwtUtils {
 
     /**
      * Base64加密key，然后再生产token
-     * @throws Exception
      */
-    public static String encodeToToken(String key) {
-        Date date = DateUtils.localDateTime2Date(LocalDateTime.now().plusSeconds(DEFAULT_EXPIRE_SECOND));
+    public static String encodeToToken(String key, int second) {
+        Date date = DateUtils.localDateTime2Date(LocalDateTime.now().plusSeconds(second));
         return JWT.create()
                 .withClaim(JWT_KEY_ID, CryptoUtils.encodeBASE64(key))
                 .withExpiresAt(date)
                 .sign(Algorithm.HMAC256(UUID.randomUUID().toString()));
+    }
+
+    /**
+     * Base64加密key，然后再生产token
+     */
+    public static String encodeToToken(String key) {
+        return encodeToToken(key, DEFAULT_EXPIRE_SECOND);
     }
 
     /**
