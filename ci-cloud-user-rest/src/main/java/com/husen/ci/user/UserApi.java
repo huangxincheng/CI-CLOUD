@@ -43,22 +43,26 @@ public class UserApi {
     }
 
     @RequestMapping("/getAll")
+    @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse getAll() {
         return GlobalApiResponse.toSuccess(userService.getAll());
     }
 
     @RequestMapping("/saveUser/{userName}")
+    @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse saveUser(@PathVariable String userName) {
         User user = new User().setUserName(userName);
         return GlobalApiResponse.toSuccess(userService.createUser(user));
     }
 
     @RequestMapping("/saveOrder")
+    @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse saveOrder(@RequestBody GlobalApiRequest<Order> request) {
         return orderClient.saveOrder(request);
     }
 
     @RequestMapping("/queryOrder/{orderNo}")
+    @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse queryOrder(@PathVariable Long orderNo) {
         return orderClient.getOrder(orderNo);
     }
