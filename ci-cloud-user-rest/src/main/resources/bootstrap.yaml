@@ -1,3 +1,11 @@
 spring:
   application:
     name: ci-cloud-user
+  cloud:
+    nacos:
+      config:
+        server-addr: www.limaila.com:8848
+        file-extension: yaml
+        group: CI-CLOUD
+      discovery:
+        server-addr: www.limaila.com:8848
