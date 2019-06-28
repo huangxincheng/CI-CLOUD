@@ -22,7 +22,7 @@ public class JwtUtils {
     /**
      * Base64加密key，然后再生产token
      */
-    public static String encodeToToken(String key, int second) {
+    public static String encodeToToken(String key, long second) {
         Date date = DateUtils.localDateTime2Date(LocalDateTime.now().plusSeconds(second));
         return JWT.create()
                 .withClaim(JWT_KEY_ID, CryptoUtils.encodeBASE64(key))
@@ -61,9 +61,7 @@ public class JwtUtils {
     }
 
     public static void main(String[] args) {
-        String s = encodeToToken("123");
+        String s = encodeToToken("10001", 36000000);
         System.out.println(s);
-        System.out.println(checkFormToken(s));
-        System.out.println(decodeFormTokenn(s));
     }
 }
