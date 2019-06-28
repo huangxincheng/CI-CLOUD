@@ -80,7 +80,7 @@ class GlobalHandlerCommon {
                 .writeWith(
                         Flux.just(GlobalHandlerCommon.getBodyBuffer(exchange.getResponse(),
                                 GlobalApiResponse.toFail(GlobalApiCode.UNAUTH_CODE, GlobalApiCode.UNAUTH_CODE_MSG)))
-                ).then(Mono.fromRunnable(() ->  GlobalHandlerCommon.handlerPost(exchange)));
+                );
     }
 
 

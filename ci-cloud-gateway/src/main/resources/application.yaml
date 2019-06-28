@@ -12,6 +12,7 @@ spring:
       - name: Global
         args:
           handler: true
+      - name: Auth
       routes:
       - id: ci-cloud-order
         uri: lb://ci-cloud-order
