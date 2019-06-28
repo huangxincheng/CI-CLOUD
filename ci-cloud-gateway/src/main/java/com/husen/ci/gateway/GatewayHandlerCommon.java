@@ -19,7 +19,6 @@ import reactor.core.publisher.Mono;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 /***
@@ -29,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
  @VERSION: 1.0
  ***/
 @Slf4j
-class GlobalHandlerCommon {
+class GatewayHandlerCommon {
 
     private static final String GATEWAY_START_TIME = "GATEWAY_START_TIME";
 
@@ -107,7 +106,7 @@ class GlobalHandlerCommon {
         exchange.getResponse().getHeaders().add("Content-Type", "application/json;charset=UTF-8");
         return exchange.getResponse()
                 .writeWith(
-                        Flux.just(GlobalHandlerCommon.getBodyBuffer(exchange.getResponse(),
+                        Flux.just(GatewayHandlerCommon.getBodyBuffer(exchange.getResponse(),
                                 GlobalApiResponse.toFail(GlobalApiCode.UNAUTH_CODE, GlobalApiCode.UNAUTH_CODE_MSG)))
                 );
     }

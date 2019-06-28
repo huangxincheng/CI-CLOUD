@@ -32,8 +32,8 @@ public class AuthGatewayFilterFactory extends AbstractGatewayFilterFactory<AuthG
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
-            if (!GlobalHandlerCommon.isPassAuth(exchange, config) && !GlobalHandlerCommon.isAuth(exchange)) {
-                return GlobalHandlerCommon.returnAuthFail(exchange);
+            if (!GatewayHandlerCommon.isPassAuth(exchange, config) && !GatewayHandlerCommon.isAuth(exchange)) {
+                return GatewayHandlerCommon.returnAuthFail(exchange);
             }
             return chain.filter(exchange);
         });

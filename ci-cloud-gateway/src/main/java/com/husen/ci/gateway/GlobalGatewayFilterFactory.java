@@ -40,8 +40,8 @@ public class GlobalGatewayFilterFactory extends AbstractGatewayFilterFactory<Glo
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
-            GlobalHandlerCommon.handlerPre(exchange);
-            return chain.filter(exchange).then(Mono.fromRunnable(() -> GlobalHandlerCommon.handlerPost(exchange)));
+            GatewayHandlerCommon.handlerPre(exchange);
+            return chain.filter(exchange).then(Mono.fromRunnable(() -> GatewayHandlerCommon.handlerPost(exchange)));
         });
     }
 
