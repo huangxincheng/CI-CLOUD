@@ -43,23 +43,23 @@ public class UserApi {
     }
 
     @RequestMapping("/getAll")
-    public GlobalApiResponse<Collection<User>> getAll() {
+    public GlobalApiResponse getAll() {
         return GlobalApiResponse.toSuccess(userService.getAll());
     }
 
     @RequestMapping("/saveUser/{userName}")
-    public GlobalApiResponse<User> saveUser(@PathVariable String userName) {
+    public GlobalApiResponse saveUser(@PathVariable String userName) {
         User user = new User().setUserName(userName);
         return GlobalApiResponse.toSuccess(userService.createUser(user));
     }
 
     @RequestMapping("/saveOrder")
-    public GlobalApiResponse<Boolean> saveOrder(@RequestBody GlobalApiRequest<Order> request) {
+    public GlobalApiResponse saveOrder(@RequestBody GlobalApiRequest<Order> request) {
         return orderClient.saveOrder(request);
     }
 
     @RequestMapping("/queryOrder/{orderNo}")
-    public GlobalApiResponse<Order> queryOrder(@PathVariable Long orderNo) {
+    public GlobalApiResponse queryOrder(@PathVariable Long orderNo) {
         return orderClient.getOrder(orderNo);
     }
 
