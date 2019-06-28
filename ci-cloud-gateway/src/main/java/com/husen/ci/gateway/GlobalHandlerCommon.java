@@ -5,6 +5,9 @@ import com.husen.ci.framework.api.GlobalApiResponse;
 import com.husen.ci.framework.auth.JwtUtils;
 import com.husen.ci.framework.json.JSONUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.cloud.gateway.route.Route;
+import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import reactor.core.publisher.Mono;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 /***
@@ -38,7 +42,7 @@ class GlobalHandlerCommon {
      * @param exchange
      * @return
      */
-    static boolean isPassAuth(ServerWebExchange exchange) {
+    static boolean isPassAuth(ServerWebExchange exchange, AuthGatewayFilterFactory.Config config) {
         List<String> authList = exchange.getRequest().getHeaders().get(PASS_AUTH);
         if (authList != null && authList.size() > 0) {
             return true;
@@ -46,6 +50,31 @@ class GlobalHandlerCommon {
         String authParam = exchange.getRequest().getQueryParams().getFirst(PASS_AUTH);
         if (authParam != null) {
             return true;
+        }
+        // 获取当前调整的route
+        return isIgnoreAuth(exchange, config);
+    }
+
+    /**
+     * 是否是忽略认证
+     * @param exchange
+     * @param config
+     * @return
+     */
+    private static boolean isIgnoreAuth(ServerWebExchange exchange, AuthGatewayFilterFactory.Config config) {
+        Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
+        String rawPath = exchange.getRequest().getURI().getRawPath();
+        List<AuthGatewayFilterFactory.ServiceRoute> ignore = config.getIgnore();
+        if (ignore != null && ignore.size() > 0) {
+            for (AuthGatewayFilterFactory.ServiceRoute serviceRoute : ignore) {
+                if (StringUtils.equals(serviceRoute.getService(), route.getId())) {
+                    for (String uri : serviceRoute.getUri()) {
+                        if (rawPath.startsWith(uri)) {
+                            return true;
+                        }
+                    }
+                }
+            }
         }
         return false;
     }

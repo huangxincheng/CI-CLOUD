@@ -1,9 +1,9 @@
 package com.husen.ci.gateway;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +17,9 @@ import java.util.List;
 @Slf4j
 public class AuthGatewayFilterFactory extends AbstractGatewayFilterFactory<AuthGatewayFilterFactory.Config> {
 
+
+    private static final String IGNORE = "ignore";
+
     /**
      * constructor
      */
@@ -29,7 +32,7 @@ public class AuthGatewayFilterFactory extends AbstractGatewayFilterFactory<AuthG
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
-            if (!GlobalHandlerCommon.isPassAuth(exchange) && !GlobalHandlerCommon.isAuth(exchange)) {
+            if (!GlobalHandlerCommon.isPassAuth(exchange, config) && !GlobalHandlerCommon.isAuth(exchange)) {
                 return GlobalHandlerCommon.returnAuthFail(exchange);
             }
             return chain.filter(exchange);
@@ -38,13 +41,26 @@ public class AuthGatewayFilterFactory extends AbstractGatewayFilterFactory<AuthG
 
     @Override
     public List<String> shortcutFieldOrder() {
-        return Arrays.asList();
+        return Arrays.asList(IGNORE);
     }
 
     /**
      * 自定义的config类，用来设置传入的参数
      */
+    @Data
     public static class Config {
 
+        private List<ServiceRoute> ignore;
+    }
+
+    /**
+     * 自定义的ServiceRoute 用来设置Config中的配置
+     */
+    @Data
+    public static class ServiceRoute {
+
+        private String service;
+
+        private List<String> uri;
     }
 }

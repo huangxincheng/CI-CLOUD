@@ -13,6 +13,11 @@ spring:
         args:
           handler: true
       - name: Auth
+        args:
+          ignore:
+          - service: ci-cloud-order
+            uri:
+            - /api/v1/order/get
       routes:
       - id: ci-cloud-order
         uri: lb://ci-cloud-order
