@@ -1,6 +1,11 @@
 spring:
   application:
     name: ci-cloud-gateway
-
-server:
-  port: 80
+  cloud:
+    nacos:
+      config:
+        server-addr: www.limaila.com:8848
+        file-extension: yaml
+        group: CI-CLOUD
+      discovery:
+        server-addr: www.limaila.com:8848
