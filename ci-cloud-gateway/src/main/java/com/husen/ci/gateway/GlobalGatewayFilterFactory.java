@@ -41,7 +41,7 @@ public class GlobalGatewayFilterFactory extends AbstractGatewayFilterFactory<Glo
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
             GlobalHandlerCommon.handlerPre(exchange);
-            if (!GlobalHandlerCommon.isPassAuth(exchange) || !GlobalHandlerCommon.isAuth(exchange)) {
+            if (!GlobalHandlerCommon.isPassAuth(exchange) && !GlobalHandlerCommon.isAuth(exchange)) {
                 return GlobalHandlerCommon.returnAuthFail(exchange);
             }
             return chain.filter(exchange).then(Mono.fromRunnable(() -> GlobalHandlerCommon.handlerPost(exchange)));

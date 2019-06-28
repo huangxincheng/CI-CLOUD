@@ -7,6 +7,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.husen.ci.framework.date.DateUtils;
 import com.husen.ci.framework.utils.CryptoUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -49,10 +50,12 @@ public class JwtUtils {
 
     public static boolean checkFormToken(String token) {
         try {
-            DecodedJWT decode = JWT.decode(token);
-            LocalDateTime expiresAt = DateUtils.date2LocalDateTime(decode.getExpiresAt());
-            if (DateUtils.getMilllis(LocalDateTime.now()) <= DateUtils.getMilllis(expiresAt)) {
-                return true;
+            if (!StringUtils.isEmpty(token)) {
+                DecodedJWT decode = JWT.decode(token);
+                LocalDateTime expiresAt = DateUtils.date2LocalDateTime(decode.getExpiresAt());
+                if (DateUtils.getMilllis(LocalDateTime.now()) <= DateUtils.getMilllis(expiresAt)) {
+                    return true;
+                }
             }
         } catch (Exception ex){
             log.error("JwtUtils checkFormToken fail", ex);
