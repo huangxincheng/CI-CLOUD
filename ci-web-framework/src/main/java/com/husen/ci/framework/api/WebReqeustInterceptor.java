@@ -1,9 +1,7 @@
 package com.husen.ci.framework.api;
 
-import com.husen.ci.framework.json.JSONUtils;
-import com.husen.ci.framework.logback.IpConvent;
-import com.husen.ci.framework.utils.IpUtils;
 import com.husen.ci.framework.api.WebRequestContext.WebRequestBean;
+import com.husen.ci.framework.utils.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.web.servlet.HandlerInterceptor;

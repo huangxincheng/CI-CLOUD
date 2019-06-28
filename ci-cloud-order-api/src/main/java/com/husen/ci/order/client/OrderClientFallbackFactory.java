@@ -6,8 +6,8 @@ import com.husen.ci.order.pojo.Order;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
 
-import static com.husen.ci.framework.api.GlobalApiCode.HYSTRIX_UNKNOW_CODE;
-import static com.husen.ci.framework.api.GlobalApiCode.HYSTRIX_UNKNOW_CODE_MSG;
+import static com.husen.ci.framework.api.GlobalApiCode.FEIGN_HYSTRIX_UNKNOW_CODE;
+import static com.husen.ci.framework.api.GlobalApiCode.FEIGN_HYSTRIX_UNKNOW_CODE_MSG;
 
 /***
  @Author:MrHuang
@@ -22,12 +22,12 @@ public class OrderClientFallbackFactory implements FallbackFactory<OrderClient> 
         return new OrderClient() {
             @Override
             public GlobalApiResponse<Order> getOrder(Long orderNo) {
-                return GlobalApiResponse.toFail(HYSTRIX_UNKNOW_CODE, HYSTRIX_UNKNOW_CODE_MSG, throwable);
+                return GlobalApiResponse.toFail(FEIGN_HYSTRIX_UNKNOW_CODE, FEIGN_HYSTRIX_UNKNOW_CODE_MSG, throwable);
             }
 
             @Override
             public GlobalApiResponse<Boolean> saveOrder(GlobalApiRequest request) {
-                return GlobalApiResponse.toFail(HYSTRIX_UNKNOW_CODE, HYSTRIX_UNKNOW_CODE_MSG, throwable);
+                return GlobalApiResponse.toFail(FEIGN_HYSTRIX_UNKNOW_CODE, FEIGN_HYSTRIX_UNKNOW_CODE_MSG, throwable);
             }
         };
     }

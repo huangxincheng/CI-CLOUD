@@ -41,20 +41,34 @@ public interface GlobalApiCode {
      */
     String UNKONW_CODE_MSG = "BUSIN_UNKNOW";
 
-    /**
-     * 业务Hystrix未知错误响应码
-     */
-    int HYSTRIX_UNKNOW_CODE = -10003;
 
     /**
-     * 业务Hystrix未知错误响应码信息
+     * Server端业务Hystrix未知错误响应码
      */
-    String HYSTRIX_UNKNOW_CODE_MSG = "HYSTRIX_UNKNOW";
+    int SERVER_HYSTRIX_UNKONW_CODE = -10002;
+
+    /**
+     * Server端业务Hystrix未知错误响应码信息
+     */
+    String SERVER_HYSTRIX_UNKNOW_CODE_MSG = "SERVER_HYSTRIX_UNKNOW";
+
+    /**
+     * Feign端业务Hystrix未知错误响应码
+     */
+    int FEIGN_HYSTRIX_UNKNOW_CODE = -10003;
+
+    /**
+     * Feign端业务Hystrix未知错误响应码信息
+     */
+    String FEIGN_HYSTRIX_UNKNOW_CODE_MSG = "FEIGN_HYSTRIX_UNKNOW";
+
+
+
 
     /**
      * 鉴权失败
      */
-    int UNAUTH_CODE = -10002;
+    int UNAUTH_CODE = -20000;
 
     /**
      * 鉴权失败
