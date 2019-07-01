@@ -21,6 +21,7 @@
          <module>ci-cloud-gateway</module>
          <module>ci-cloud-log</module>
          <module>ci-cloud-mq</module>
+         <module>ci-cloud-cache</module>
      </modules>
 
     <properties>

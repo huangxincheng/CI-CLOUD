@@ -9,32 +9,20 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ci-web-framework</artifactId>
+    <artifactId>ci-cloud-cache</artifactId>
 
     <dependencies>
+        <!-- Redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.husen</groupId>
             <artifactId>ci-framework</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- 整合sleuth 实现分布式traceId-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-sleuth</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.husen</groupId>
-            <artifactId>ci-cloud-log</artifactId>
-            <version>1.1</version>
-        </dependency>
-
     </dependencies>
 
 </project>
