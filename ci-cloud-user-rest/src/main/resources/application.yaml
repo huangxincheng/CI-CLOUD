@@ -25,6 +25,6 @@ feign:
 
 
 rocketmq:
-  name-server: 47.106.95.198:9876
+  name-server: www.limaila.com:9876
   producer:
     group: ${spring.application.name}

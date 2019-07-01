@@ -46,6 +46,12 @@
             <artifactId>ci-web-framework</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.husen</groupId>
+            <artifactId>ci-cloud-mq</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

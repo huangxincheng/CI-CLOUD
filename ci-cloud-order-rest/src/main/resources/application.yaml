@@ -22,3 +22,8 @@ spring:
 feign:
   hystrix:
     enabled: true
+
+rocketmq:
+  name-server: www.limaila.com:9876
+  producer:
+    group: ${spring.application.name}
