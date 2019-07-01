@@ -14,6 +14,9 @@ spring:
           handler: true
       - name: Auth
         args:
+          notAuthService:
+          - ci-cloud-order
+          - ci-cloud-user
           ignore:
           - service: ci-cloud-order
             uri:

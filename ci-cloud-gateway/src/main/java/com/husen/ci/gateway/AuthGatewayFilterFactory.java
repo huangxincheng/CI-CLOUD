@@ -51,6 +51,8 @@ public class AuthGatewayFilterFactory extends AbstractGatewayFilterFactory<AuthG
     public static class Config {
 
         private List<ServiceRoute> ignore;
+
+        private List<String> notAuthService;
     }
 
     /**
