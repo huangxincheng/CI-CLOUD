@@ -3,6 +3,7 @@ package com.husen.ci.user;
 import com.husen.ci.framework.api.GlobalApiCode;
 import com.husen.ci.framework.api.GlobalApiRequest;
 import com.husen.ci.framework.api.GlobalApiResponse;
+import com.husen.ci.mq.MqUtils;
 import com.husen.ci.order.client.OrderClient;
 import com.husen.ci.order.pojo.Order;
 import com.husen.ci.user.pojo.User;
@@ -67,6 +68,10 @@ public class UserApi {
         return orderClient.getOrder(orderNo);
     }
 
+    @RequestMapping("/sendMQ/{topic}/{tags}/{msg}")
+    public GlobalApiResponse sendMQ(@PathVariable String topic, @PathVariable String tags, @PathVariable String msg) {
+         return GlobalApiResponse.toSuccess(MqUtils.syncSend(topic, tags, msg));
+    }
 
     public GlobalApiResponse defaultFallback(Throwable throwable) {
         return GlobalApiResponse.toFail(GlobalApiCode.SERVER_HYSTRIX_UNKONW_CODE, GlobalApiCode.SERVER_HYSTRIX_UNKNOW_CODE_MSG, throwable);

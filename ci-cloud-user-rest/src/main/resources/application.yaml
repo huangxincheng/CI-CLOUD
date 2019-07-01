@@ -22,3 +22,9 @@ spring:
 feign:
   hystrix:
     enabled: true
+
+
+rocketmq:
+  name-server: 47.106.95.198:9876
+  producer:
+    group: ${spring.application.name}

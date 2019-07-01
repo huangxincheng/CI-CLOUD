@@ -20,6 +20,7 @@
          <module>ci-cloud-user-rest</module>
          <module>ci-cloud-gateway</module>
          <module>ci-cloud-log</module>
+         <module>ci-cloud-mq</module>
      </modules>
 
     <properties>
@@ -28,6 +29,7 @@
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
         <alibaba-cloud.version>0.9.0.RELEASE</alibaba-cloud.version>
         <dubbo.version>2.7.1</dubbo.version>
+        <rocketmq-boot.version>2.0.3</rocketmq-boot.version>
         <ci.version>1.1</ci.version>
     </properties>
 
@@ -49,12 +51,19 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- 整合aliCloud-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
                 <version>${alibaba-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq-boot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
