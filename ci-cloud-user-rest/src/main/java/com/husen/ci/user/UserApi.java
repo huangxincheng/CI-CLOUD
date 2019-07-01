@@ -71,7 +71,7 @@ public class UserApi {
     @RequestMapping("/sendMQ/{topic}/{tags}/{msg}")
     @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse sendMQ(@PathVariable String topic, @PathVariable String tags, @PathVariable String msg) {
-         return GlobalApiResponse.toSuccess(MqUtils.syncSend(topic, tags, msg));
+         return GlobalApiResponse.toSuccess(MqUtils.syncSendDelay(topic, tags, msg, 2));
     }
 
     public GlobalApiResponse defaultFallback(Throwable throwable) {
