@@ -185,12 +185,13 @@ class GatewayHandlerCommon {
      */
     static void handlerPost(ServerWebExchange exchange) {
         Long startTime = exchange.getAttribute(GATEWAY_START_TIME);
+        Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         if (startTime != null) {
-            log.info("{} method:{} url:{} body:{} timeOff:{}",
+            log.info("{} method:{} url:{} route:{} timeOff:{}",
                     "The Gateway Global Handler",
                     exchange.getRequest().getMethodValue(),
                     exchange.getRequest().getURI().toString(),
-                    Optional.ofNullable(exchange.getAttribute(GATEWAY_BODY)).orElse(""),
+                    Optional.ofNullable(route).map(Route::getId).orElse(""),
                     (System.currentTimeMillis() - startTime) + "ms"
             );
         }
