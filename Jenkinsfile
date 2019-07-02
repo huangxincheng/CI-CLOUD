@@ -16,7 +16,7 @@ pipeline {
 
     environment {
         // 总项目
-        project = ''
+        deployProject = ''
         // 部署人员名称
         deployUserName = ''
         // Git克隆地址
@@ -59,7 +59,7 @@ pipeline {
         stage('初始化参数') {
             steps {
                 script {
-                    project = 'CI-CLOUD'
+                    deployProject = 'CI-CLOUD'
                     deployUserName = 'huangxincheng'
                     cloneGitUrl =  'https://github.com/huangxincheng/CI'
                     cloneGitBranch = params.branch
@@ -73,7 +73,7 @@ pipeline {
         stage('代码拉取') {
             steps {
                 script {
-                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step1-pullCode.sh ${cloneGitBranch} ${cloneGitUrl} ${project}"
+                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step1-pullCode.sh ${cloneGitBranch} ${cloneGitUrl} ${deployProject}"
                 }
             }
         }
@@ -81,14 +81,14 @@ pipeline {
             steps {
                 script {
                     // 远程 k8s-master进行打包
-                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step2-compileCode.sh ${project}"
+                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step2-compileCode.sh ${deployProject}"
                 }
             }
         }
         stage('生成镜像') {
             steps {
                 script {
-                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step3-buildDockerImage.sh ${deployAppName} ${deployAppVersion} ${project}"
+                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step3-buildDockerImage.sh ${deployAppName} ${deployAppVersion} ${deployProject}"
                 }
             }
         }
