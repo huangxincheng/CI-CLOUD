@@ -23,10 +23,10 @@ spec:
         app: ci-cloud-order-rest
     spec:
       # 允许master节点部署
-      tolerations:
-      - key: node-role.kubernetes.io/master
-        operator: Exists
-        effect: NoSchedule
+#      tolerations:
+#      - key: node-role.kubernetes.io/master
+#        operator: Exists
+#        effect: NoSchedule
       containers:
       - name: ci-cloud-order-rest
         image: registry-vpc.cn-shenzhen.aliyuncs.com/huangxincheng/ci-cloud-order-rest:1.1

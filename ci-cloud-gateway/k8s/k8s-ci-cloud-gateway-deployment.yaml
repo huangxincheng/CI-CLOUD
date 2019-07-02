@@ -23,10 +23,10 @@ spec:
         app: ci-cloud-gateway
     spec:
       # 允许master节点部署
-      tolerations:
-      - key: node-role.kubernetes.io/master
-        operator: Exists
-        effect: NoSchedule
+#      tolerations:
+#      - key: node-role.kubernetes.io/master
+#        operator: Exists
+#        effect: NoSchedule
       containers:
       - name: ci-cloud-gateway
         image: registry-vpc.cn-shenzhen.aliyuncs.com/huangxincheng/ci-cloud-gateway:1.1
