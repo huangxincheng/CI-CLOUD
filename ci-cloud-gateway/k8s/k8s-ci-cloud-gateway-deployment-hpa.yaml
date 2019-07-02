@@ -1,0 +1,13 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ci-cloud-gateway
+  namespace: ci-cloud
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: ci-cloud-gateway
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
