@@ -3,9 +3,14 @@ package com.husen.ci.gateway;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +47,9 @@ public class GlobalGatewayFilterFactory extends AbstractGatewayFilterFactory<Glo
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
             GatewayHandlerCommon.handlerPre(exchange);
-            return chain.filter(exchange).then(Mono.fromRunnable(() -> GatewayHandlerCommon.handlerPost(exchange)));
+            return chain.filter(exchange).then(Mono.fromRunnable(() ->  {
+                GatewayHandlerCommon.handlerPost(exchange);
+            }));
         });
     }
 

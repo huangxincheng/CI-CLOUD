@@ -12,10 +12,7 @@ import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.NettyDataBufferFactory;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
@@ -36,13 +33,22 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 class GatewayHandlerCommon {
 
-    private static final String GATEWAY_START_TIME = "GATEWAY_START_TIME";
+    public static final String GATEWAY_START_TIME = qualify("GATEWAY_START_TIME");
 
-    private static final String GATEWAY_BODY = "GATEWAY_BODY";
+    public static final String GATEWAY_BODY = qualify("GATEWAY_BODY");
 
     private static final String PASS_AUTH = "I_PASS_AUTH";
 
     private static final String AUTH_TOKEN = "AUTH_TOKEN";
+
+    /**
+     * 增加前缀
+     * @param attr
+     * @return
+     */
+    private static String qualify(String attr) {
+        return GatewayHandlerCommon.class.getName() + "." + attr;
+    }
 
     /**
      * 判断是否Pass认证
@@ -122,7 +128,7 @@ class GatewayHandlerCommon {
         exchange.getResponse().getHeaders().add("Content-Type", "application/json;charset=UTF-8");
         return exchange.getResponse()
                 .writeWith(
-                        Flux.just(GatewayHandlerCommon.getBodyBuffer(exchange.getResponse(),
+                        Flux.just(GatewayHandlerCommon.getDataBuffer(exchange.getResponse(),
                                 GlobalApiResponse.toFail(GlobalApiCode.UNAUTH_CODE, GlobalApiCode.UNAUTH_CODE_MSG)))
                 );
     }
@@ -134,7 +140,7 @@ class GatewayHandlerCommon {
      * @param result
      * @return
      */
-    private static DataBuffer getBodyBuffer(ServerHttpResponse response, GlobalApiResponse result) {
+    private static DataBuffer getDataBuffer(ServerHttpResponse response, GlobalApiResponse result) {
         return response.bufferFactory().wrap(JSONUtils.object2Bytes(result));
     }
 
@@ -144,7 +150,7 @@ class GatewayHandlerCommon {
      * @param result
      * @return
      */
-    private static DataBuffer getBodyBuffer(Object result) {
+    private static DataBuffer getDataBuffer(Object result) {
         byte[] bytes = JSONUtils.object2Bytes(result);
         NettyDataBufferFactory nettyDataBufferFactory = new NettyDataBufferFactory(ByteBufAllocator.DEFAULT);
         DataBuffer buffer = nettyDataBufferFactory.allocateBuffer(bytes.length);
@@ -157,7 +163,7 @@ class GatewayHandlerCommon {
      * @param result
      * @return
      */
-    private static DataBuffer getBodyBuffer(String result) {
+    private static DataBuffer getDataBuffer(String result) {
         byte[] bytes = result.getBytes(StandardCharsets.UTF_8);
         NettyDataBufferFactory nettyDataBufferFactory = new NettyDataBufferFactory(ByteBufAllocator.DEFAULT);
         DataBuffer buffer = nettyDataBufferFactory.allocateBuffer(bytes.length);
