@@ -102,7 +102,7 @@ pipeline {
         stage('K8S部署项目') {
             steps {
                 script {
-                    sh "ssh root@47.106.95.198 deployAppByAliYunImage.sh ${deployAppName} ${dockerVersion}"
+                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step5-k8sDeploy.sh ${deployAppName} ${dockerVersion} ${deployProject}"
                 }
             }
         }
