@@ -61,7 +61,7 @@ pipeline {
                 script {
                     deployProject = 'CI-CLOUD'
                     deployUserName = 'huangxincheng'
-                    cloneGitUrl =  'https://github.com/huangxincheng/CI'
+                    cloneGitUrl =  'https://github.com/huangxincheng/CI-CLOUD'
                     cloneGitBranch = params.branch
                     deployAppName = params.project
                     deployAppVersion = "1.1"
