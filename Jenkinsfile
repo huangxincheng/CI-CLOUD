@@ -15,6 +15,8 @@ pipeline {
     agent any
 
     environment {
+        // 总项目
+        project = ''
         // 部署人员名称
         deployUserName = ''
         // Git克隆地址
@@ -57,6 +59,7 @@ pipeline {
         stage('初始化参数') {
             steps {
                 script {
+                    project = 'CI-CLOUD'
                     deployUserName = 'huangxincheng'
                     cloneGitUrl =  'https://github.com/huangxincheng/CI'
                     cloneGitBranch = params.branch
@@ -70,7 +73,7 @@ pipeline {
         stage('代码拉取') {
             steps {
                 script {
-                    sh "ssh root@47.106.95.198 clone.sh ${cloneGitBranch} ${cloneGitUrl}"
+                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step1-pullCode.sh ${cloneGitBranch} ${cloneGitUrl} ${project}"
                 }
             }
         }
@@ -78,21 +81,21 @@ pipeline {
             steps {
                 script {
                     // 远程 k8s-master进行打包
-                    sh "ssh root@47.106.95.198 compile.sh"
+                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step2-compileCode.sh ${project}"
                 }
             }
         }
         stage('生成镜像') {
             steps {
                 script {
-                    sh "ssh root@47.106.95.198 buildImage.sh ${deployAppName} ${deployAppVersion}"
+                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step3-buildDockerImage.sh ${deployAppName} ${deployAppVersion} ${project}"
                 }
             }
         }
         stage('上传本地镜像到阿里云仓库') {
             steps {
                 script {
-                    sh "ssh root@47.106.95.198 uploadLocalDockerImageToAliYun.sh ${deployAppName} ${deployAppVersion} ${dockerVersion}"
+                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step4-uploadDockerImage.sh ${deployAppName} ${deployAppVersion} ${dockerVersion}"
                 }
             }
         }
