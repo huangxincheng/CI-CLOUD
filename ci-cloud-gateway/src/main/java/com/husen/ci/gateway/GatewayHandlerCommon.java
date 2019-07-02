@@ -35,7 +35,9 @@ class GatewayHandlerCommon {
 
     public static final String GATEWAY_START_TIME = qualify("GATEWAY_START_TIME");
 
-    public static final String GATEWAY_BODY = qualify("GATEWAY_BODY");
+    public static final String GATEWAY_REQUEST_BODY = qualify("GATEWAY_REQUEST_BODY");
+
+    public static final String GATEWAY_RESPONSE_RESULT = qualify("GATEWAY_RESPONSE_RESULT");
 
     private static final String PASS_AUTH = "I_PASS_AUTH";
 
