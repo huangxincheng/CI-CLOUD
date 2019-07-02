@@ -110,9 +110,17 @@ pipeline {
             steps {
                 script {
                     // 待补充
-                    echo "OK"
+                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step6-checkProjectStatus.sh"
                 }
             }
+        }
+        stage('回收镜像') {
+                    steps {
+                        script {
+                            // 待补充
+                            sh "ssh root@47.106.95.198 sh /root/ci-cloud/step7-recycleImage.sh"
+                        }
+                    }
         }
     }
 }
