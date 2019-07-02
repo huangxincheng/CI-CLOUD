@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
+
 /***
  @Author:MrHuang
  @Date: 2019/6/28 18:23
- @DESC: TODO
+ @DESC: TODO MQ发送消息Utils
  @VERSION: 1.0
  ***/
 @Component
@@ -21,6 +23,9 @@ public class MqUtils {
     private static RocketMQTemplate rocketMQTemplate;
 
     private static String buildDestination(String topic, String tags) {
+        if (StringUtils.isBlank(topic)) {
+            throw new MqException("The MqUtils topic not null");
+        }
         if (StringUtils.isBlank(tags)) {
             return topic;
         }

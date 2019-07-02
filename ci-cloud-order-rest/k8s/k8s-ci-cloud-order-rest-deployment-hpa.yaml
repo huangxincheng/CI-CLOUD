@@ -1,0 +1,13 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ci-cloud-order-rest
+  namespace: ci-cloud
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: ci-cloud-order-rest
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80

@@ -1,0 +1,71 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ci-cloud-order-rest
+  labels:
+    app: ci-cloud-order-rest
+  namespace: ci-cloud
+spec:
+  # 副本数
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ci-cloud-order-rest
+  minReadySeconds: 30
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: ci-cloud-order-rest
+    spec:
+      # 允许master节点部署
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: ci-cloud-order-rest
+        image: registry-vpc.cn-shenzhen.aliyuncs.com/huangxincheng/ci-cloud-order-rest:1.1
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1024Mi"
+            cpu: "500m"
+        lifecycle:
+          preStop:
+            exec:
+              command:
+                - ls /root
+        env:
+        - name: JAVA_OPTS
+          value: "-server -Xmx512m -Xms512m"
+        volumeMounts:
+        - mountPath: /root/ci-cloud-order-rest
+          name: logs
+      volumes:
+      - name: logs
+        hostPath:
+          path: /logs
+
+---
+
+# 正常情况只有网关才需要暴露nodePort。
+# 暂时没有网关，故暴露nodePort
+apiVersion: v1
+kind: Service
+metadata:
+  name: ci-cloud-order-rest
+  namespace: ci-cloud
+spec:
+  type: NodePort
+  ports:
+  - port: 30082
+    nodePort: 30082
+  selector:
+    app: ci-cloud-order-rest
