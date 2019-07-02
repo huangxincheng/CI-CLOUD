@@ -9,5 +9,5 @@ spec:
     kind: Deployment
     name: ci-cloud-gateway
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 2
   targetCPUUtilizationPercentage: 80
