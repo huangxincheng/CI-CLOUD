@@ -9,5 +9,5 @@ spec:
     kind: Deployment
     name: ci-cloud-user-rest
   minReplicas: 1
-  maxReplicas: 2
+  maxReplicas: 1
   targetCPUUtilizationPercentage: 80
