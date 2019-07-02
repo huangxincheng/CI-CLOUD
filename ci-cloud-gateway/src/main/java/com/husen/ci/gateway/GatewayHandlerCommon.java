@@ -4,13 +4,18 @@ import com.husen.ci.framework.api.GlobalApiCode;
 import com.husen.ci.framework.api.GlobalApiResponse;
 import com.husen.ci.framework.auth.JwtUtils;
 import com.husen.ci.framework.json.JSONUtils;
+import io.netty.buffer.ByteBufAllocator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.core.io.buffer.NettyDataBufferFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
@@ -19,6 +24,7 @@ import reactor.core.publisher.Mono;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 /***
@@ -31,6 +37,8 @@ import java.util.concurrent.atomic.AtomicReference;
 class GatewayHandlerCommon {
 
     private static final String GATEWAY_START_TIME = "GATEWAY_START_TIME";
+
+    private static final String GATEWAY_BODY = "GATEWAY_BODY";
 
     private static final String PASS_AUTH = "I_PASS_AUTH";
 
@@ -121,8 +129,7 @@ class GatewayHandlerCommon {
 
 
     /**
-     * 封装返回值
-     *
+     * 将result转换成DataBuffer
      * @param response
      * @param result
      * @return
@@ -131,8 +138,35 @@ class GatewayHandlerCommon {
         return response.bufferFactory().wrap(JSONUtils.object2Bytes(result));
     }
 
+
     /**
-     * 处理前存入请求时间
+     * 将result转换成DataBuffer
+     * @param result
+     * @return
+     */
+    private static DataBuffer getBodyBuffer(Object result) {
+        byte[] bytes = JSONUtils.object2Bytes(result);
+        NettyDataBufferFactory nettyDataBufferFactory = new NettyDataBufferFactory(ByteBufAllocator.DEFAULT);
+        DataBuffer buffer = nettyDataBufferFactory.allocateBuffer(bytes.length);
+        buffer.write(bytes);
+        return buffer;
+    }
+
+    /**
+     * 将result转换成DataBuffer
+     * @param result
+     * @return
+     */
+    private static DataBuffer getBodyBuffer(String result) {
+        byte[] bytes = result.getBytes(StandardCharsets.UTF_8);
+        NettyDataBufferFactory nettyDataBufferFactory = new NettyDataBufferFactory(ByteBufAllocator.DEFAULT);
+        DataBuffer buffer = nettyDataBufferFactory.allocateBuffer(bytes.length);
+        buffer.write(bytes);
+        return buffer;
+    }
+
+    /**
+     * 处理前存入请求时间 替换Request Body数据请求
      * @param exchange
      */
     static void handlerPre(ServerWebExchange exchange) {
@@ -146,19 +180,11 @@ class GatewayHandlerCommon {
     static void handlerPost(ServerWebExchange exchange) {
         Long startTime = exchange.getAttribute(GATEWAY_START_TIME);
         if (startTime != null) {
-            Flux<DataBuffer> body = exchange.getRequest().getBody();
-            AtomicReference<String> bodyRef = new AtomicReference<>();
-            body.subscribe(buffer -> {
-                CharBuffer charBuffer = StandardCharsets.UTF_8.decode(buffer.asByteBuffer());
-                DataBufferUtils.release(buffer);
-                bodyRef.set(charBuffer.toString());
-            });
-            log.info("{} method:{} url:{} body:{} rsp:{} timeOff:{}",
+            log.info("{} method:{} url:{} body:{} timeOff:{}",
                     "The Gateway Global Handler",
                     exchange.getRequest().getMethodValue(),
                     exchange.getRequest().getURI().toString(),
-                    bodyRef.get(),
-                    "",
+                    Optional.ofNullable(exchange.getAttribute(GATEWAY_BODY)).orElse(""),
                     (System.currentTimeMillis() - startTime) + "ms"
             );
         }
