@@ -118,7 +118,7 @@ pipeline {
                     steps {
                         script {
                             // 待补充
-                            sh "ssh root@47.106.95.198 sh /root/ci-cloud/step7-recycleImage.sh"
+                            sh "ssh root@47.106.95.198 sh /root/ci-cloud/step7-recycleImage.sh ${deployAppName} ${dockerVersion}"
                         }
                     }
         }
