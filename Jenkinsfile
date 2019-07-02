@@ -34,7 +34,7 @@ pipeline {
     tools {
             //工具名称必须在Jenkins 管理Jenkins → 全局工具配置中预配置,配置构建工具,例如：maven,gradle
             maven 'maven'
-            jdk 'jdk'
+            jdk 'java-1.8.0-openjdk'
     }
 
     post {
