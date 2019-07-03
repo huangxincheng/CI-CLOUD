@@ -20,11 +20,16 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR;
 
 /***
  @Author:MrHuang
@@ -192,11 +197,13 @@ class GatewayHandlerCommon {
     static void handlerPost(ServerWebExchange exchange) {
         Long startTime = exchange.getAttribute(GATEWAY_START_TIME);
         Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
+        LinkedHashSet<URI> originalUris = exchange.getAttribute(GATEWAY_ORIGINAL_REQUEST_URL_ATTR);
         if (startTime != null) {
-            log.info("{\"logType\":{},\"method\":{},\"url\":{},\"route\":{},\"timeOff\":{}}",
+            log.info("{\"logType\":{},\"method\":{},\"uri\":{},\"originUri\":{},\"route\":{},\"timeOff\":{}}",
                     "Rsp Data Info",
                     exchange.getRequest().getMethodValue(),
                     exchange.getRequest().getURI().toString(),
+                    Optional.ofNullable(originalUris).map(Objects::toString).orElse(""),
                     Optional.ofNullable(route).map(Route::getId).orElse(""),
                     (System.currentTimeMillis() - startTime) + "ms"
             );
