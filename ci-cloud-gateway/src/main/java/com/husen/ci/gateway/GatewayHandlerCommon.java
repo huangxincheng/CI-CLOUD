@@ -12,7 +12,9 @@ import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.NettyDataBufferFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
@@ -127,12 +129,13 @@ class GatewayHandlerCommon {
      */
     static Mono<Void> returnAuthFail(ServerWebExchange exchange) {
         // 不能pass的直接失败
+        GlobalApiResponse rsp = GlobalApiResponse.toFail(GlobalApiCode.UNAUTH_CODE, GlobalApiCode.UNAUTH_CODE_MSG);
         exchange.getResponse().setStatusCode(HttpStatus.OK);
-        exchange.getResponse().getHeaders().add("Content-Type", "application/json;charset=UTF-8");
+        exchange.getResponse().getHeaders().set(HttpHeaders.CONTENT_LENGTH, JSONUtils.object2Bytes(rsp).length + "");
+        exchange.getResponse().getHeaders().set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
         return exchange.getResponse()
                 .writeWith(
-                        Flux.just(GatewayHandlerCommon.getDataBuffer(exchange.getResponse(),
-                                GlobalApiResponse.toFail(GlobalApiCode.UNAUTH_CODE, GlobalApiCode.UNAUTH_CODE_MSG)))
+                        Flux.just(GatewayHandlerCommon.getDataBuffer(exchange.getResponse(), rsp))
                 );
     }
 
