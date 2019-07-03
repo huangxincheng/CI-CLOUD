@@ -40,12 +40,12 @@ public class RedisUtils {
     private static final Long LOCK_SUCCESS = 1L;
 
     /**
-     * 获取不阻塞的锁脚本
+     * 获取不阻塞的锁lua脚本
      */
     private static final String NO_BLOCK_LOCK_SCRIPT = "if redis.call('set', KEYS[1], ARGV[1], 'NX', 'EX', ARGV[2]) then return 1 else return 0 end";
 
     /**
-     * 施法锁脚本
+     * 释放锁lua脚本
      */
     private static final String RELEASE_LOCK_SCRIPT = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
     /**
