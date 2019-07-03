@@ -80,6 +80,12 @@ public class RedisUtils {
 
 
     /***--------------------------- Base ------------------------------- ***/
+
+    /**
+     * 删除某个key
+     * @param key
+     * @return
+     */
     public static Boolean delete(String key) {
         try {
             return template.delete(key);
@@ -89,10 +95,20 @@ public class RedisUtils {
         }
     }
 
+    /**
+     * 删除一些key
+     * @param keys
+     * @return
+     */
     public static Long delete(String ... keys) {
         return delete(Arrays.asList(keys));
     }
 
+    /**
+     * 删除一些key
+     * @param keys
+     * @return
+     */
     public static Long delete(Collection<String> keys) {
         try {
             return template.delete(keys);
@@ -102,15 +118,27 @@ public class RedisUtils {
         }
     }
 
-    public static Boolean expire(String key, long timeout) {
+    /**
+     * 设置失效时间 单位秒
+     * @param key
+     * @param timeoutSecond
+     * @return
+     */
+    public static Boolean expire(String key, long timeoutSecond) {
         try {
-            return template.expire(key, timeout, TimeUnit.SECONDS);
+            return template.expire(key, timeoutSecond, TimeUnit.SECONDS);
         } catch (Exception e) {
             log.error("RedisUtils expire", e);
             return null;
         }
     }
 
+    /**
+     * 设置失效时间 具体到日期
+     * @param key
+     * @param date
+     * @return
+     */
     public static Boolean expireAt(String key, Date date) {
         try {
             return template.expireAt(key, date);
@@ -120,6 +148,11 @@ public class RedisUtils {
         }
     }
 
+    /**
+     * 获取Key的类型
+     * @param key
+     * @return
+     */
     public static DataType type(String key) {
         try {
             DataType type = template.type(key);
@@ -130,7 +163,12 @@ public class RedisUtils {
         }
     }
 
-    public static Boolean exists(String key) {
+    /**
+     * 判断是否key存在
+     * @param key
+     * @return
+     */
+    public static Boolean hasKey(String key) {
         try {
             return template.hasKey(key);
         } catch (Exception e) {
@@ -139,6 +177,11 @@ public class RedisUtils {
         }
     }
 
+    /**
+     * 获取失效时间
+     * @param key
+     * @return
+     */
     public static Long getExpire(String key) {
         try {
             return template.getExpire(key);
