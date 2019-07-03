@@ -2,7 +2,7 @@
 #FROM fabric8/java-alpine-openjdk8-jdk
 #FROM fabric8/java-jboss-openjdk8-jdk
 #FROM openjdk:8-jdk-alpine
-FROM registry-vpc.cn-shenzhen.aliyuncs.com/huangxincheng/java-alpine-openjdk8-jdk
+FROM registry.cn-shenzhen.aliyuncs.com/huangxincheng/java-alpine-openjdk8-jdk
 MAINTAINER huangxincheng 249270087@qq.com
 VOLUME /tmp
 EXPOSE 30081
