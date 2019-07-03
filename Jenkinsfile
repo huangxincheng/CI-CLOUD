@@ -103,7 +103,7 @@ pipeline {
             steps {
                 script {
                     echo '上传本地镜像到阿里云仓库';
-                    sh "pwd;pwd;"
+                    sh "docker tag `docker images -q hxc/${deployAppName}:${deployAppVersion}` registry.cn-shenzhen.aliyuncs.com/huangxincheng/${deployAppName}:${dockerVersion}; docker push registry.cn-shenzhen.aliyuncs.com/huangxincheng/${deployAppName}:${dockerVersion}"
                     // 远程k8s-master上传镜像
                     // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step4-uploadDockerImage.sh ${deployAppName} ${deployAppVersion} ${dockerVersion}"
                 }
