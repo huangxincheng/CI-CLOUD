@@ -150,7 +150,7 @@ public class RedisUtils {
 
 
     /**
-     * 获取锁
+     * 获取不阻塞锁
      * @param lockKey 锁的key
      * @param clientId 加锁的客户端Id - 可采用UUID
      * @param expireSecond 失效时间 单位-秒
@@ -163,6 +163,32 @@ public class RedisUtils {
         Long result = template.execute(redisScript, Collections.singletonList(lockKey), clientId, String.valueOf(expireSecond));
         if(LOCK_SUCCESS.equals(result)){
             return true;
+        }
+        return false;
+    }
+
+    /**
+     * 获取阻塞锁
+     * @param lockKey
+     * @param clientId
+     * @param expireSecond
+     * @param blockMilliSecond 阻塞的毫秒数
+     * @Param sleppMilliSecond 每次请求睡眠的毫秒数
+     * @return
+     */
+    public static boolean getBlockLock(String lockKey, String clientId, int expireSecond, long blockMilliSecond, long sleppMilliSecond) {
+        while (blockMilliSecond >= 0){
+            boolean lock = getNoBlockLock(lockKey, clientId, expireSecond);
+            if (lock) {
+                return true;
+            } else {
+                blockMilliSecond -= sleppMilliSecond ;
+                try {
+                    TimeUnit.MILLISECONDS.sleep(sleppMilliSecond);
+                } catch (InterruptedException e) {
+                    return false;
+                }
+            }
         }
         return false;
     }
