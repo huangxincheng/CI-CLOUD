@@ -112,6 +112,8 @@ pipeline {
         stage('K8S部署项目') {
             steps {
                 script {
+                    echo 'K8S部署项目';
+                    sh "pwd;pwd;"
                     // 远程k8s-master部署项目
                     // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step5-k8sDeploy.sh ${deployAppName} ${dockerVersion} ${deployProject}"
                 }
@@ -120,6 +122,8 @@ pipeline {
         stage('检查项目是否正常') {
             steps {
                 script {
+                    echo '检查项目是否正常';
+                    sh "pwd;pwd;"
                     // 远程k8s-master检查项目
                     // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step6-checkProjectStatus.sh"
                 }
@@ -128,6 +132,8 @@ pipeline {
         stage('回收镜像') {
             steps {
                 script {
+                     echo '回收镜像';
+                     sh "pwd;pwd;"
                     // 远程k8s-master回收镜像
                     // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step7-recycleImage.sh ${deployAppName} ${dockerVersion}"
                 }
