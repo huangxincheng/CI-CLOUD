@@ -32,6 +32,8 @@ public class RedisUtils {
 
     private static SetOperations<String, String> sos;
 
+    private static ZSetOperations<String, String> zsos;
+
     /**
      * 获取不阻塞的锁成功返回：1
      */
@@ -73,6 +75,7 @@ public class RedisUtils {
         RedisUtils.hos = template.opsForHash();
         RedisUtils.los = template.opsForList();
         RedisUtils.sos = template.opsForSet();
+        RedisUtils.zsos = template.opsForZSet();
     }
 
 
@@ -700,8 +703,14 @@ public class RedisUtils {
 
     /***--------------------------- Set ------------------------------- ***/
 
-
-    private static Long addForSet(String key, String ...values) {
+    /**
+     * SADD key member1 [member2]
+     * 向集合添加一个或多个成员
+     * @param key
+     * @param values
+     * @return
+     */
+    public static Long addForSet(String key, String ...values) {
         try {
             return sos.add(key, values);
         } catch (Exception e) {
@@ -710,16 +719,29 @@ public class RedisUtils {
         }
     }
 
-    private static Long removeForSet(String key, String values) {
+    /**
+     * SREM key member1 [member2]
+     * 移除集合中一个或多个成员
+     * @param key
+     * @param values
+     * @return
+     */
+    public static Long removeForSet(String key, String ... values) {
         try {
-            return sos.remove(key, values);
+            return sos.remove(key, (Object[]) values);
         } catch (Exception e) {
             log.error("RedisUtils removeForSet", e);
             return null;
         }
     }
 
-    private static String popForSet(String key) {
+    /**
+     * SPOP key
+     * 移除并返回集合中的一个随机元素
+     * @param key
+     * @return
+     */
+    public static String popForSet(String key) {
         try {
             return sos.pop(key);
         } catch (Exception e) {
@@ -728,7 +750,13 @@ public class RedisUtils {
         }
     }
 
-    private static List<String> popForSet(String key, long count) {
+    /**
+     * SPOP key
+     * 移除并返回集合中的多个随机元素
+     * @param key
+     * @return
+     */
+    public static List<String> popForSet(String key, long count) {
         try {
             return sos.pop(key, count);
         } catch (Exception e) {
@@ -737,7 +765,15 @@ public class RedisUtils {
         }
     }
 
-    private static Boolean moveForSet(String key, String value, String destKey) {
+    /**
+     * 	SMOVE source destination member
+     * 将 member 元素从 source 集合移动到 destination 集合
+     * @param key
+     * @param value
+     * @param destKey
+     * @return
+     */
+    public static Boolean moveForSet(String key, String value, String destKey) {
         try {
             return sos.move(key, value, destKey);
         } catch (Exception e) {
@@ -746,7 +782,13 @@ public class RedisUtils {
         }
     }
 
-    private static Long sizeForSet(String key) {
+    /**
+     * SCARD key
+     * 获取集合的成员数
+     * @param key
+     * @return
+     */
+    public static Long sizeForSet(String key) {
         try {
             return sos.size(key);
         } catch (Exception e) {
@@ -755,7 +797,14 @@ public class RedisUtils {
         }
     }
 
-    private static Boolean isMemberForSet(String key, Object o) {
+    /**
+     * SISMEMBER key member
+     * 判断 member 元素是否是集合 key 的成员
+     * @param key
+     * @param o
+     * @return
+     */
+    public static Boolean isMemberForSet(String key, Object o) {
         try {
             return sos.isMember(key, o);
         } catch (Exception e) {
@@ -764,8 +813,14 @@ public class RedisUtils {
         }
     }
 
-
-    private static Set<String> differenceForSet(String key, String otherKey) {
+    /**
+     * SDIFF key1 [key2]
+     * 返回给定所有集合的差集
+     * @param key
+     * @param otherKey
+     * @return
+     */
+    public static Set<String> differenceForSet(String key, String otherKey) {
         try {
             return sos.difference(key, otherKey);
         } catch (Exception e) {
@@ -777,4 +832,277 @@ public class RedisUtils {
 
 
     /***--------------------------- ZSet ------------------------------- ***/
+
+
+    /**
+     * 	ZADD key score1 member1 [score2 member2]
+     * 向有序集合添加一个或多个成员，或者更新已存在成员的分数
+     * @param key
+     * @param value
+     * @param score
+     * @return
+     */
+    public static boolean addForZSet(String key, String value, double score) {
+        try {
+            return Optional.ofNullable(zsos.add(key, value, score)).orElse(false);
+        } catch (Exception e) {
+            log.error("RedisUtils addForZSet", e);
+        }
+        return false;
+    }
+
+    /**
+     * 	ZADD key score1 member1 [score2 member2]
+     * 向有序集合添加一个或多个成员，或者更新已存在成员的分数
+     * @param key
+     * @param tuples
+     * @return
+     */
+    public static Long addForZSet(String key, Set<ZSetOperations.TypedTuple<String>> tuples) {
+        return zsos.add(key, tuples);
+    }
+
+    /**
+     * ZCARD key
+     * 获取有序集合的成员数
+     * @param key
+     * @return
+     */
+    public static Long sizeForZSet(String key) {
+        try {
+            return zsos.size(key);
+        } catch (Exception e) {
+            log.error("RedisUtils sizeForZSet", e);
+        }
+        return null;
+    }
+
+    /**
+     * ZCOUNT key min max
+     * 计算在有序集合中指定区间分数的成员数
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    public static Long countForZSet(String key, double min, double max) {
+        return zsos.count(key, min, max);
+    }
+
+    /**
+     * ZINCRBY key increment member
+     * 有序集合中对指定成员的分数加上增量 increment
+     * @param key
+     * @param value
+     * @param delta
+     * @return
+     */
+    public static Double incrementScoreForZSet(String key, String value, double delta) {
+        return zsos.incrementScore(key, value, delta);
+    }
+
+    /**
+     * ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]
+     * 通过分数返回有序集合指定区间内的成员
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    public static Set<String> rangeByScoreForZSet(String key, double min, double max) {
+        return zsos.rangeByScore(key, min, max);
+    }
+
+    /**
+     * ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]
+     * 通过分数返回有序集合指定区间内的成员
+     * @param key
+     * @param min
+     * @param max
+     * @param offset
+     * @param count
+     * @return
+     */
+    public static Set<String> rangeByScoreForZSet(String key, double min, double max, long offset, long count) {
+        return zsos.rangeByScore(key, min, max, offset, count);
+    }
+
+    /**
+     * ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]
+     * 通过分数返回有序集合指定区间内的成员
+     * @param key
+     * @param min
+     * @param max
+     * @param offset
+     * @param count
+     * @return
+     */
+    public static Set<ZSetOperations.TypedTuple<String>> rangeByScoreWithScoresForZSet(String key, double min, double max) {
+        return zsos.rangeByScoreWithScores(key, min, max);
+    }
+
+    /**
+     * ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]
+     * 通过分数返回有序集合指定区间内的成员
+     * @param key
+     * @param min
+     * @param max
+     * @param offset
+     * @param count
+     * @return
+     */
+    public static Set<ZSetOperations.TypedTuple<String>> rangeByScoreWithScoresForZSet(String key, double min, double max, long offset, long count) {
+        return zsos.rangeByScoreWithScores(key, min, max, offset, count);
+    }
+
+    /**
+     * ZRANK key member
+     * 返回有序集合中指定成员的索引
+     * @param key
+     * @param value
+     * @return
+     */
+    public static Long rankForZSet(String key, Object value) {
+        return zsos.rank(key, value);
+    }
+
+    /**
+     * ZREM key member [member ...]
+     * 移除有序集合中的一个或多个成员
+     * @param key
+     * @param values
+     * @return
+     */
+    public static Long removeForZSet(String key, Object ... values) {
+        return zsos.remove(key, values);
+    }
+
+    /**
+     * 	ZREMRANGEBYLEX key min max
+     * 移除有序集合中给定的字典区间的所有成员
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    public static Long removeRangeForZSet(String key, long start, long end) {
+       return zsos.removeRange(key, start, end);
+    }
+
+    /**
+     * ZREMRANGEBYSCORE key min max
+     * 移除有序集合中给定的分数区间的所有成员
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    public static Long removeRangeByScoreForZSet(String key, double min, double max) {
+        return zsos.removeRangeByScore(key, min, max);
+    }
+
+    /**
+     * ZREVRANGE key start stop [WITHSCORES]
+     * 返回有序集中指定区间内的成员，通过索引，分数从高到底
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    public static Set<String> reverseRangeForZSet(String key, long start, long end) {
+       return zsos.reverseRange(key, start, end);
+    }
+
+    /**
+     * ZREVRANGE key start stop [WITHSCORES]
+     * 返回有序集中指定区间内的成员，通过索引，分数从高到底
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    public static Set<ZSetOperations.TypedTuple<String>> reverseRangeWithScoresForZSet(String key, long start, long end) {
+        return zsos.reverseRangeWithScores(key, start, end);
+    }
+
+    /**
+     * 	ZREVRANGEBYSCORE key max min [WITHSCORES]
+     * 返回有序集中指定分数区间内的成员，分数从高到低排序
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    public static Set<String> reverseRangeByScoreForZSet(String key, double min, double max) {
+        return zsos.reverseRangeByScore(key, min, max);
+    }
+
+    /**
+     * 	ZREVRANGEBYSCORE key max min [WITHSCORES]
+     * 返回有序集中指定分数区间内的成员，分数从高到低排序
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    public static Set<String> reverseRangeByScoreForZSet(String key, double min, double max, long offset, long count) {
+        return zsos.reverseRangeByScore(key, min, max, offset, count);
+    }
+
+    /**
+     * 	ZREVRANGEBYSCORE key max min [WITHSCORES]
+     * 返回有序集中指定分数区间内的成员，分数从高到低排序
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    public static Set<ZSetOperations.TypedTuple<String>> reverseRangeByScoreWithScoresForZSet(String key, double min, double max) {
+        return zsos.reverseRangeByScoreWithScores(key, min, max);
+    }
+
+    /**
+     * 	ZREVRANGEBYSCORE key max min [WITHSCORES]
+     * 返回有序集中指定分数区间内的成员，分数从高到低排序
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    public static Set<ZSetOperations.TypedTuple<String>> reverseRangeByScoreWithScoresForZSet(String key, double min, double max, long offset, long count) {
+        return zsos.reverseRangeByScoreWithScores(key, min, max, offset, count);
+    }
+
+    /**
+     * ZREVRANK key member
+     * 返回有序集合中指定成员的排名，有序集成员按分数值递减(从大到小)排序
+     * @param key
+     * @param value
+     * @return
+     */
+    public static Long reverseRankForZSet(String key, Object value) {
+        return zsos.reverseRank(key, value);
+    }
+
+    /**
+     * 	ZSCORE key member
+     * 返回有序集中，成员的分数值
+     * @param key
+     * @param value
+     * @return
+     */
+    public static Double scoreForZSet(String key, Object value) {
+        return zsos.score(key, value);
+    }
+
+    /**
+     * 	ZSCAN key cursor [MATCH pattern] [COUNT count]
+     * 迭代有序集合中的元素（包括元素成员和元素分值）
+     * @param key
+     * @param options
+     * @return
+     */
+    public static Cursor<ZSetOperations.TypedTuple<String>> scanForZSet(String key, ScanOptions options) {
+        return zsos.scan(key, options);
+    }
 }
