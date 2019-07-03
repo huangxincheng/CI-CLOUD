@@ -275,8 +275,12 @@ public class RedisUtils {
 
     /***--------------------------- String ------------------------------- ***/
 
-
-    public static String getToString(String key) {
+    /**
+     * Redis Get
+     * @param key
+     * @return
+     */
+    public static String getForString(String key) {
         try {
             return vos.get(key);
         } catch (Exception e) {
@@ -285,16 +289,16 @@ public class RedisUtils {
         }
     }
 
-    public static <T> T getToObject(String key, Class<T> clazz) {
-        return JSONUtils.json2Bean(getToString(key), clazz);
+    public static <T> T getObjectForString(String key, Class<T> clazz) {
+        return JSONUtils.json2Bean(getForString(key), clazz);
     }
 
-    public static <T> List<T> getToArray(String key, Class<T> clazz) {
-        return JSONUtils.json2List(getToString(key), clazz);
+    public static <T> List<T> getArrayForString(String key, Class<T> clazz) {
+        return JSONUtils.json2List(getForString(key), clazz);
     }
 
 
-    public static boolean set(String key, String value) {
+    public static boolean setForString(String key, String value) {
         try {
             vos.set(key, value);
             return true;
@@ -304,11 +308,15 @@ public class RedisUtils {
         }
     }
 
-    public static boolean set(String key, Object value) {
-        return set(key, JSONUtils.object2Json(value));
+    public static boolean setForString(String key, Object value) {
+        return setForString(key, JSONUtils.object2Json(value));
     }
 
-    public static boolean setex(String key, String value, int expire) {
+    public static boolean setForString(String key, Object value, int expire) {
+        return setForString(key, JSONUtils.object2Json(value), expire);
+    }
+
+    public static boolean setForString(String key, String value, int expire) {
         try {
             vos.set(key, value, expire, TimeUnit.SECONDS);
             return true;
@@ -318,11 +326,7 @@ public class RedisUtils {
         }
     }
 
-    public static boolean setex(String key, Object value, int expire) {
-        return setex(key, JSONUtils.object2Json(value), expire);
-    }
-
-    public static boolean setnx(String key, String value) {
+    public static boolean setIfAbsentForString(String key, String value) {
         try {
             return Optional.ofNullable(vos.setIfAbsent(key, value)).orElse(false);
         } catch (Exception e) {
@@ -331,7 +335,7 @@ public class RedisUtils {
         }
     }
 
-    public static Long incr(String key, long delta) {
+    public static Long incrementForString(String key, long delta) {
         try {
             return vos.increment(key, delta);
         } catch (Exception e) {
@@ -341,7 +345,7 @@ public class RedisUtils {
     }
 
 
-    public static Double incr(String key, double delta) {
+    public static Double incrementForString(String key, double delta) {
         try {
             return vos.increment(key, delta);
         } catch (Exception e) {
@@ -350,21 +354,21 @@ public class RedisUtils {
         }
     }
 
-    public static Long decr(String key, long delta) {
-        return incr(key, -delta);
+    public static Long decrementForString(String key, long delta) {
+        return incrementForString(key, -delta);
     }
 
 
-    public static Double decr(String key, double delta) {
-        return incr(key, -delta);
+    public static Double decrementForString(String key, double delta) {
+        return incrementForString(key, -delta);
     }
 
 
-    public static List<String> mget(String... keys) {
-        return mget(Arrays.asList(keys));
+    public static List<String> multiGetForString(String... keys) {
+        return multiGetForString(Arrays.asList(keys));
     }
 
-    public static List<String> mget(Collection<String> keys) {
+    public static List<String> multiGetForString(Collection<String> keys) {
         try {
             return vos.multiGet(keys);
         } catch (Exception e) {
@@ -373,7 +377,7 @@ public class RedisUtils {
         }
     }
 
-    public static boolean mset(Map<String, String> map) {
+    public static boolean multiSetForString(Map<String, String> map) {
         try {
             vos.multiSet(map);
             return true;
@@ -383,7 +387,7 @@ public class RedisUtils {
         }
     }
 
-    public static String getAndSet(String key, String value) {
+    public static String getAndSetForString(String key, String value) {
         try {
             return vos.getAndSet(key, value);
         } catch (Exception e) {
@@ -393,7 +397,7 @@ public class RedisUtils {
     }
 
 
-    public static Long size(String key) {
+    public static Long sizeForString(String key) {
         try {
             return vos.size(key);
         } catch (Exception e) {
@@ -402,7 +406,7 @@ public class RedisUtils {
         }
     }
 
-    public static Boolean msetnx(Map<String,String> map) {
+    public static Boolean multiSetIfAbsentForString(Map<String,String> map) {
         try {
             return vos.multiSetIfAbsent(map);
         } catch (Exception e) {
