@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  ***/
 @Component
 @Slf4j
-@RocketMQMessageListener(topic = "test-topic", selectorExpression = "test-tag", consumerGroup = "CI-CLOUG-MQ")
+@RocketMQMessageListener(topic = "test-topic", selectorExpression = "test-tag", consumerGroup = "${spring.application.name}")
 public class TestConsumer implements RocketMQListener<String> {
     @Override
     public void onMessage(String message) {
