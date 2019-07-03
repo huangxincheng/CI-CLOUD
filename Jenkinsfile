@@ -93,7 +93,7 @@ pipeline {
             steps {
                 script {
                     echo '本地生成镜像';
-                    sh "pwd;pwd;";
+                    sh "cp ./${deployAppName}/target/${deployAppName}.jar ./${deployAppName}/docker; cd ${deployAppName}/docker; docker build -f ./Dockerfile -t hxc/$deployAppName:$deployAppVersion .";
                     // 远程 k8s-master生成镜像
                     // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step3-buildDockerImage.sh ${deployAppName} ${deployAppVersion} ${deployProject}"
                 }
