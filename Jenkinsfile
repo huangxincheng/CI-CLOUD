@@ -133,7 +133,7 @@ pipeline {
             steps {
                 script {
                      echo '回收镜像';
-                     sh "docker images|grep registry.cn-shenzhen.aliyuncs.com/huangxincheng/$deployAppName|awk -F ' ' '{print $3}'|xargs docker rmi";
+                     sh "sh deploy/cleanDockerImage.sh ${deployAppName}"
                     // 远程k8s-master回收镜像
                     // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step7-recycleImage.sh ${deployAppName} ${dockerVersion}"
                 }
