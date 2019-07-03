@@ -73,54 +73,65 @@ pipeline {
         stage('代码拉取') {
             steps {
                 script {
-                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step1-pullCode.sh ${cloneGitBranch} ${cloneGitUrl} ${deployProject}"
+                    echo '本地已拉取代码'
+                    // 远程 k8s-master进行拉取代码
+                    // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step1-pullCode.sh ${cloneGitBranch} ${cloneGitUrl} ${deployProject}"
                 }
             }
         }
         stage('编译代码') {
             steps {
                 script {
+                    echo '本地编译代码'
+                    sh "mvn clean install -Dmaven.test.skip=true"
                     // 远程 k8s-master进行打包
-                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step2-compileCode.sh ${deployProject}"
+                    // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step2-compileCode.sh ${deployProject}"
                 }
             }
         }
         stage('生成镜像') {
             steps {
                 script {
-                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step3-buildDockerImage.sh ${deployAppName} ${deployAppVersion} ${deployProject}"
+                    echo '本地生成镜像';
+                    sh "pwd;pwd;";
+                    // 远程 k8s-master生成镜像
+                    // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step3-buildDockerImage.sh ${deployAppName} ${deployAppVersion} ${deployProject}"
                 }
             }
         }
         stage('上传本地镜像到阿里云仓库') {
             steps {
                 script {
-                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step4-uploadDockerImage.sh ${deployAppName} ${deployAppVersion} ${dockerVersion}"
+                    echo '上传本地镜像到阿里云仓库';
+                    sh "pwd;pwd;"
+                    // 远程k8s-master上传镜像
+                    // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step4-uploadDockerImage.sh ${deployAppName} ${deployAppVersion} ${dockerVersion}"
                 }
             }
         }
         stage('K8S部署项目') {
             steps {
                 script {
-                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step5-k8sDeploy.sh ${deployAppName} ${dockerVersion} ${deployProject}"
+                    // 远程k8s-master部署项目
+                    // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step5-k8sDeploy.sh ${deployAppName} ${dockerVersion} ${deployProject}"
                 }
             }
         }
         stage('检查项目是否正常') {
             steps {
                 script {
-                    // 待补充
-                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step6-checkProjectStatus.sh"
+                    // 远程k8s-master检查项目
+                    // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step6-checkProjectStatus.sh"
                 }
             }
         }
         stage('回收镜像') {
-                    steps {
-                        script {
-                            // 待补充
-                            sh "ssh root@47.106.95.198 sh /root/ci-cloud/step7-recycleImage.sh ${deployAppName} ${dockerVersion}"
-                        }
-                    }
+            steps {
+                script {
+                    // 远程k8s-master回收镜像
+                    // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step7-recycleImage.sh ${deployAppName} ${dockerVersion}"
+                }
+            }
         }
     }
 }
