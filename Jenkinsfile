@@ -133,7 +133,7 @@ pipeline {
             steps {
                 script {
                      echo '回收镜像';
-                     sh "sh deploy/cleanDockerImage.sh ${deployAppName}"
+                     sh "sh deploy/cleanDockerImage.sh ${deployAppName} ${dockerVersion}"
                     // 远程k8s-master回收镜像
                     // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step7-recycleImage.sh ${deployAppName} ${dockerVersion}"
                 }
