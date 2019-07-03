@@ -50,12 +50,13 @@ public class GlobalApiResponse<T> implements Serializable {
      * @return
      */
     public static <T> GlobalApiResponse<T> toSuccess(T payLoad) {
-        log.info("The GlobalApiResponse toSuccess code = {} msg = {} payLoad = {}", SUCCESS_CODE, "SUCCESS", JSONUtils.object2Json(payLoad));
-        return new GlobalApiResponse<T>()
+        GlobalApiResponse<T> rsp = new GlobalApiResponse<T>()
                 .setCode(SUCCESS_CODE)
                 .setMsg("SUCCESS")
                 .setPayLoad(payLoad)
                 .setTraceId(MDC.get("X-B3-TraceId"));
+        log.info("{\"logType\":{},\"rsp\":{}}", "Rsp Data Info", JSONUtils.object2Json(rsp));
+        return rsp;
     }
 
     /**
@@ -64,10 +65,12 @@ public class GlobalApiResponse<T> implements Serializable {
      */
     public static GlobalApiResponse toFail(Exception e) {
         log.error("The GlobalApiResponse toFail code = "+UNKNOW_CODE+" msg = " + UNKONW_CODE_MSG, e);
-        return new GlobalApiResponse()
+        GlobalApiResponse rsp = new GlobalApiResponse()
                 .setCode(UNKNOW_CODE)
                 .setMsg(UNKONW_CODE_MSG)
                 .setTraceId(MDC.get("X-B3-TraceId"));
+        log.error("{\"logType\":\"Rsp Data Info\",\"rsp\":"+JSONUtils.object2Json(rsp)+"}", e);
+        return rsp;
     }
 
     /**
@@ -78,8 +81,9 @@ public class GlobalApiResponse<T> implements Serializable {
      * @return
      */
     public static GlobalApiResponse toFail(int code, String errorMsg) {
-        log.error("The GlobalApiResponse toFail code = {} msg = {}", code, errorMsg);
-        return new GlobalApiResponse().setCode(code).setMsg(errorMsg).setTraceId(MDC.get("X-B3-TraceId"));
+        GlobalApiResponse rsp = new GlobalApiResponse().setCode(code).setMsg(errorMsg).setTraceId(MDC.get("X-B3-TraceId"));
+        log.error("{\"logType\":\"Rsp Data Info\",\"rsp\":"+JSONUtils.object2Json(rsp)+"}");
+        return rsp;
     }
 
 
@@ -91,8 +95,9 @@ public class GlobalApiResponse<T> implements Serializable {
      * @return
      */
     public static GlobalApiResponse toFail(int code, String errorMsg, Throwable throwable) {
-        log.error("The GlobalApiResponse toFail code = " + code + " msg = " + errorMsg, throwable);
-        return new GlobalApiResponse().setCode(code).setMsg(errorMsg).setTraceId(MDC.get("X-B3-TraceId"));
+        GlobalApiResponse rsp = new GlobalApiResponse().setCode(code).setMsg(errorMsg).setTraceId(MDC.get("X-B3-TraceId"));
+        log.error("{\"logType\":\"Rsp Data Info\",\"rsp\":"+JSONUtils.object2Json(rsp)+"}", throwable);
+        return rsp;
     }
 
     /**

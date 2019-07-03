@@ -193,8 +193,8 @@ class GatewayHandlerCommon {
         Long startTime = exchange.getAttribute(GATEWAY_START_TIME);
         Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         if (startTime != null) {
-            log.info("{} method:{} url:{} route:{} timeOff:{}",
-                    "The Gateway Global Handler",
+            log.info("{\"logType\":{},\"method\":{},\"url\":{},\"route\":{},\"timeOff\":{}}",
+                    "Rsp Data Info",
                     exchange.getRequest().getMethodValue(),
                     exchange.getRequest().getURI().toString(),
                     Optional.ofNullable(route).map(Route::getId).orElse(""),
