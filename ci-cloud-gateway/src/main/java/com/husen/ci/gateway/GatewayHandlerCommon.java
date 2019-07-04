@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.NettyDataBufferFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,13 +20,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
-import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR;
 
@@ -124,7 +121,7 @@ class GatewayHandlerCommon {
             authToken = exchange.getRequest().getQueryParams().getFirst(AUTH_TOKEN);
         }
         //TODO 这里只简单判断校验就行, 后面可以增加判断Redis中是否存在
-        return JwtUtils.checkFormToken(authToken);
+        return JwtUtils.checkTokenAndExpire(authToken);
     }
 
     /**
@@ -198,16 +195,21 @@ class GatewayHandlerCommon {
         Long startTime = exchange.getAttribute(GATEWAY_START_TIME);
         Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
         LinkedHashSet<URI> originalUris = exchange.getAttribute(GATEWAY_ORIGINAL_REQUEST_URL_ATTR);
+        Object body = exchange.getAttribute(GATEWAY_REQUEST_BODY);
         if (startTime != null) {
-            log.info("{\"logType\":{},\"method\":{},\"uri\":{},\"originUri\":{},\"route\":{},\"timeOff\":{}}",
+            log.info("{\"logType\":{},\"method\":{},\"uri\":{},\"originUri\":{},\"body\":{},\"route\":{},\"timeOff\":{}}",
                     "Rsp Data Info",
                     exchange.getRequest().getMethodValue(),
                     exchange.getRequest().getURI().toString(),
                     Optional.ofNullable(originalUris).map(Objects::toString).orElse(""),
+                    Optional.ofNullable(body).orElse(""),
                     Optional.ofNullable(route).map(Route::getId).orElse(""),
                     (System.currentTimeMillis() - startTime) + "ms"
             );
         }
     }
+
+
+
 
 }
