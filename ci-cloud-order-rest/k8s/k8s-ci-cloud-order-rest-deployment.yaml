@@ -44,7 +44,7 @@ spec:
                 - ls /root
         env:
         - name: JAVA_OPTS
-          value: "-server -Xmx512m -Xms512m"
+          value: "-server -Xmx256m -Xms256m"
         volumeMounts:
         - mountPath: /root/ci-cloud-order-rest
           name: logs
