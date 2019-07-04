@@ -32,10 +32,10 @@ spec:
         image: registry-vpc.cn-shenzhen.aliyuncs.com/huangxincheng/ci-cloud-user-rest:1.1
         resources:
           requests:
-            memory: "512Mi"
+            memory: "256Mi"
             cpu: "250m"
           limits:
-            memory: "1024Mi"
+            memory: "512Mi"
             cpu: "500m"
         lifecycle:
           preStop:
@@ -44,7 +44,7 @@ spec:
                 - ls /root
         env:
         - name: JAVA_OPTS
-          value: "-server -Xmx512m -Xms512m"
+          value: "-server -Xmx256m -Xms256m"
         volumeMounts:
         - mountPath: /root/ci-cloud-user-rest
           name: logs
