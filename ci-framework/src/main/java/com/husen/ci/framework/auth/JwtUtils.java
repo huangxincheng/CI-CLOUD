@@ -23,7 +23,7 @@ public class JwtUtils {
     /**
      * Base64加密key，然后再生产token
      */
-    public static String encodeToToken(String key, long second) {
+    public static String encode(String key, long second) {
         Date date = DateUtils.localDateTime2Date(LocalDateTime.now().plusSeconds(second));
         return JWT.create()
                 .withClaim(JWT_KEY_ID, CryptoUtils.encodeBASE64(key))
@@ -34,8 +34,8 @@ public class JwtUtils {
     /**
      * Base64加密key，然后再生产token
      */
-    public static String encodeToToken(String key) {
-        return encodeToToken(key, DEFAULT_EXPIRE_SECOND);
+    public static String encode(String key) {
+        return encode(key, DEFAULT_EXPIRE_SECOND);
     }
 
     /**
@@ -43,12 +43,24 @@ public class JwtUtils {
      * @param token
      * @return
      */
-    public static String decodeFormTokenn(String token) {
+    public static String decode(String token) {
         Claim claim = JWT.decode(token).getClaim(JWT_KEY_ID);
         return CryptoUtils.decodeBASE64(claim.asString());
     }
 
-    public static boolean checkFormToken(String token) {
+    public static boolean checkToken(String token) {
+        try {
+            if (!StringUtils.isEmpty(token)) {
+                DecodedJWT decode = JWT.decode(token);
+                return true;
+            }
+        } catch (Exception ex){
+            log.error("JwtUtils checkFormToken fail", ex);
+        }
+        return false;
+    }
+
+    public static boolean checkTokenAndExpire(String token) {
         try {
             if (!StringUtils.isEmpty(token)) {
                 DecodedJWT decode = JWT.decode(token);
@@ -64,7 +76,7 @@ public class JwtUtils {
     }
 
     public static void main(String[] args) {
-        String s = encodeToToken("10001", 36000000);
+        String s = encode("10001", 36000000);
         System.out.println(s);
     }
 }
