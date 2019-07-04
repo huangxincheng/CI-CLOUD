@@ -32,10 +32,10 @@ spec:
         image: registry-vpc.cn-shenzhen.aliyuncs.com/huangxincheng/ci-cloud-order-rest:1.1
         resources:
           requests:
-            memory: "512Mi"
+            memory: "256Mi"
             cpu: "250m"
           limits:
-            memory: "1024Mi"
+            memory: "512Mi"
             cpu: "500m"
         lifecycle:
           preStop:
