@@ -75,7 +75,7 @@ pipeline {
                 script {
                     echo '本地已拉取代码'
                     // 远程 k8s-master进行拉取代码
-                    // sh "ssh root@47.106.95.198 sh /root/ci-cloud/step1-pullCode.sh ${cloneGitBranch} ${cloneGitUrl} ${deployProject}"
+                    sh "ssh root@47.106.95.198 sh /root/ci-cloud/step1-pullCode.sh ${cloneGitBranch} ${cloneGitUrl} ${deployProject}"
                 }
             }
         }
