@@ -10,10 +10,7 @@ import com.husen.ci.user.pojo.User;
 import com.husen.ci.user.service.IUserService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
@@ -49,12 +46,14 @@ public class UserApi {
         return GlobalApiResponse.toSuccess(userService.getAll());
     }
 
-    @RequestMapping("/saveUser/{userName}")
+    @PostMapping("/saveUser")
     @HystrixCommand(defaultFallback = "defaultFallback")
-    public GlobalApiResponse saveUser(@PathVariable String userName) {
-        User user = new User().setUserName(userName);
+    public GlobalApiResponse saveUser(@RequestBody User user) {
         return GlobalApiResponse.toSuccess(userService.createUser(user));
     }
+
+
+
 
     @RequestMapping("/saveOrder")
     @HystrixCommand(defaultFallback = "defaultFallback")

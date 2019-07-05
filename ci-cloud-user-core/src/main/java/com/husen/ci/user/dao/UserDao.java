@@ -4,6 +4,8 @@ import com.husen.ci.framework.cache.GuavaCache;
 import com.husen.ci.user.entity.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,6 +29,11 @@ public class UserDao {
             throw new RuntimeException("TEST EXCEPTION");
         }
         return guavaCache.get(userId, () -> mongoTemplate.findById(userId, UserDTO.class));
+    }
+
+
+    public UserDTO findOneByName(String userName) {
+       return mongoTemplate.findOne(new Query(Criteria.where("userName").is(userName)), UserDTO.class);
     }
 
     public List<UserDTO> getAll() {

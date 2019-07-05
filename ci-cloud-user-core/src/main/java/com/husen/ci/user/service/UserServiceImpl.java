@@ -1,10 +1,11 @@
 package com.husen.ci.user.service;
 
+import com.husen.ci.framework.api.GlobalApiException;
+import com.husen.ci.framework.utils.BeanUtils;
 import com.husen.ci.framework.utils.IpUtils;
 import com.husen.ci.user.dao.UserDao;
 import com.husen.ci.user.entity.UserDTO;
 import com.husen.ci.user.pojo.User;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,15 +51,15 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User createUser(User user) {
-        UserDTO dto = new UserDTO().setUserId(user.getUserId())
-                .setUserStatus(1)
-                .setUserActiveTime(LocalDateTime.now())
-                .setUserCreateTime(LocalDateTime.now())
-                .setHost(IpUtils.getInstance().getServerIP())
-                .setUserName(user.getUserName());
-        userDao.add(dto);
-        user = new User();
-        BeanUtils.copyProperties(dto, user);
-        return user;
+        UserDTO dto = com.husen.ci.framework.utils.BeanUtils.copy(user, new UserDTO());
+        UserDTO tmp = userDao.findOneByName(dto.getUserName());
+        if (tmp != null) {
+            throw new GlobalApiException("用户已存在");
+        }
+        boolean flag = userDao.add(dto);
+        if (!flag) {
+            throw new GlobalApiException("创建用户失败");
+        }
+        return BeanUtils.copy(dto, new User());
     }
 }
