@@ -56,3 +56,9 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 8000
+ribbon:
+  eager-load:
+    enabled: true
+    clients:
+    - ci-cloud-user
+    - ci-cloud-order
