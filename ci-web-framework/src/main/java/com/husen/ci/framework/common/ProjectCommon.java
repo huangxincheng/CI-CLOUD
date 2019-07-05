@@ -8,5 +8,10 @@ package com.husen.ci.framework.common;
  ***/
 public interface ProjectCommon {
 
+    String GATEWAY_SERVICE = "ci-cloud-gateway";
+
     String ORDER_SERVICE = "ci-cloud-order";
+
+    String USER_SERVICE = "ci-cloud-user";
+
 }
