@@ -26,6 +26,9 @@ CI-CLOUD模块
     
     ---ci-cloud-user-core
         用户服务核心代码
+        
+    ---ci-cloud-user-clent
+        用户服务提供内部其他服务调用client包
     
     ---ci-cloud-user-rest
         用户服务服务提供者
