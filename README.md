@@ -17,6 +17,9 @@ CI-CLOUD模块
     
     ---ci-cloud-order-core
         订单服务核心代码
+        
+    ---ci-cloud-order-client
+        订单服务提供内部其他服务调用Client
     
     ---ci-cloud-order-rest
         订单服务服务提供者
