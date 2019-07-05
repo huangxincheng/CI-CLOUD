@@ -17,12 +17,12 @@
          <module>ci-cloud-order-core</module>
          <module>ci-cloud-user-api</module>
          <module>ci-cloud-user-core</module>
+         <module>ci-cloud-user-client</module>
          <module>ci-cloud-user-rest</module>
          <module>ci-cloud-gateway</module>
          <module>ci-cloud-log</module>
          <module>ci-cloud-mq</module>
          <module>ci-cloud-cache</module>
-         <module>ci-cloud-user-client</module>
      </modules>
 
     <properties>
