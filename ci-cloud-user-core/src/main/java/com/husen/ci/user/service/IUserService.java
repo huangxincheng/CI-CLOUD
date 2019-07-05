@@ -21,7 +21,9 @@ public interface IUserService {
 
      User getOneById(String userId);
 
+     User getOneByUserName(String userName);
+
      Collection<User> getAll();
 
-     User createUser(User user);
+     boolean createUser(User user);
 }

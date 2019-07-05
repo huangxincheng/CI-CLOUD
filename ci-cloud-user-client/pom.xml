@@ -9,15 +9,21 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ci-cloud-user-api</artifactId>
+    <artifactId>ci-cloud-user-client</artifactId>
+
 
     <dependencies>
+        <!-- feign client-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.husen</groupId>
-            <artifactId>ci-web-framework</artifactId>
+            <artifactId>ci-cloud-user-api</artifactId>
             <version>1.1</version>
         </dependency>
     </dependencies>
-
 
 </project>

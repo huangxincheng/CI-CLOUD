@@ -1,4 +1,4 @@
-package com.husen.ci.user;
+package com.husen.ci.user.api;
 
 import com.husen.ci.framework.api.GlobalApiCode;
 import com.husen.ci.framework.api.GlobalApiRequest;
@@ -46,13 +46,12 @@ public class UserApi {
         return GlobalApiResponse.toSuccess(userService.getAll());
     }
 
+
     @PostMapping("/saveUser")
     @HystrixCommand(defaultFallback = "defaultFallback")
-    public GlobalApiResponse saveUser(@RequestBody User user) {
-        return GlobalApiResponse.toSuccess(userService.createUser(user));
+    public GlobalApiResponse saveUser(@RequestBody GlobalApiRequest<User> request) {
+        return GlobalApiResponse.toSuccess(userService.createUser(request.getPayLoad()));
     }
-
-
 
 
     @RequestMapping("/saveOrder")

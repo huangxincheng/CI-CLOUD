@@ -6,6 +6,7 @@ import com.husen.ci.framework.utils.IpUtils;
 import com.husen.ci.user.dao.UserDao;
 import com.husen.ci.user.entity.UserDTO;
 import com.husen.ci.user.pojo.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
  @VERSION: 1.0
  ***/
 @Service
+@Slf4j
 public class UserServiceImpl implements IUserService {
 
     @Autowired
@@ -39,6 +41,12 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public User getOneByUserName(String userName) {
+        UserDTO dto = userDao.findOneByName(userName);
+        return BeanUtils.copy(dto, new User());
+    }
+
+    @Override
     public Collection<User> getAll() {
          return Optional.ofNullable(userDao.getAll())
                 .orElse(new ArrayList<>())
@@ -50,16 +58,18 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User createUser(User user) {
+    public boolean createUser(User user) {
         UserDTO dto = com.husen.ci.framework.utils.BeanUtils.copy(user, new UserDTO());
         UserDTO tmp = userDao.findOneByName(dto.getUserName());
         if (tmp != null) {
-            throw new GlobalApiException("用户已存在");
+            log.info("用户已存在");
+            return false;
         }
         boolean flag = userDao.add(dto);
         if (!flag) {
-            throw new GlobalApiException("创建用户失败");
+            log.info("创建用户失败");
+            return false;
         }
-        return BeanUtils.copy(dto, new User());
+        return true;
     }
 }

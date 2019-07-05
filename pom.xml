@@ -22,6 +22,7 @@
          <module>ci-cloud-log</module>
          <module>ci-cloud-mq</module>
          <module>ci-cloud-cache</module>
+         <module>ci-cloud-user-client</module>
      </modules>
 
     <properties>
