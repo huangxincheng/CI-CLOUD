@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /***
  @Author:MrHuang
@@ -33,6 +34,16 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public Order queryOrder(Long orderNo) {
+        if (orderNo == 1) {
+            int i = 1 / 0;
+        }
+        if (orderNo == 2) {
+            try {
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         return Optional.ofNullable(orderDao.queryOrder(orderNo))
         .map(o -> {
                 Order order = new Order();

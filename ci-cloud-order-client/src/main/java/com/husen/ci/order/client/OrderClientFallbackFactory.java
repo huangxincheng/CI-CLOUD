@@ -16,18 +16,18 @@ import static com.husen.ci.framework.api.GlobalApiCode.FEIGN_HYSTRIX_UNKNOW_CODE
  @VERSION: 1.0
  ***/
 @Component
-public class OrderClientFallbackFactory implements FallbackFactory<OrderClient> {
+public class OrderClientFallbackFactory implements FallbackFactory<IOrderClient> {
     @Override
-    public OrderClient create(Throwable throwable) {
-        return new OrderClient() {
+    public IOrderClient create(Throwable throwable) {
+        return new IOrderClient() {
             @Override
-            public GlobalApiResponse<Order> getOrder(Long orderNo) {
-                return GlobalApiResponse.toFail(FEIGN_HYSTRIX_UNKNOW_CODE, FEIGN_HYSTRIX_UNKNOW_CODE_MSG, throwable);
+            public Order getOrder(Long orderNo) {
+                return null;
             }
 
             @Override
-            public GlobalApiResponse<Boolean> saveOrder(GlobalApiRequest request) {
-                return GlobalApiResponse.toFail(FEIGN_HYSTRIX_UNKNOW_CODE, FEIGN_HYSTRIX_UNKNOW_CODE_MSG, throwable);
+            public boolean saveOrder(Order order) {
+               return false;
             }
         };
     }

@@ -43,7 +43,7 @@
 
         <dependency>
             <groupId>com.husen</groupId>
-            <artifactId>ci-cloud-order-api</artifactId>
+            <artifactId>ci-cloud-order-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -4,16 +4,13 @@ import com.husen.ci.framework.api.GlobalApiCode;
 import com.husen.ci.framework.api.GlobalApiRequest;
 import com.husen.ci.framework.api.GlobalApiResponse;
 import com.husen.ci.mq.MqUtils;
-import com.husen.ci.order.client.OrderClient;
+import com.husen.ci.order.client.IOrderClient;
 import com.husen.ci.order.pojo.Order;
 import com.husen.ci.user.pojo.User;
 import com.husen.ci.user.service.IUserService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
-import java.util.concurrent.TimeUnit;
 
 /***
  @Author:MrHuang
@@ -29,18 +26,15 @@ public class UserApi {
     private IUserService userService;
 
     @Autowired
-    private OrderClient orderClient;
+    private IOrderClient orderClient;
 
-    @RequestMapping("/get/{userId}")
+    @GetMapping("/get/{userId}")
     @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse get(@PathVariable String userId) {
-        if ("1".equals(userId)) {
-            int i = 1 / 0;
-        }
         return GlobalApiResponse.toSuccess(userService.getOneById(userId));
     }
 
-    @RequestMapping("/getAll")
+    @GetMapping("/getAll")
     @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse getAll() {
         return GlobalApiResponse.toSuccess(userService.getAll());
@@ -57,16 +51,16 @@ public class UserApi {
     @RequestMapping("/saveOrder")
     @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse saveOrder(@RequestBody GlobalApiRequest<Order> request) {
-        return orderClient.saveOrder(request);
+        return GlobalApiResponse.toSuccess(orderClient.saveOrder(request.getPayLoad()));
     }
 
-    @RequestMapping("/queryOrder/{orderNo}")
+    @GetMapping("/queryOrder/{orderNo}")
     @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse queryOrder(@PathVariable Long orderNo) {
-        return orderClient.getOrder(orderNo);
+        return GlobalApiResponse.toSuccess(orderClient.getOrder(orderNo));
     }
 
-    @RequestMapping("/sendMQ/{topic}/{tags}/{msg}")
+    @GetMapping("/sendMQ/{topic}/{tags}/{msg}")
     @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse sendMQ(@PathVariable String topic, @PathVariable String tags, @PathVariable String msg) {
          return GlobalApiResponse.toSuccess(MqUtils.syncSendDelay(topic, tags, msg, 2));

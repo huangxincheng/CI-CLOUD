@@ -17,21 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
  @VERSION: 1.0
  ***/
 @FeignClient(name = ProjectCommon.ORDER_SERVICE, fallbackFactory = OrderClientFallbackFactory.class)
-public interface OrderClient {
+public interface IOrderClient extends IOrderClientService{
 
-    /**
-     * 获取订单详情
-     * @param orderNo
-     * @return
-     */
-    @GetMapping("api/v1/order/get/{orderNo}")
-    GlobalApiResponse<Order> getOrder(@PathVariable("orderNo") Long orderNo);
-
-    /**
-     * 保存订单
-     * @param request
-     * @return
-     */
-    @PostMapping("api/v1/order/save")
-    GlobalApiResponse saveOrder(@RequestBody GlobalApiRequest request);
 }

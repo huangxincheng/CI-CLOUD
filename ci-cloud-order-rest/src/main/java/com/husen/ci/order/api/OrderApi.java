@@ -1,4 +1,4 @@
-package com.husen.ci.order;
+package com.husen.ci.order.api;
 
 import com.husen.ci.framework.api.GlobalApiRequest;
 import com.husen.ci.framework.api.GlobalApiResponse;
@@ -24,16 +24,6 @@ public class OrderApi {
 
     @GetMapping("/get/{orderNo}")
     public GlobalApiResponse<Order> getOrder(@PathVariable Long orderNo) {
-        if (orderNo == 1) {
-            int i = 1 / 0;
-        }
-        if (orderNo == 2) {
-            try {
-                TimeUnit.SECONDS.sleep(3);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
         Order order = orderService.queryOrder(orderNo);
         return GlobalApiResponse.toSuccess(order);
     }

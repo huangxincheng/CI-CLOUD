@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  @VERSION: 1.0
  ***/
 @RestController
-public class UserClientService implements IUserClientService {
+public class UserClientServiceImpl implements IUserClientService {
 
     @Autowired
     private IUserService userService;

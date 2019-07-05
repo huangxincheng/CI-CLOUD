@@ -13,8 +13,9 @@
          <module>ci-framework</module>
          <module>ci-web-framework</module>
          <module>ci-cloud-order-api</module>
-         <module>ci-cloud-order-rest</module>
          <module>ci-cloud-order-core</module>
+         <module>ci-cloud-order-client</module>
+         <module>ci-cloud-order-rest</module>
          <module>ci-cloud-user-api</module>
          <module>ci-cloud-user-core</module>
          <module>ci-cloud-user-client</module>
