@@ -141,7 +141,7 @@ public class CryptoUtils {
      *            a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
      */
-    public static String encodeBASE64(final String str, String charset) {
+    public static String encodeBase64String(final String str, String charset) {
         if (str == null) {
             return null;
         }
@@ -160,8 +160,8 @@ public class CryptoUtils {
      *            a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
      */
-    public static String encodeBASE64(final String str) {
-        return encodeBASE64(str, DEFAULT_CHARSET);
+    public static String encodeBase64String(final String str) {
+        return encodeBase64String(str, DEFAULT_CHARSET);
     }
 
     /**
@@ -171,24 +171,23 @@ public class CryptoUtils {
      *            a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
      */
-    public static String decodeBASE64(String str) {
-        return decodeBASE64(str, DEFAULT_CHARSET);
+    public static String decodeBASE64String(String str) {
+        return decodeBASE64String(str, DEFAULT_CHARSET);
     }
 
     public static byte[] decodeBASE64(byte[] bytes){
         return Base64.decodeBase64(bytes);
     }
 
+    public static byte[] decodeBASE64(String str) {
+        return Base64.decodeBase64(str);
+    }
+
+
     /**
      * BASE64解密
-     *
-     * @param str
-     *            a {@link java.lang.String} object.
-     * @param charset
-     *            字符编码
-     * @return a {@link java.lang.String} object.
      */
-    public static String decodeBASE64(String str, String charset) {
+    public static String decodeBASE64String(String str, String charset) {
         try {
             byte[] bytes = str.getBytes(charset);
             return new String(Base64.decodeBase64(bytes));
@@ -303,7 +302,7 @@ public class CryptoUtils {
     }
 
     public static void main(String[] args) {
-        String s = encodeBASE64("123");
+        String s = encodeBase64String("123");
         System.out.println(decodeBASE64(s));
     }
 }
