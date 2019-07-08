@@ -95,17 +95,14 @@ public class GzipUtil {
         if (bs == null || bs.length == 0) {
             return null;
         }
-        ByteArrayInputStream bais = null;
-        GZIPInputStream gis = null;
-        byte bytes[] = null;
-        try {
-            bais = new ByteArrayInputStream(bs);
-            gis = new GZIPInputStream(bais);
+        byte[] bytes = null;
+        try(
+            ByteArrayInputStream bais = new ByteArrayInputStream(bs);
+            GZIPInputStream gis = new GZIPInputStream(bais)
+        ) {
             bytes = IOUtils.toByteArray(gis);
         } catch (IOException e) {
             log.error("GzipUtil", e);
-        } finally {
-            IOUtils.closeQuietly(gis, bais);
         }
         return bytes;
     }
