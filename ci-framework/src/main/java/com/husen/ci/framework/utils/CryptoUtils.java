@@ -117,8 +117,19 @@ public class CryptoUtils {
      *            an array of byte.
      * @return a {@link java.lang.String} object.
      */
-    public static String encodeBASE64(final byte[] bytes) {
-        return new String(Base64.encodeBase64String(bytes));
+    public static String encodeBase64String(final byte[] bytes) {
+        return Base64.encodeBase64String(bytes);
+    }
+
+    /**
+     * BASE64加密
+     *
+     * @param bytes
+     *            an array of byte.
+     * @return a {@link java.lang.String} object.
+     */
+    public static byte[] encodeBASE64(final  byte[] bytes) {
+        return Base64.encodeBase64(bytes);
     }
 
     /**
@@ -136,7 +147,7 @@ public class CryptoUtils {
         }
         try {
             byte[] bytes = str.getBytes(charset);
-            return encodeBASE64(bytes);
+            return encodeBase64String(bytes);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
@@ -162,6 +173,10 @@ public class CryptoUtils {
      */
     public static String decodeBASE64(String str) {
         return decodeBASE64(str, DEFAULT_CHARSET);
+    }
+
+    public static byte[] decodeBASE64(byte[] bytes){
+        return Base64.decodeBase64(bytes);
     }
 
     /**
