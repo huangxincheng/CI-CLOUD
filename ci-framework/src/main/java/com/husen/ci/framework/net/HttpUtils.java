@@ -55,15 +55,15 @@ public class HttpUtils {
     }
 
     private HttpUtils() {
-        okhttp3.OkHttpClient.Builder ClientBuilder = new okhttp3.OkHttpClient.Builder();
-        ClientBuilder.readTimeout(10, TimeUnit.SECONDS)
+        okhttp3.OkHttpClient.Builder clientBuilder = new okhttp3.OkHttpClient.Builder();
+        clientBuilder.readTimeout(10, TimeUnit.SECONDS)
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .connectionPool(new ConnectionPool(50, 5, TimeUnit.MINUTES));
 //        支持HTTPS请求，跳过证书验证
-        ClientBuilder.sslSocketFactory(createSSLSocketFactory(), new MyX509TrustManager());
-        ClientBuilder.hostnameVerifier((s, sslSession) -> true);
-        okHttpClient = ClientBuilder.build();
+        clientBuilder.sslSocketFactory(createSSLSocketFactory(), new MyX509TrustManager());
+        clientBuilder.hostnameVerifier((s, sslSession) -> true);
+        okHttpClient = clientBuilder.build();
     }
 
 
@@ -386,6 +386,5 @@ public class HttpUtils {
         String esUrl = "http://node1.es.sizne.net:9200/";
         HttpResult result = HttpUtils.getInstance().doGet(esUrl);
         System.out.println(result);
-
     }
 }
