@@ -1,6 +1,5 @@
 package com.husen.ci.framework.api;
 
-import com.husen.ci.framework.api.WebRequestContext.WebRequestBean;
 import com.husen.ci.framework.utils.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -31,7 +30,7 @@ public class WebReqeustInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        WebRequestBean wrb = new WebRequestBean()
+        WebRequestContext.WebRequest wrb = new WebRequestContext.WebRequest()
                 .setServerIp(IpUtils.getInstance().getServerIP())
                 .setClientIp(IpUtils.getInstance().getClientIP(request))
                 .setClientReqTime(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli())

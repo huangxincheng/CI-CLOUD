@@ -13,7 +13,7 @@ public class WebRequestContext {
 
     @Data
     @Accessors(chain = true)
-    public static class WebRequestBean {
+    public static class WebRequest {
 
         private String serverIp;
 
@@ -30,13 +30,13 @@ public class WebRequestContext {
         private String clientReqType;
     }
 
-    private static final ThreadLocal<WebRequestBean> HOLDER = new ThreadLocal<>();
+    private static final ThreadLocal<WebRequest> HOLDER = new ThreadLocal<>();
 
-    public static WebRequestBean getContext() {
+    public static WebRequest getContext() {
         return HOLDER.get();
     }
 
-    protected static void setContext(WebRequestBean bean) {
+    protected static void setContext(WebRequest bean) {
         HOLDER.set(bean);
     }
 
