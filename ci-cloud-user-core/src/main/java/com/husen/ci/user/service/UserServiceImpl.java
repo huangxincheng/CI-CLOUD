@@ -1,8 +1,7 @@
 package com.husen.ci.user.service;
 
-import com.husen.ci.framework.api.GlobalApiException;
+import com.husen.ci.framework.annotation.PrintMethod;
 import com.husen.ci.framework.utils.BeanUtils;
-import com.husen.ci.framework.utils.IpUtils;
 import com.husen.ci.user.dao.UserDao;
 import com.husen.ci.user.entity.UserDTO;
 import com.husen.ci.user.pojo.User;
@@ -10,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -29,6 +27,7 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserDao userDao;
 
+    @PrintMethod
     @Override
     public User getOneById(String userId) {
         return Optional.ofNullable(userDao.findById(userId))
@@ -40,6 +39,7 @@ public class UserServiceImpl implements IUserService {
                 .orElse(null);
     }
 
+    @PrintMethod
     @Override
     public User getOneByUserName(String userName) {
         UserDTO dto = userDao.findOneByName(userName);
@@ -57,6 +57,7 @@ public class UserServiceImpl implements IUserService {
                 .setUserCreateTime(uto.getUserCreateTime())).collect(Collectors.toList());
     }
 
+    @PrintMethod
     @Override
     public boolean createUser(User user) {
         UserDTO dto = com.husen.ci.framework.utils.BeanUtils.copy(user, new UserDTO());
