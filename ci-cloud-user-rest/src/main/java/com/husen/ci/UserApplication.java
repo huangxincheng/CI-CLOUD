@@ -12,6 +12,13 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  @Date: 2019/6/25 15:03
  @DESC: TODO
  @VERSION: 1.0
+
+
+ @SpringBootApplication SpringBoot启动类注解
+ @EnableDiscoveryClient 开启服务发现，服务注册注解
+ @EnableFeignClients 开启Feign调用注解
+ @EnableCircuitBreaker 开启Hystrix熔断器注解
+ @EnableAspectJAutoProxy 开启Aop注解
  ***/
 @SpringBootApplication
 @EnableDiscoveryClient
