@@ -15,7 +15,7 @@
         <dependency>
             <groupId>com.husen</groupId>
             <artifactId>ci-cloud-user-core</artifactId>
-            <version>1.1</version>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- feign client-->
