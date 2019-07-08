@@ -26,7 +26,7 @@ public class JwtUtils {
     public static String encode(String key, long second) {
         Date date = DateUtils.localDateTime2Date(LocalDateTime.now().plusSeconds(second));
         return JWT.create()
-                .withClaim(JWT_KEY_ID, CryptoUtils.encodeBASE64(key))
+                .withClaim(JWT_KEY_ID, CryptoUtils.encodeBase64String(key))
                 .withExpiresAt(date)
                 .sign(Algorithm.HMAC256(UUID.randomUUID().toString()));
     }
@@ -45,7 +45,7 @@ public class JwtUtils {
      */
     public static String decode(String token) {
         Claim claim = JWT.decode(token).getClaim(JWT_KEY_ID);
-        return CryptoUtils.decodeBASE64(claim.asString());
+        return CryptoUtils.decodeBASE64String(claim.asString());
     }
 
     public static boolean checkToken(String token) {
