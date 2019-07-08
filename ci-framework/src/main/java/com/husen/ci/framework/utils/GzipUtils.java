@@ -11,8 +11,11 @@ import java.util.Base64;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ * Gzip压缩
+ */
 @Slf4j
-public class GzipUtil {
+public class GzipUtils {
 
     /**
      * 压缩数据且通过Base64加密
@@ -46,17 +49,17 @@ public class GzipUtil {
         GZIPOutputStream gos;
         byte[] bs = null;
         try {
-            log.debug("GzipUtil 压缩前大小：" + bytes.length);
+            log.debug("GzipUtils 压缩前大小：" + bytes.length);
             gos = new GZIPOutputStream(aos);
             gos.write(bytes);
             gos.flush();
             gos.close();
             bs = aos.toByteArray();
-            log.debug("GzipUtil 压缩后大小：" + bs.length);
+            log.debug("GzipUtils 压缩后大小：" + bs.length);
         } catch (UnsupportedEncodingException e) {
-            log.error("GzipUtil", e);
+            log.error("GzipUtils", e);
         } catch (IOException e) {
-            log.error("GzipUtil", e);
+            log.error("GzipUtils", e);
         } finally {
             IOUtils.closeQuietly(aos);
         }
@@ -102,7 +105,7 @@ public class GzipUtil {
         ) {
             bytes = IOUtils.toByteArray(gis);
         } catch (IOException e) {
-            log.error("GzipUtil", e);
+            log.error("GzipUtils", e);
         }
         return bytes;
     }
