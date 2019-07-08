@@ -36,7 +36,9 @@ public class WebReqeustInterceptor implements HandlerInterceptor {
                 .setClientIp(IpUtils.getInstance().getClientIP(request))
                 .setClientReqTime(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli())
                 .setTraceId(Optional.ofNullable(MDC.get("X-B3-TraceId")).orElse(""))
-                .setSpanId(Optional.ofNullable(MDC.get("X-B3-SpanId")).orElse(""));
+                .setSpanId(Optional.ofNullable(MDC.get("X-B3-SpanId")).orElse(""))
+                .setTokenId(request.getHeader("tokenId"))
+                .setClientReqType(request.getHeader("clientReqType"));
         WebRequestContext.setContext(wrb);
         log.info("{} preHadnle wrb = {}", "[WebReqeustInterceptor]", wrb);
         return true;

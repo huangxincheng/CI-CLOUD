@@ -24,6 +24,10 @@ public class WebRequestContext {
         private String traceId;
 
         private String spanId;
+
+        private String tokenId;
+
+        private String clientReqType;
     }
 
     private static final ThreadLocal<WebRequestBean> HOLDER = new ThreadLocal<>();
