@@ -8,6 +8,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
 
+/**
+ * AES对称加密
+ */
 public class AESUtils {
 
     /**

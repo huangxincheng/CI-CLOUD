@@ -1,7 +1,6 @@
 package com.husen.ci.framework.utils;
 
 import org.apache.commons.codec.binary.Base64;
-import org.springframework.util.Base64Utils;
 
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
@@ -13,6 +12,9 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * RSA非对称加密
+ */
 public class RSAUtils {
  
    /** 
