@@ -1,20 +1,20 @@
 package com.husen.ci.framework.auth;
 
+import com.husen.ci.framework.utils.CryptoUtils;
 import org.apache.commons.codec.binary.StringUtils;
-import org.springframework.util.DigestUtils;
 
 import java.io.Serializable;
 import java.util.*;
 
 /**
- * Author: huangxincheng
+ * @Author: huangxincheng
  * <p>
  * <p>
- *     签名Util
+ *    签名Utils
  **/
-public class SignUtil {
+public class SignUtils {
 
-    public static String getSign(Map<String, Serializable> keyValueMap, String apikey) {
+    public static String sign(Map<String, Serializable> keyValueMap, String apikey) {
         List<String> keyList  = new ArrayList<>(keyValueMap.keySet());
         Collections.sort(keyList);
         StringBuilder sb = new StringBuilder();
@@ -27,12 +27,12 @@ public class SignUtil {
             }
         }
         sb.append("&apikey=").append(apikey);
-        return DigestUtils.md5DigestAsHex(sb.toString().getBytes()).toUpperCase();
+        return CryptoUtils.encodeMD5(sb.toString()).toUpperCase();
     }
 
 
     public static boolean checkSign(Map<String, Serializable> keyValueMap, String apikey, String requestSign) {
-        String sign = getSign(keyValueMap, apikey);
+        String sign = sign(keyValueMap, apikey);
         return StringUtils.equals(sign, requestSign);
     }
 
@@ -44,7 +44,7 @@ public class SignUtil {
         kv.put("k3", "v3");
         kv.put("k4", "v4");
         kv.put("k5", "v5");
-        String sign = getSign(kv, "apikey");
+        String sign = sign(kv, "apikey");
         System.out.println(sign);
 
         kv.put("k1", "v1");
