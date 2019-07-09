@@ -61,7 +61,7 @@ public class JwtUtils {
                 return true;
             }
         } catch (Exception ex){
-            log.error("JwtUtils checkFormToken fail", ex);
+            log.error("JwtUtils checkToken fail", ex);
         }
         return false;
     }
@@ -76,7 +76,7 @@ public class JwtUtils {
                 }
             }
         } catch (Exception ex){
-            log.error("JwtUtils checkFormToken fail", ex);
+            log.error("JwtUtils checkTokenWithExpire fail", ex);
         }
         return false;
     }
