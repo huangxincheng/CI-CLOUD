@@ -49,7 +49,7 @@ public class SsoTokenFilter implements Filter {
             // 重新登陆
             rsp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             rsp.setContentType("application/json;charset=UTF-8");
-            rsp.getWriter().println(JSONUtils.object2Json(GlobalApiResponse.toSuccess(new SsoRsp().setStatus(-401).setMsg("sso not login"))));
+            rsp.getWriter().println(JSONUtils.object2Json(GlobalApiResponse.toSuccess(new SsoRsp().setStatus(HttpServletResponse.SC_UNAUTHORIZED).setMsg("sso not login"))));
             return ;
         }
         request.setAttribute(ClientConf.SSO_SESSION, ssoSession);
