@@ -8,11 +8,13 @@ import com.husen.ci.sso.helper.SsoLoginHelper;
 import com.husen.ci.sso.response.SsoRsp;
 import com.husen.ci.sso.session.SsoSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -47,16 +49,18 @@ public class SsoTokenFilter implements Filter {
             return;
         }
         System.out.println(servletPath);
-        // TODO 判断是否是excluedPaths
-        SsoSession ssoSession = SsoLoginHelper.loginCheck(req.getHeader(SsoConstants.RQ_HEADER_TOEKN_SESSION_ID));
-        if (Objects.isNull(ssoSession)) {
-            // 重新登陆
-            rsp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            rsp.setContentType("application/json;charset=UTF-8");
-            rsp.getWriter().println(JSONUtils.object2Json(GlobalApiResponse.toSuccess(new SsoRsp().setStatus(HttpServletResponse.SC_UNAUTHORIZED).setMsg("sso not login"))));
-            return ;
+        List<String> excludedPathList = this.excludedPathList(ssoExcluedPaths);
+        if (!excludedPathList.contains(servletPath)) {
+            SsoSession ssoSession = SsoLoginHelper.loginCheck(req.getHeader(SsoConstants.RQ_HEADER_TOEKN_SESSION_ID));
+            if (Objects.isNull(ssoSession)) {
+                // 重新登陆
+                rsp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                rsp.setContentType("application/json;charset=UTF-8");
+                rsp.getWriter().println(JSONUtils.object2Json(GlobalApiResponse.toSuccess(new SsoRsp().setStatus(HttpServletResponse.SC_UNAUTHORIZED).setMsg("sso not login"))));
+                return ;
+            }
+            request.setAttribute(ClientConf.SSO_SESSION, ssoSession);
         }
-        request.setAttribute(ClientConf.SSO_SESSION, ssoSession);
         chain.doFilter(request, response);
         return;
     }
@@ -64,5 +68,12 @@ public class SsoTokenFilter implements Filter {
     @Override
     public void destroy() {
 
+    }
+
+    private List<String> excludedPathList(String paths) {
+        if (StringUtils.isEmpty(paths)) {
+            return new ArrayList<>();
+        }
+        return Arrays.asList(paths.split(","));
     }
 }
