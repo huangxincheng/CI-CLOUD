@@ -20,7 +20,7 @@ public class SsoLoginHelper {
     }
 
     public static void login(String tokenSessionId) {
-        Assert.notNull(tokenSessionId, "tokenSessionId not Null");
+        checkTokenSessionId(tokenSessionId);
         String userId = JwtUtils.decode(tokenSessionId);
         SsoSession session = new SsoSession()
                 .setUserId(userId)
@@ -31,7 +31,7 @@ public class SsoLoginHelper {
     }
 
     public static void logout(String tokenSessionId) {
-        Assert.notNull(tokenSessionId, "tokenSessionId not Null");
+        checkTokenSessionId(tokenSessionId);
         String userId = JwtUtils.decode(tokenSessionId);
         SsoStoreHelper.remove(userId);
     }
@@ -61,5 +61,12 @@ public class SsoLoginHelper {
             log.error("loginCheck fail", e);
         }
         return null;
+    }
+
+    private static void checkTokenSessionId(String tokenSessionId) {
+        Assert.notNull(tokenSessionId, "tokenSessionId not Null");
+        if (!JwtUtils.checkToken(tokenSessionId)) {
+            Assert.notNull(tokenSessionId, "tokenSessionId check fail");
+        }
     }
 }
