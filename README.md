@@ -44,10 +44,13 @@ CI-CLOUD模块
         
     ---ci-cloud-sso-server
         单点登陆Server
+        
     ---ci-cloud-sso-client
         其他系统使用单点登陆必须依赖的包
+    
     ---ci-cloud-sso-client-sample
         其他系统单点登陆例子
+    
     ---ci-cloud-sso-core
         单点登陆核心代码
     
