@@ -50,7 +50,7 @@ public class SsoLoginHelper {
                 SsoSession ssoSession = SsoStoreHelper.get(userId);
                 if (ssoSession != null) {
                     // 自动刷新tokenSession时间
-                    if ( (System.currentTimeMillis() - ssoSession.getFreshTime()) >= ssoSession.getExpireSecond() * 1000 / 2) {
+                    if ( (System.currentTimeMillis() - ssoSession.getFreshTime()) >= SsoStoreHelper.getRedisExpireSecond() * 1000 / 2) {
                         ssoSession.setFreshTime(System.currentTimeMillis());
                         SsoStoreHelper.put(userId, ssoSession);
                     }
