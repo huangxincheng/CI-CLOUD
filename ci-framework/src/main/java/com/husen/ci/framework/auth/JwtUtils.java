@@ -22,7 +22,9 @@ public class JwtUtils {
 
 
     public static String encode(String key) {
-        return JWT.create().withClaim(JWT_KEY_ID, CryptoUtils.encodeBase64String(key))
+        return JWT.create()
+                .withIssuer("JwtUtils")
+                .withClaim(JWT_KEY_ID, CryptoUtils.encodeBase64String(key))
                 .sign(Algorithm.HMAC256(UUID.randomUUID().toString()));
     }
 
@@ -32,6 +34,7 @@ public class JwtUtils {
     public static String encodeWithExpire(String key, long second) {
         Date date = DateUtils.localDateTime2Date(LocalDateTime.now().plusSeconds(second));
         return JWT.create()
+                .withIssuer("JwtUtils")
                 .withClaim(JWT_KEY_ID, CryptoUtils.encodeBase64String(key))
                 .withExpiresAt(date)
                 .sign(Algorithm.HMAC256(UUID.randomUUID().toString()));
@@ -79,10 +82,5 @@ public class JwtUtils {
             log.error("JwtUtils checkTokenWithExpire fail", ex);
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        String s = encodeWithExpire("10001", 36000000);
-        System.out.println(s);
     }
 }
