@@ -53,7 +53,7 @@ public class SsoTokenFilter implements Filter {
         if (!excludedPathList.contains(servletPath)) {
             SsoSession ssoSession = SsoLoginHelper.loginCheck(req.getHeader(SsoConstants.RQ_HEADER_TOEKN_SESSION_ID));
             if (Objects.isNull(ssoSession)) {
-                // 重新登陆
+                // 认证失败
                 rsp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 rsp.setContentType("application/json;charset=UTF-8");
                 rsp.getWriter().println(JSONUtils.object2Json(GlobalApiResponse.toSuccess(new SsoRsp().setStatus(HttpServletResponse.SC_UNAUTHORIZED).setMsg("sso not login"))));
