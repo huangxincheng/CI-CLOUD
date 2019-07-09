@@ -20,10 +20,16 @@ public class JwtUtils {
 
     private final static int DEFAULT_EXPIRE_SECOND = 10;
 
+
+    public static String encode(String key) {
+        return JWT.create().withClaim(JWT_KEY_ID, CryptoUtils.encodeBase64String(key))
+                .sign(Algorithm.HMAC256(UUID.randomUUID().toString()));
+    }
+
     /**
      * Base64加密key，然后再生产token
      */
-    public static String encode(String key, long second) {
+    public static String encodeWithExpire(String key, long second) {
         Date date = DateUtils.localDateTime2Date(LocalDateTime.now().plusSeconds(second));
         return JWT.create()
                 .withClaim(JWT_KEY_ID, CryptoUtils.encodeBase64String(key))
@@ -34,8 +40,8 @@ public class JwtUtils {
     /**
      * Base64加密key，然后再生产token
      */
-    public static String encode(String key) {
-        return encode(key, DEFAULT_EXPIRE_SECOND);
+    public static String encodeWithExpire(String key) {
+        return encodeWithExpire(key, DEFAULT_EXPIRE_SECOND);
     }
 
     /**
@@ -60,7 +66,7 @@ public class JwtUtils {
         return false;
     }
 
-    public static boolean checkTokenAndExpire(String token) {
+    public static boolean checkTokenWithExpire(String token) {
         try {
             if (!StringUtils.isEmpty(token)) {
                 DecodedJWT decode = JWT.decode(token);
@@ -76,7 +82,7 @@ public class JwtUtils {
     }
 
     public static void main(String[] args) {
-        String s = encode("10001", 36000000);
+        String s = encodeWithExpire("10001", 36000000);
         System.out.println(s);
     }
 }

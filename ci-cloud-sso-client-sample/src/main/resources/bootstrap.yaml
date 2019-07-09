@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: ci-cloud-sso-client-sample
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: 30084
+
+logging:
+  path: ${user.home}/${spring.application.name}
+  level:
+    root: info
+    com:
+      alibaba:
+        nacos:
+          client:
+            naming: error
+
+sso:
+  redis: redis://redis.limaila.com:6379/1,redis://redis.limaila.com:6379/2
+  server: http://localhost:30083
+  excluded:
+    paths:

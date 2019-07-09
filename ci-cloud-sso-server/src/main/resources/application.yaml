@@ -1,5 +1,5 @@
 server:
-  port: 30081
+  port: 30083
 
 logging:
   path: ${user.home}/${spring.application.name}
@@ -12,22 +12,13 @@ logging:
             naming: error
 
 spring:
-  data:
-    mongodb:
-      uri: mongodb://mongo.limaila.com/ci-user
-      port: 27017
   jackson:
     default-property-inclusion: non_null
+
 
 feign:
   hystrix:
     enabled: true
-
-
-rocketmq:
-  name-server: www.limaila.com:9876
-  producer:
-    group: ${spring.application.name}
 
 
 hystrix:
@@ -37,3 +28,8 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 5000
+
+sso:
+  redis: redis://redis.limaila.com:6379/1,redis://redis.limaila.com:6379/2
+  expire:
+    second: 86400

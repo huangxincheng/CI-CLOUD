@@ -24,6 +24,10 @@
          <module>ci-cloud-log</module>
          <module>ci-cloud-mq</module>
          <module>ci-cloud-cache</module>
+         <module>ci-cloud-sso-core</module>
+         <module>ci-cloud-sso-server</module>
+         <module>ci-cloud-sso-client</module>
+         <module>ci-cloud-sso-client-sample</module>
      </modules>
 
     <properties>
