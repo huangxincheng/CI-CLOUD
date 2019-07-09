@@ -18,12 +18,14 @@ public class JwtUtils {
 
     private final static String JWT_KEY_ID = "JWT_KEY_ID";
 
+    private final static String JWT_ISSUER = "JWT_HUSEN";
+
     private final static int DEFAULT_EXPIRE_SECOND = 10;
 
 
     public static String encode(String key) {
         return JWT.create()
-                .withIssuer("JwtUtils")
+                .withIssuer(JWT_ISSUER)
                 .withClaim(JWT_KEY_ID, CryptoUtils.encodeBase64String(key))
                 .sign(Algorithm.HMAC256(UUID.randomUUID().toString()));
     }
@@ -34,7 +36,7 @@ public class JwtUtils {
     public static String encodeWithExpire(String key, long second) {
         Date date = DateUtils.localDateTime2Date(LocalDateTime.now().plusSeconds(second));
         return JWT.create()
-                .withIssuer("JwtUtils")
+                .withIssuer(JWT_ISSUER)
                 .withClaim(JWT_KEY_ID, CryptoUtils.encodeBase64String(key))
                 .withExpiresAt(date)
                 .sign(Algorithm.HMAC256(UUID.randomUUID().toString()));
