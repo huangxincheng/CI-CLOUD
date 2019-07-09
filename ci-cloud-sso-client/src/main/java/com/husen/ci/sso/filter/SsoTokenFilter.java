@@ -13,6 +13,8 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /***
@@ -28,6 +30,8 @@ public class SsoTokenFilter implements Filter {
 
     private String ssoExcluedPaths;
 
+    private static final List<String> IGNORE_PATHS = Arrays.asList("/favicon.ico");
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         ssoServer = filterConfig.getInitParameter(ClientConf.SSO_SERVER);
@@ -39,7 +43,7 @@ public class SsoTokenFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse rsp = (HttpServletResponse) response;
         String servletPath = req.getServletPath();
-        if ("/favicon.ico".equals(servletPath)) {
+        if (IGNORE_PATHS.contains(servletPath)) {
             return;
         }
         System.out.println(servletPath);
