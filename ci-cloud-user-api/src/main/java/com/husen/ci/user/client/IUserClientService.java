@@ -1,10 +1,7 @@
 package com.husen.ci.user.client;
 
 import com.husen.ci.user.pojo.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /***
  @Author:MrHuang
@@ -22,7 +19,7 @@ public interface IUserClientService {
     User getUserByName(@PathVariable("userName") String userName);
 
     @GetMapping("/getByNameAndPassword")
-    User getUserByNameAndPassword(String userName, String password);
+    User getUserByNameAndPassword(@RequestParam("userName") String userName, @RequestParam("password") String password);
 
     @RequestMapping("/saveUser")
     boolean saveUser(@RequestBody User user);
