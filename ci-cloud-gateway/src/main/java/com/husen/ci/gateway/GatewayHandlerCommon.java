@@ -121,7 +121,7 @@ class GatewayHandlerCommon {
             authToken = exchange.getRequest().getQueryParams().getFirst(AUTH_TOKEN);
         }
         //TODO 这里只简单判断校验就行, 后面可以增加判断Redis中是否存在
-        return JwtUtils.checkTokenAndExpire(authToken);
+        return JwtUtils.checkToken(authToken);
     }
 
     /**
