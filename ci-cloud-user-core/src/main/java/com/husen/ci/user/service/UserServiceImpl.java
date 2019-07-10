@@ -46,6 +46,7 @@ public class UserServiceImpl implements IUserService {
         return BeanUtils.copy(dto, new User());
     }
 
+    @PrintMethod
     @Override
     public Collection<User> getAll() {
          return Optional.ofNullable(userDao.getAll())
