@@ -18,5 +18,5 @@ public class ClientConf {
     /**
      * SSO SESSION
      */
-    public static final String SSO_SESSION = "SSO_SESSION";
+    public static final String ATTR_SSO_SESSION = "ATTR_SSO_SESSION";
 }

@@ -65,7 +65,7 @@ public class SsoTokenFilter implements Filter {
                     return;
                 }
             }
-            request.setAttribute(ClientConf.SSO_SESSION, ssoSession);
+            request.setAttribute(ClientConf.ATTR_SSO_SESSION, ssoSession);
         }
         chain.doFilter(request, response);
         return;
