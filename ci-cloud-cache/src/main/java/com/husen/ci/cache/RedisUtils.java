@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.*;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
@@ -189,66 +188,6 @@ public class RedisUtils {
             log.error("RedisUtils getExpire", e);
             return null;
         }
-    }
-
-
-    /**
-     * 获取不阻塞锁
-     * @param lockKey 锁的key
-     * @param clientId 加锁的客户端Id - 可采用UUID
-     * @param expireSecond 失效时间 单位-秒
-     *                   PX 是毫秒
-     *                   EX 是秒
-     * @return
-     */
-    public static boolean getNoBlockLock(String lockKey, String clientId, int expireSecond) {
-        RedisScript<Long> redisScript = RedisScript.of(NO_BLOCK_LOCK_SCRIPT, Long.class);
-        Long result = template.execute(redisScript, Collections.singletonList(lockKey), clientId, String.valueOf(expireSecond));
-        if(LOCK_SUCCESS.equals(result)){
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 获取阻塞锁
-     * @param lockKey
-     * @param clientId
-     * @param expireSecond
-     * @param blockMilliSecond 阻塞的毫秒数
-     * @Param sleppMilliSecond 每次请求睡眠的毫秒数
-     * @return
-     */
-    public static boolean getBlockLock(String lockKey, String clientId, int expireSecond, long blockMilliSecond, long sleppMilliSecond) {
-        while (blockMilliSecond >= 0){
-            boolean lock = getNoBlockLock(lockKey, clientId, expireSecond);
-            if (lock) {
-                return true;
-            } else {
-                blockMilliSecond -= sleppMilliSecond ;
-                try {
-                    TimeUnit.MILLISECONDS.sleep(sleppMilliSecond);
-                } catch (InterruptedException e) {
-                    return false;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 释放锁
-     * @param lockKey 锁的key
-     * @param clientId 加锁的客户端Id - 可采用UUID
-     * @return
-     */
-    public static boolean releaseLock(String lockKey, String clientId){
-        RedisScript<Long> redisScript = new DefaultRedisScript<>(RELEASE_LOCK_SCRIPT, Long.class);
-        Long result = template.execute(redisScript, Collections.singletonList(lockKey), clientId);
-        if(LOCK_SUCCESS.equals(result)) {
-            return true;
-        }
-        return false;
     }
 
 
