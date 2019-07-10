@@ -66,10 +66,10 @@ public class RedisLockUtils {
 
     /**
      * 同步锁调用（无需释放）
-     * @param lockKey
-     * @param clientId
-     * @param expireSecond
-     * @param call
+     * @param lockKey 加锁的key
+     * @param clientId 客户端ID 可采用UUID 必须唯一
+     * @param expireSecond 失效时间-单位秒
+     * @param call 执行的代码块
      * @return
      */
     public static void tryLockWithNotBlock(String lockKey, String clientId, int expireSecond, RedisLockCall call) {
@@ -85,12 +85,12 @@ public class RedisLockUtils {
 
     /**
      * 同步锁调用（无需释放）
-     * @param lockKey
-     * @param clientId
-     * @param expireSecond
-     * @param blockMilliSecond
-     * @param sleppMilliSecond
-     * @param call
+     * @param lockKey 加锁的key
+     * @param clientId 客户端ID 可采用UUID 必须唯一
+     * @param expireSecond 失效时间-单位秒
+     * @param blockMilliSecond 阻塞的毫秒数
+     * @param sleppMilliSecond 每次请求睡眠的毫秒数
+     * @param call 执行的代码块
      * @return
      */
     public static void tryLockWithBlock(String lockKey, String clientId, int expireSecond, long blockMilliSecond, long sleppMilliSecond, RedisLockCall call) {
@@ -107,9 +107,9 @@ public class RedisLockUtils {
 
     /**
      * 获取阻塞锁 (必须释放锁)
-     * @param lockKey
-     * @param clientId
-     * @param expireSecond
+     * @param lockKey 加锁的key
+     * @param clientId 客户端ID 可采用UUID 必须唯一
+     * @param expireSecond  失效时间-单位秒
      * @param blockMilliSecond 阻塞的毫秒数
      * @Param sleppMilliSecond 每次请求睡眠的毫秒数
      * @return
