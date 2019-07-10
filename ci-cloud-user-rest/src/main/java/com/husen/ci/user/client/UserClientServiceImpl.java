@@ -28,6 +28,11 @@ public class UserClientServiceImpl implements IUserClientService {
     }
 
     @Override
+    public User getUserByNameAndPassword(String userName, String password) {
+        return userService.getOneByUserNameAndPassword(userName, password);
+    }
+
+    @Override
     public boolean saveUser(User user) {
         return userService.createUser(user);
     }

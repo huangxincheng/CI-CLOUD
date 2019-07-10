@@ -36,6 +36,9 @@ public class UserDTO implements Serializable {
     @Field(value = "userName")
     private String userName;
 
+    @Field(value = "password")
+    private String password;
+
     @Field(value = "userStatus")
     private Integer userStatus;
 

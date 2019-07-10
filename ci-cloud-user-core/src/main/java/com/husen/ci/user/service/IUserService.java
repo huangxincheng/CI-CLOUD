@@ -1,15 +1,8 @@
 package com.husen.ci.user.service;
 
-import com.husen.ci.framework.utils.IpUtils;
-import com.husen.ci.user.entity.UserDTO;
 import com.husen.ci.user.pojo.User;
-import org.springframework.beans.BeanUtils;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /***
  @Author:MrHuang
@@ -22,6 +15,8 @@ public interface IUserService {
      User getOneById(String userId);
 
      User getOneByUserName(String userName);
+
+     User getOneByUserNameAndPassword(String userName, String password);
 
      Collection<User> getAll();
 

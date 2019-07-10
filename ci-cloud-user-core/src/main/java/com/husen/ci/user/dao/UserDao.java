@@ -36,6 +36,10 @@ public class UserDao {
        return mongoTemplate.findOne(new Query(Criteria.where("userName").is(userName)), UserDTO.class);
     }
 
+    public UserDTO findOneByNameAndPassword(String userName, String password) {
+       return mongoTemplate.findOne(Query.query(Criteria.where("userName").is(userName).and("password").is(password)), UserDTO.class);
+    }
+
     public List<UserDTO> getAll() {
         List<UserDTO> all = mongoTemplate.findAll(UserDTO.class);
         return all;

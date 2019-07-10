@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 /***
  @Author:MrHuang
  @Date: 2019/7/9 10:25
@@ -24,12 +26,29 @@ public class SsoController {
     @Autowired
     private IUserClientService userClientService;
 
+    @RequestMapping("/register")
+    public GlobalApiResponse register(String userName, String password) {
+        User user = userClientService.getUserByName(userName);
+        if (user != null) {
+            return GlobalApiResponse.toSuccess(new SsoRsp().setStatus(-1).setMsg("账户名已存在"));
+        }
+        user = new User().setUserName(userName).setPassword(password).setUserStatus(1)
+                .setUserCreateTime(LocalDateTime.now()).setUserActiveTime(LocalDateTime.now());
+        boolean saveOk = userClientService.saveUser(user);
+        if (saveOk) {
+            return GlobalApiResponse.toSuccess(new SsoRsp().setStatus(0).setMsg("注册成功"));
+        } else {
+            return GlobalApiResponse.toSuccess(new SsoRsp().setStatus(-1).setMsg("注册失败"));
+        }
+    }
+
+
     @RequestMapping("/login")
     public GlobalApiResponse login(String userName, String password) {
         // 1.校验用户
-        User user = userClientService.getUserByName(userName);
+        User user = userClientService.getUserByNameAndPassword(userName, password);
         if (user == null) {
-            return GlobalApiResponse.toSuccess(new SsoLoginRsp().setStatus(-1).setMsg("用户不存在"));
+            return GlobalApiResponse.toSuccess(new SsoLoginRsp().setStatus(-1).setMsg("账户不存在"));
         }
         // 2.生成TokenSessionId
         String tokenSessionId = SsoLoginHelper.createTokenSessionId(user.getUserId());

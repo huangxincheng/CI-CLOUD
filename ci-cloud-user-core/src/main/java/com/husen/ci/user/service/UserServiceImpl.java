@@ -46,6 +46,12 @@ public class UserServiceImpl implements IUserService {
         return BeanUtils.copy(dto, new User());
     }
 
+    @Override
+    public User getOneByUserNameAndPassword(String userName, String password) {
+        UserDTO dto = userDao.findOneByNameAndPassword(userName, password);
+        return BeanUtils.copy(dto, new User());
+    }
+
     @PrintMethod
     @Override
     public Collection<User> getAll() {
