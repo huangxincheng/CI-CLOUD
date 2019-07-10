@@ -62,6 +62,7 @@ public class SsoTokenFilter implements Filter {
                     return ;
                 } else {
                     // 认证失败，重定向Url
+                    rsp.setStatus(HttpServletResponse.SC_SEE_OTHER);
                     rsp.sendRedirect(redirectUrl);
                     return;
                 }
