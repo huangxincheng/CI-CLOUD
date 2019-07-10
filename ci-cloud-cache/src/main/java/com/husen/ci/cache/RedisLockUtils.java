@@ -72,19 +72,15 @@ public class RedisLockUtils {
      * @param call
      * @return
      */
-    public static boolean tryLockWithNotBlock(String lockKey, String clientId, int expireSecond, RedisLockCall call) {
+    public static void tryLockWithNotBlock(String lockKey, String clientId, int expireSecond, RedisLockCall call) {
         boolean lock = getNoBlockLock(lockKey, clientId, expireSecond);
-        try {
-            if (lock) {
+        if (lock) {
+            try {
                 call.call();
-                return true;
+            } finally {
+                releaseLock(lockKey, clientId);
             }
-        } catch (Exception ex) {
-            log.error("tryLock fail", ex);
-        } finally {
-            releaseLock(lockKey, clientId);
         }
-        return false;
     }
 
     /**
@@ -97,19 +93,15 @@ public class RedisLockUtils {
      * @param call
      * @return
      */
-    public static boolean tryLockWithBlock(String lockKey, String clientId, int expireSecond, long blockMilliSecond, long sleppMilliSecond, RedisLockCall call) {
+    public static void tryLockWithBlock(String lockKey, String clientId, int expireSecond, long blockMilliSecond, long sleppMilliSecond, RedisLockCall call) {
         boolean lock = getBlockLock(lockKey, clientId, expireSecond, blockMilliSecond, sleppMilliSecond);
-        try {
-            if (lock) {
+        if (lock) {
+            try {
                 call.call();
-                return true;
+            }  finally {
+                releaseLock(lockKey, clientId);
             }
-        } catch (Exception ex) {
-            log.error("tryLock fail", ex);
-        } finally {
-            releaseLock(lockKey, clientId);
         }
-        return false;
     }
 
 
