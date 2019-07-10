@@ -27,6 +27,11 @@ public class UserClientFallbackFactory implements FallbackFactory<IUserClient> {
             }
 
             @Override
+            public User getUserByNameAndPassword(String userName, String password) {
+                return null;
+            }
+
+            @Override
             public boolean saveUser(User user) {
                 return false;
             }
