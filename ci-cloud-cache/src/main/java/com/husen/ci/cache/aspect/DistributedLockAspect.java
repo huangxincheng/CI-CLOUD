@@ -34,7 +34,7 @@ public class DistributedLockAspect {
         String lockKey = StringUtils.isEmpty(distributedLock.lockKey()) ? DEFAULT_LOCK_KEY_PRE + clientId : distributedLock.lockKey();
         int expireSecond = distributedLock.expireSecond();
         boolean isBlock = distributedLock.sleppMilliSecond() != 0 && distributedLock.blockMilliSecond() != 0;
-        boolean isGetLock = false;
+        boolean isGetLock;
         if (isBlock) {
             // 要阻塞的
             isGetLock = RedisLockUtils.getBlockLock(lockKey, clientId, expireSecond, distributedLock.blockMilliSecond(), distributedLock.sleppMilliSecond());
