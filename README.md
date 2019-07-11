@@ -43,7 +43,7 @@ CI-CLOUD模块
         工具服务涉及Spring框架
         
     ---ci-cloud-sso-server
-        单点登陆Server
+        单点登陆Server 参考xxl-sso的token模式
         
     ---ci-cloud-sso-client
         其他系统使用单点登陆必须依赖的包
