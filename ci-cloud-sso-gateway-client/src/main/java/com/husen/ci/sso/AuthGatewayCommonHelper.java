@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -33,12 +34,12 @@ public class AuthGatewayCommonHelper {
      * @return
      */
     static boolean isPassAuth(ServerWebExchange exchange, AuthGatewayFilterFactory.Config config) {
-        List<String> authList = exchange.getRequest().getHeaders().get(SsoConstants.RQ_PASS_TOKEN_AUTH);
-        if (authList != null && authList.size() > 0) {
+        boolean isPass = exchange.getRequest().getHeaders().containsKey(SsoConstants.RQ_PASS_TOKEN_AUTH);
+        if (isPass) {
             return true;
         }
-        String authParam = exchange.getRequest().getQueryParams().getFirst(SsoConstants.RQ_PASS_TOKEN_AUTH);
-        if (authParam != null) {
+        isPass = exchange.getRequest().getQueryParams().containsKey(SsoConstants.RQ_PASS_TOKEN_AUTH);
+        if (isPass) {
             return true;
         }
         // 获取当前调整的route
@@ -85,10 +86,9 @@ public class AuthGatewayCommonHelper {
      * @return
      */
     static boolean isAuth(ServerWebExchange exchange) {
-        List<String> authTokenList = exchange.getRequest().getHeaders().get(SsoConstants.RQ_HEADER_TOEKN_SESSION_ID);
-        if (authTokenList != null && authTokenList.size() > 0) {
-            String authToken = authTokenList.get(0);
-            SsoSession ssoSession = SsoLoginHelper.loginCheck(authToken);
+        String tokenSessionId = exchange.getRequest().getHeaders().getFirst(SsoConstants.RQ_HEADER_TOEKN_SESSION_ID);
+        if (!StringUtils.isEmpty(tokenSessionId)) {
+            SsoSession ssoSession = SsoLoginHelper.loginCheck(tokenSessionId);
             if (!Objects.isNull(ssoSession)) {
                 return true;
             }
@@ -97,11 +97,11 @@ public class AuthGatewayCommonHelper {
     }
 
     /**
-     * 返回认证失败
+     * 返回认证失败JSON数据
      * @param exchange
      * @return
      */
-    static Mono<Void> returnAuthFail(ServerWebExchange exchange) {
+    static Mono<Void> returnAuthFailData(ServerWebExchange exchange) {
         // 不能pass的直接失败
         GlobalApiResponse rsp = GlobalApiResponse.toFail(GlobalApiCode.UNAUTH_CODE, GlobalApiCode.UNAUTH_CODE_MSG);
         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
@@ -111,6 +111,18 @@ public class AuthGatewayCommonHelper {
                 .writeWith(
                         Flux.just(getDataBuffer(exchange.getResponse(), rsp))
                 );
+    }
+
+    /**
+     * 返回认证失败重定向页面
+     * @param exchange
+     * @return
+     */
+    static Mono<Void> returnAuthFailRedirect(ServerWebExchange exchange) {
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(HttpStatus.SEE_OTHER);
+        response.getHeaders().set(HttpHeaders.LOCATION, exchange.getRequest().getHeaders().getFirst(SsoConstants.RQ_HEADER_REDIRECT_URL));
+        return response.setComplete();
     }
 
     /**

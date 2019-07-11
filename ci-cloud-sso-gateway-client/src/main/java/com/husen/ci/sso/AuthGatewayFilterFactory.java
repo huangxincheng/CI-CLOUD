@@ -33,7 +33,13 @@ public class AuthGatewayFilterFactory extends AbstractGatewayFilterFactory<AuthG
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
             if (!AuthGatewayCommonHelper.isPassAuth(exchange, config) && !AuthGatewayCommonHelper.isAuth(exchange)) {
-                return AuthGatewayCommonHelper.returnAuthFail(exchange);
+                if (exchange.getRequest().getHeaders().containsKey(SsoConstants.RQ_HEADER_REDIRECT_URL)) {
+                    // 认证失败 重定向页面
+                    return AuthGatewayCommonHelper.returnAuthFailRedirect(exchange);
+                } else {
+                    // 认证失败 返回数据
+                    return AuthGatewayCommonHelper.returnAuthFailData(exchange);
+                }
             }
             return chain.filter(exchange);
         });
