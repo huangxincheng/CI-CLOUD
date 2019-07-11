@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  ***/
 @Slf4j
 @Component
-public class RedisLockUtils {
+public class DistributedLockUtils {
 
     @FunctionalInterface
     public interface  RedisLockCall {
@@ -44,8 +44,8 @@ public class RedisLockUtils {
     private static StringRedisTemplate template;
 
     @Autowired
-    public RedisLockUtils(StringRedisTemplate template) {
-        RedisLockUtils.template = template;
+    public DistributedLockUtils(StringRedisTemplate template) {
+        DistributedLockUtils.template = template;
     }
 
     /**

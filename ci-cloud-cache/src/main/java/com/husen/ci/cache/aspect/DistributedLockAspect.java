@@ -1,6 +1,6 @@
 package com.husen.ci.cache.aspect;
 
-import com.husen.ci.cache.RedisLockUtils;
+import com.husen.ci.cache.DistributedLockUtils;
 import com.husen.ci.cache.annotation.DistributedLock;
 import com.husen.ci.framework.api.GlobalApiException;
 import lombok.extern.slf4j.Slf4j;
@@ -37,10 +37,10 @@ public class DistributedLockAspect {
         boolean isGetLock;
         if (isBlock) {
             // 要阻塞的
-            isGetLock = RedisLockUtils.getBlockLock(lockKey, clientId, expireSecond, distributedLock.blockMilliSecond(), distributedLock.sleppMilliSecond());
+            isGetLock = DistributedLockUtils.getBlockLock(lockKey, clientId, expireSecond, distributedLock.blockMilliSecond(), distributedLock.sleppMilliSecond());
         } else {
             // 非阻塞的
-            isGetLock = RedisLockUtils.getNoBlockLock(lockKey, clientId, expireSecond);
+            isGetLock = DistributedLockUtils.getNoBlockLock(lockKey, clientId, expireSecond);
         }
         // 锁获取失败 直接抛出异常
         if (!isGetLock) {
@@ -50,7 +50,7 @@ public class DistributedLockAspect {
         try {
             result = point.proceed();
         } finally {
-            RedisLockUtils.releaseLock(lockKey, clientId);
+            DistributedLockUtils.releaseLock(lockKey, clientId);
         }
         return result;
     }
