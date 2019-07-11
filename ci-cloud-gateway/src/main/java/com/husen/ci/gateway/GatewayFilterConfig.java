@@ -19,8 +19,4 @@ public class GatewayFilterConfig {
         return new GlobalGatewayFilterFactory();
     }
 
-    @Bean
-    public AuthGatewayFilterFactory authGatewayFilterFactory() {
-        return new AuthGatewayFilterFactory();
-    }
 }

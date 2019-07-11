@@ -49,6 +49,12 @@
             <artifactId>ci-framework</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.husen</groupId>
+            <artifactId>ci-cloud-sso-gateway-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
