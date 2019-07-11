@@ -33,28 +33,35 @@ public class DistributedLockAspect {
      */
     @Around(value = "@annotation(distributedLock)")
     public Object around(ProceedingJoinPoint point, DistributedLock distributedLock) throws Throwable {
+
+        // 获取注解值
         Map<String, Object> annotationAttributes = AnnotationUtils.getAnnotationAttributes(distributedLock);
         String clientId = StringUtils.isEmpty(distributedLock.clientId()) ? UUID.randomUUID().toString() : distributedLock.clientId();
-        String lockKey =  DEFAULT_LOCK_KEY_PRE + annotationAttributes.get("value");
+        String lockKey = StringUtils.isEmpty(annotationAttributes.get("value")) ? point.getSignature().getDeclaringTypeName() + "#" + point.getSignature().getName() : (String)annotationAttributes.get("value");
         int expireSecond = distributedLock.expireSecond();
         boolean isBlock = distributedLock.sleppMilliSecond() != 0 && distributedLock.blockMilliSecond() != 0;
+        // 分布式锁Key
+        String distributedLockKey =  DEFAULT_LOCK_KEY_PRE + lockKey;
+        // 1.获取锁
         boolean isGetLock;
         if (isBlock) {
             // 要阻塞的
-            isGetLock = DistributedLockUtils.getBlockLock(lockKey, clientId, expireSecond, distributedLock.blockMilliSecond(), distributedLock.sleppMilliSecond());
+            isGetLock = DistributedLockUtils.getBlockLock(distributedLockKey, clientId, expireSecond, distributedLock.blockMilliSecond(), distributedLock.sleppMilliSecond());
         } else {
             // 非阻塞的
-            isGetLock = DistributedLockUtils.getNoBlockLock(lockKey, clientId, expireSecond);
+            isGetLock = DistributedLockUtils.getNoBlockLock(distributedLockKey, clientId, expireSecond);
         }
         // 锁获取失败 直接抛出异常
         if (!isGetLock) {
             throw new GlobalApiException("内部系统错误,锁获取失败");
         }
+        // 2. 执行代码逻辑
         Object result = null;
         try {
             result = point.proceed();
         } finally {
-            DistributedLockUtils.releaseLock(lockKey, clientId);
+            // 3. 释放锁
+            DistributedLockUtils.releaseLock(distributedLockKey, clientId);
         }
         return result;
     }

@@ -30,7 +30,7 @@ public class UserServiceImpl implements IUserService {
 
     @PrintMethod
     @Override
-    @DistributedLock(lockKey = "UserServiceImpl#getOneById" , expireSecond = 10)
+    @DistributedLock(expireSecond = 100)
     public User getOneById(String userId) {
         return Optional.ofNullable(userDao.findById(userId))
                 .map(uto -> new User().setUserId(uto.getUserId())
