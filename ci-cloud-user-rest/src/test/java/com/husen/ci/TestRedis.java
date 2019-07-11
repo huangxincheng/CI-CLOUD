@@ -1,5 +1,6 @@
 package com.husen.ci;
 
+import com.husen.ci.cache.RedisLockUtils;
 import com.husen.ci.cache.RedisUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,5 +26,14 @@ public class TestRedis {
         RedisUtils.setForString("a123", "a456");
         String a1231 = RedisUtils.getForString("a123");
         System.out.println(a1231);
+    }
+
+    @Test
+    public void lock() {
+        RedisLockUtils.tryLockWithNotBlock("asd", "123", 100, () -> {
+            System.out.println("aaaa");
+            System.out.println("aaaa");
+            System.out.println("aaaa");
+        });
     }
 }
