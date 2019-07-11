@@ -21,10 +21,19 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.G
 @Slf4j
 public class GlobalHelper {
 
+    /**
+     * 服务器收到的请求时间
+     */
     public static final String GATEWAY_START_TIME = qualify("GATEWAY_START_TIME");
 
+    /**
+     * 服务器收到的请求体
+     */
     public static final String GATEWAY_REQUEST_BODY = qualify("GATEWAY_REQUEST_BODY");
 
+    /**
+     * 服务器响应的响应体
+     */
     public static final String GATEWAY_RESPONSE_RESULT = qualify("GATEWAY_RESPONSE_RESULT");
 
     /**
