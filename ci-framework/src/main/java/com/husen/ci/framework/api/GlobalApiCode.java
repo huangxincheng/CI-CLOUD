@@ -68,7 +68,7 @@ public interface GlobalApiCode {
     /**
      * 鉴权失败
      */
-    int UNAUTH_CODE = -20000;
+    int UNAUTH_CODE = 401;
 
     /**
      * 鉴权失败

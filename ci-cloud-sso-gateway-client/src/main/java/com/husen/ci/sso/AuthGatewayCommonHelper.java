@@ -1,9 +1,9 @@
 package com.husen.ci.sso;
 
+import com.husen.ci.framework.api.GlobalApiCode;
 import com.husen.ci.framework.api.GlobalApiResponse;
 import com.husen.ci.framework.json.JSONUtils;
 import com.husen.ci.sso.helper.SsoLoginHelper;
-import com.husen.ci.sso.response.SsoRsp;
 import com.husen.ci.sso.session.SsoSession;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
@@ -103,8 +103,8 @@ public class AuthGatewayCommonHelper {
      */
     static Mono<Void> returnAuthFail(ServerWebExchange exchange) {
         // 不能pass的直接失败
-        GlobalApiResponse rsp = GlobalApiResponse.toSuccess(new SsoRsp().setStatus(HttpStatus.OK.value()).setMsg("sso not login"));
-        exchange.getResponse().setStatusCode(HttpStatus.OK);
+        GlobalApiResponse rsp = GlobalApiResponse.toFail(GlobalApiCode.UNAUTH_CODE, GlobalApiCode.UNAUTH_CODE_MSG);
+        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
         exchange.getResponse().getHeaders().set(HttpHeaders.CONTENT_LENGTH, JSONUtils.object2Bytes(rsp).length + "");
         exchange.getResponse().getHeaders().set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
         return exchange.getResponse()
