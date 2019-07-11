@@ -33,7 +33,6 @@ public class DistributedLockAspect {
      */
     @Around(value = "@annotation(distributedLock)")
     public Object around(ProceedingJoinPoint point, DistributedLock distributedLock) throws Throwable {
-
         // 获取注解值
         Map<String, Object> annotationAttributes = AnnotationUtils.getAnnotationAttributes(distributedLock);
         String clientId = StringUtils.isEmpty(distributedLock.clientId()) ? UUID.randomUUID().toString() : distributedLock.clientId();

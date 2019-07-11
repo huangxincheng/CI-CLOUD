@@ -1,5 +1,6 @@
 package com.husen.ci;
 
+import com.husen.ci.framework.utils.AsyncExecutor;
 import com.husen.ci.user.pojo.User;
 import com.husen.ci.user.service.IUserService;
 import org.junit.Test;
@@ -25,8 +26,18 @@ public class TestPrintMethod {
     public void print() {
         User oneById = userService.getOneById("5d1efabfc607690006f84d07");
         System.out.println(oneById);
-
         User oneById2 = userService.getOneById("5d1efabfc607690006f84d07");
         System.out.println(oneById2);
+        for (int i = 1; i <= 10; i++) {
+            AsyncExecutor.execute(() -> {
+                while (true) {
+                    User us = userService.getOneById("5d1efabfc607690006f84d07");
+                    System.out.println(us);
+                }
+            });
+        }
+        while (true) {
+
+        }
     }
 }
