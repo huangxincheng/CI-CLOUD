@@ -53,7 +53,7 @@ public class DistributedLockAspect {
         }
         // 锁获取失败 直接抛出异常
         if (!isGetLock) {
-            throw new GlobalApiException("内部系统错误,锁获取失败");
+            throw new GlobalApiException("内部系统错误,分布式锁获取失败");
         }
         // 2. 执行代码逻辑
         Object result = null;
