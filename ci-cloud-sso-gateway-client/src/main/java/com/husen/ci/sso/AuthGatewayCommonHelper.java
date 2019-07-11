@@ -58,16 +58,16 @@ public class AuthGatewayCommonHelper {
             return true;
         }
         // 判断是否在不需要认证的服务列表中
-        List<String> notAuthService = config.getNotAuthService();
+        List<String> notAuthService = config.getIgnoreAuthServices();
         if (notAuthService != null && notAuthService.contains(route.getId())) {
             return true;
         }
         // 判断是否在不需要认证的请求uri中
         String rawPath = exchange.getRequest().getURI().getRawPath();
-        List<AuthGatewayFilterFactory.ServiceRoute> ignore = config.getIgnore();
+        List<AuthGatewayFilterFactory.ServiceRoute> ignore = config.getIgnoreAuthRoutes();
         if (ignore != null && ignore.size() > 0) {
             for (AuthGatewayFilterFactory.ServiceRoute serviceRoute : ignore) {
-                if (route.getId().equals(serviceRoute.getService())) {
+                if (route.getId().equals(serviceRoute.getRouteId())) {
                     for (String uri : serviceRoute.getUri()) {
                         if (rawPath.startsWith(uri)) {
                             return true;

@@ -5,39 +5,39 @@ spring:
   cloud:
     gateway:
       default-filters:
-      - name: Hystrix
-        args:
-          name: fallbackCmd
-          fallbackUri: forward:/fallbackCmd
-      - name: Global
-        args:
-          handler: true
-      - name: Auth
-        args:
-          notAuthService:
-          - ci-cloud-order
-          - ci-cloud-user
-          ignore:
-          - service: ci-cloud-order
-            uri:
-            - /api/v1/order/get
+        - name: Hystrix
+          args:
+            name: fallbackCmd
+            fallbackUri: forward:/fallbackCmd
+        - name: Global
+          args:
+            handler: true
+        - name: Auth
+          args:
+            ignoreAuthServices:
+              - ci-cloud-order
+              - ci-cloud-user
+            ignoreAuthRoutes:
+              - routeId: ci-cloud-order
+                uri:
+                  - /api/v1/order/get
       routes:
-      - id: ci-cloud-order
-        uri: lb://ci-cloud-order
-        predicates:
-        - name: Path
-          args[pattern]: /order/**
-        filters:
-        - StripPrefix=1
-        - AddRequestHeader=X-Request-Foo, Bar
-      - id: ci-cloud-user
-        uri: lb://ci-cloud-user
-        predicates:
-        - name: Path
-          args[pattern]: /user/**
-        filters:
-        - StripPrefix=1
-        - AddRequestHeader=X-Request-Foo, Bar
+        - id: ci-cloud-order
+          uri: lb://ci-cloud-order
+          predicates:
+            - name: Path
+              args[pattern]: /order/**
+          filters:
+            - StripPrefix=1
+            - AddRequestHeader=X-Request-Foo, Bar
+        - id: ci-cloud-user
+          uri: lb://ci-cloud-user
+          predicates:
+            - name: Path
+              args[pattern]: /user/**
+          filters:
+            - StripPrefix=1
+            - AddRequestHeader=X-Request-Foo, Bar
 
 logging:
   path: ${user.home}/${spring.application.name}
@@ -55,13 +55,15 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 8000
+            timeoutInMilliseconds: 50000
+
+# 启动实例化ribbon
 ribbon:
   eager-load:
     enabled: true
     clients:
-    - ci-cloud-user
-    - ci-cloud-order
+      - ci-cloud-user
+      - ci-cloud-order
 
 
 
