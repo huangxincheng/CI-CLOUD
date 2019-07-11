@@ -1,5 +1,6 @@
 package com.husen.ci.gateway;
 
+import com.husen.ci.gateway.utils.GlobalHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -55,11 +56,11 @@ public class GlobalGatewayFilterFactory extends AbstractGatewayFilterFactory<Glo
         return ((exchange, chain) -> {
 
             // TODO 执行前
-            GatewayHandlerCommon.handlerPre(exchange);
+            GlobalHelper.handlerPre(exchange);
 
             // TODO 执行后
             Runnable runnable = () -> {
-                GatewayHandlerCommon.handlerPost(exchange);
+                GlobalHelper.handlerPost(exchange);
             };
 
             MediaType mediaType = exchange.getRequest().getHeaders().getContentType();
@@ -68,7 +69,7 @@ public class GlobalGatewayFilterFactory extends AbstractGatewayFilterFactory<Glo
                 // 如果是json格式，将body内容转化为object or map 都可
                 Mono<Object> modifiedBody = serverRequest.bodyToMono(Object.class)
                         .flatMap(body -> {
-                            exchange.getAttributes().put(GatewayHandlerCommon.GATEWAY_REQUEST_BODY, body);
+                            exchange.getAttributes().put(GlobalHelper.GATEWAY_REQUEST_BODY, body);
                             return Mono.just(body);
                 });
                 return getVoidMono(exchange, chain, Object.class, modifiedBody).then(Mono.fromRunnable(runnable));
@@ -77,7 +78,7 @@ public class GlobalGatewayFilterFactory extends AbstractGatewayFilterFactory<Glo
                 Mono<String> modifiedBody = serverRequest.bodyToMono(String.class)
                         // .log("modify_request_mono", Level.INFO)
                         .flatMap(body -> {
-                            exchange.getAttributes().put(GatewayHandlerCommon.GATEWAY_REQUEST_BODY, body);
+                            exchange.getAttributes().put(GlobalHelper.GATEWAY_REQUEST_BODY, body);
                             return Mono.just(body);
                         });
 
