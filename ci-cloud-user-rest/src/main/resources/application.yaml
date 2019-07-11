@@ -18,6 +18,9 @@ spring:
       port: 27017
   jackson:
     default-property-inclusion: non_null
+  redis:
+    database: 0
+    url: redis://redis.limaila.com:6379
 
 feign:
   hystrix:
@@ -28,6 +31,8 @@ rocketmq:
   name-server: www.limaila.com:9876
   producer:
     group: ${spring.application.name}
+
+
 
 
 hystrix:

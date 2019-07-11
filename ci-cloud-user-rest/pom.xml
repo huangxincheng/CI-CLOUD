@@ -18,6 +18,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.husen</groupId>
+            <artifactId>ci-cloud-cache</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- feign client-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
