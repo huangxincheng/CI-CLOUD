@@ -7,9 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.Map;
 import java.util.UUID;
 
 /***
@@ -30,8 +32,9 @@ public class DistributedLockAspect {
      */
     @Around(value = "@annotation(distributedLock)")
     public Object around(ProceedingJoinPoint point, DistributedLock distributedLock) throws Throwable {
+        Map<String, Object> annotationAttributes = AnnotationUtils.getAnnotationAttributes(distributedLock);
         String clientId = StringUtils.isEmpty(distributedLock.clientId()) ? UUID.randomUUID().toString() : distributedLock.clientId();
-        String lockKey =  DEFAULT_LOCK_KEY_PRE + distributedLock.lockKey();
+        String lockKey =  DEFAULT_LOCK_KEY_PRE + annotationAttributes.get("value");
         int expireSecond = distributedLock.expireSecond();
         boolean isBlock = distributedLock.sleppMilliSecond() != 0 && distributedLock.blockMilliSecond() != 0;
         boolean isGetLock;

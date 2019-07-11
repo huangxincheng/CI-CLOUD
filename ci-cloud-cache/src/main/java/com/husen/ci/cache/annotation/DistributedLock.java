@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 public @interface DistributedLock {
 
     @AliasFor("lockKey")
-    String value();
+    String value() default "";
 
     @AliasFor("value")
     String lockKey() default "";
