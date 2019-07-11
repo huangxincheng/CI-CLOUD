@@ -29,6 +29,7 @@ public class DistributedLockAspect {
 
     /**
      * 定义环绕通知
+     * @annotation(distributedLock) 切入点
      */
     @Around(value = "@annotation(distributedLock)")
     public Object around(ProceedingJoinPoint point, DistributedLock distributedLock) throws Throwable {
