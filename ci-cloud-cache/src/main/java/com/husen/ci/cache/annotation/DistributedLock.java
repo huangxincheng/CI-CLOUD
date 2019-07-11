@@ -21,7 +21,7 @@ public @interface DistributedLock {
     String value() default "";
 
     @AliasFor("value")
-    String lockKey() default "";
+    String lockKey();
 
     String clientId() default "";
 

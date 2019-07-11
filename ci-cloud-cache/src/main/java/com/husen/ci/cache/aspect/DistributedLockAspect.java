@@ -31,7 +31,7 @@ public class DistributedLockAspect {
     @Around(value = "@annotation(distributedLock)")
     public Object around(ProceedingJoinPoint point, DistributedLock distributedLock) throws Throwable {
         String clientId = StringUtils.isEmpty(distributedLock.clientId()) ? UUID.randomUUID().toString() : distributedLock.clientId();
-        String lockKey = StringUtils.isEmpty(distributedLock.lockKey()) ? DEFAULT_LOCK_KEY_PRE + clientId : distributedLock.lockKey();
+        String lockKey =  DEFAULT_LOCK_KEY_PRE + distributedLock.lockKey();
         int expireSecond = distributedLock.expireSecond();
         boolean isBlock = distributedLock.sleppMilliSecond() != 0 && distributedLock.blockMilliSecond() != 0;
         boolean isGetLock;
