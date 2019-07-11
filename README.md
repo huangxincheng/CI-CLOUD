@@ -47,6 +47,9 @@ CI-CLOUD模块
         
     ---ci-cloud-sso-client
         其他系统使用单点登陆必须依赖的包
+        
+    ---ci-cloud-sso-gateway-client
+        SpringCloudGateway网关鉴权Client包
     
     ---ci-cloud-sso-client-sample
         其他系统单点登陆例子

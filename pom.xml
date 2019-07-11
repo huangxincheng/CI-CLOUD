@@ -28,6 +28,7 @@
          <module>ci-cloud-sso-server</module>
          <module>ci-cloud-sso-client</module>
          <module>ci-cloud-sso-client-sample</module>
+         <module>ci-cloud-sso-gateway-client</module>
      </modules>
 
     <properties>
