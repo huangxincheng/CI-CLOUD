@@ -18,10 +18,10 @@ import java.lang.annotation.Target;
 public @interface DistributedLock {
 
     @AliasFor("lockKey")
-    String value() default "";
+    String value();
 
     @AliasFor("value")
-    String lockKey();
+    String lockKey() default "";
 
     String clientId() default "";
 
