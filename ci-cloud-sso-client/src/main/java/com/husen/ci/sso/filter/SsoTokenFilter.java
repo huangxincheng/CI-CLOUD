@@ -45,7 +45,14 @@ public class SsoTokenFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse rsp = (HttpServletResponse) response;
         String servletPath = req.getServletPath();
+        // 这种直接return;
         if (IGNORE_PATHS.contains(servletPath)) {
+            return;
+        }
+        // 包含Pass头这种直接放行
+        String pass = req.getHeader(SsoConstants.RQ_PASS_TOKEN_AUTH);
+        if (!StringUtils.isEmpty(pass)) {
+            chain.doFilter(request, response);
             return;
         }
         System.out.println(servletPath);
