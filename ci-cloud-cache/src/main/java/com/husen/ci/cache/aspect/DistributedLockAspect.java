@@ -2,7 +2,7 @@ package com.husen.ci.cache.aspect;
 
 import com.husen.ci.cache.DistributedLockUtils;
 import com.husen.ci.cache.annotation.DistributedLock;
-import com.husen.ci.framework.api.GlobalToastException;
+import com.husen.ci.framework.api.GlobalCallException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -52,7 +52,7 @@ public class DistributedLockAspect {
         }
         // 锁获取失败 直接抛出异常
         if (!isGetLock) {
-            throw new GlobalToastException("内部系统错误,分布式锁获取失败");
+            throw new GlobalCallException("内部系统错误,分布式锁获取失败");
         }
         // 2. 执行代码逻辑
         Object result = null;
