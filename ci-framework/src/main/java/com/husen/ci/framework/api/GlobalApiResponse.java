@@ -8,7 +8,8 @@ import org.slf4j.MDC;
 
 import java.io.Serializable;
 
-import static com.husen.ci.framework.api.GlobalApiCode.*;
+import static com.husen.ci.framework.api.GlobalApiCode.SUCCESS_CODE;
+import static com.husen.ci.framework.api.GlobalApiCode.SUCCESS_CODE_MSG;
 
 /***
  @Author:MrHuang
@@ -79,20 +80,6 @@ public class GlobalApiResponse<T> implements Serializable {
         return rsp;
     }
 
-    /**
-     * 失败时候返回
-     * @return
-     */
-    public static GlobalApiResponse toFail(Exception e) {
-        log.error("The GlobalApiResponse toFail code = "+UNKNOW_CODE+" msg = " + UNKONW_CODE_MSG, e);
-        GlobalApiResponse rsp = new GlobalApiResponse()
-                .setCode(UNKNOW_CODE)
-                .setMsg(UNKONW_CODE_MSG)
-                .setThrowableMessage(e.getMessage())
-                .setTraceId(MDC.get("X-B3-TraceId"));
-        log.error("{\"logType\":\"Rsp Data Info\",\"rsp\":"+JSONUtils.object2Json(rsp)+"}", e);
-        return rsp;
-    }
 
     /**
      * 失败时返回
