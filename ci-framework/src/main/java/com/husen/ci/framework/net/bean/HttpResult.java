@@ -1,5 +1,6 @@
 package com.husen.ci.framework.net.bean;
 
+import com.husen.ci.framework.common.SystemConstant;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -16,8 +17,6 @@ import java.util.Map;
 @Data
 @Accessors(chain = true)
 public class HttpResult implements Serializable {
-
-    public static final int SUCCESS_CODE = 200;
 
     /**
      * 状态码
@@ -40,7 +39,7 @@ public class HttpResult implements Serializable {
      * @return
      */
     public boolean ok() {
-        return SUCCESS_CODE == this.code;
+        return SystemConstant.HTTP_CODE_OK == this.code;
     }
 
 

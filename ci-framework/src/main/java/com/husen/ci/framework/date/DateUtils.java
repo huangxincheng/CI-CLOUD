@@ -1,5 +1,7 @@
 package com.husen.ci.framework.date;
 
+import com.husen.ci.framework.common.SystemConstant;
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -12,9 +14,6 @@ import java.util.Date;
  ***/
 public class DateUtils {
 
-    private static final String FORMAT_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-
-    private static final String FORMAT_DATE_PATTERN = "yyyy-MM-dd";
 
     /**
      * Date转换为LocalDateTime
@@ -62,7 +61,7 @@ public class DateUtils {
      * @return
      */
     public static String localDateTime2TimeString(LocalDateTime localDateTime) {
-       return localDateTime2String(localDateTime, FORMAT_TIME_PATTERN);
+       return localDateTime2String(localDateTime, SystemConstant.FORMAT_TIME_PATTERN);
     }
 
     /**
@@ -71,7 +70,7 @@ public class DateUtils {
      * @return
      */
     public static String localDateTime2DateString(LocalDateTime localDateTime) {
-        return localDateTime2String(localDateTime, FORMAT_DATE_PATTERN);
+        return localDateTime2String(localDateTime, SystemConstant.FORMAT_DATE_PATTERN);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.husen.ci.framework.net;
 
 import com.alibaba.fastjson.JSON;
+import com.husen.ci.framework.common.SystemConstant;
 import com.husen.ci.framework.net.bean.HttpResult;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -29,13 +30,9 @@ public class HttpUtils {
 
     public volatile static HttpUtils instance;
 
-    private static final String APPLICATION_JSON_UTF8_VALUE = "application/json;charset=UTF-8";
+    private MediaType applicationJsonMediaType = MediaType.parse(SystemConstant.APPLICATION_JSON_UTF8_VALUE);
 
-    private static final String APPLICATION_FORM_URLENCODED_VALUE = "application/x-www-form-urlencoded";
-
-    private MediaType applicationJsonMediaType = MediaType.parse(APPLICATION_JSON_UTF8_VALUE);
-
-    private MediaType applicationFormMediaType = MediaType.parse(APPLICATION_FORM_URLENCODED_VALUE);
+    private MediaType applicationFormMediaType = MediaType.parse(SystemConstant.APPLICATION_FORM_URLENCODED_VALUE);
 
     private OkHttpClient okHttpClient;
 
