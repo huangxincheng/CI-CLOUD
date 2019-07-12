@@ -103,7 +103,7 @@ public class AuthGatewayCommonHelper {
      */
     static Mono<Void> returnAuthFailData(ServerWebExchange exchange) {
         // 不能pass的直接失败
-        GlobalApiResponse rsp = GlobalApiResponse.toFail(GlobalApiCode.UNAUTH_CODE, GlobalApiCode.UNAUTH_CODE_MSG);
+        GlobalApiResponse rsp = GlobalApiResponse.toSuccess(GlobalApiCode.UNAUTH_CODE, GlobalApiCode.UNAUTH_CODE_MSG);
         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
         exchange.getResponse().getHeaders().set(HttpHeaders.CONTENT_LENGTH, JSONUtils.object2Bytes(rsp).length + "");
         exchange.getResponse().getHeaders().set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);

@@ -25,6 +25,7 @@ public class FallbackController {
     public GlobalApiResponse fallback(ServerWebExchange exchange) {
         // HystrixGatewayFilterFactory 将异常信息存入exchange的attribute中
         GlobalHelper.handlerPost(exchange);
-        return GlobalApiResponse.toFail(GlobalApiCode.GATEWAY_FALLBACK_CODE, GlobalApiCode.GATEWAY_FALLBACK_CODE_MSG, (Throwable)exchange.getAttributes().get(ServerWebExchangeUtils.HYSTRIX_EXECUTION_EXCEPTION_ATTR));
+        Throwable throwable = (Throwable) exchange.getAttributes().get(ServerWebExchangeUtils.HYSTRIX_EXECUTION_EXCEPTION_ATTR);
+        return GlobalApiResponse.toFail(GlobalApiCode.GATEWAY_FALLBACK_CODE, GlobalApiCode.GATEWAY_FALLBACK_CODE_MSG, throwable);
     }
 }

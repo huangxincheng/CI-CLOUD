@@ -10,9 +10,13 @@ public interface GlobalApiCode {
 
     /**
      * 成功响应码
-     * Msg : Success
      */
     int SUCCESS_CODE = 0;
+
+    /**
+     * 成功响应码信息
+     */
+    String SUCCESS_CODE_MSG = "SUCCESS";
 
     /**
      * 业务错误响应码

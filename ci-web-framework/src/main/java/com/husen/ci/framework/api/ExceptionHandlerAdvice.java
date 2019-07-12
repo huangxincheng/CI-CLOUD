@@ -1,8 +1,5 @@
 package com.husen.ci.framework.api;
 
-import com.husen.ci.framework.api.GlobalApiCode;
-import com.husen.ci.framework.api.GlobalApiException;
-import com.husen.ci.framework.api.GlobalApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,7 +17,7 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(GlobalApiException.class)
     @ResponseStatus(code = HttpStatus.OK)
     public GlobalApiResponse handlerGlobalApiException(GlobalApiException e) {
-        return GlobalApiResponse.toFail(GlobalApiCode.BUSIN_ERROR_CODE, e.getMessage());
+        return GlobalApiResponse.toSuccess(GlobalApiCode.BUSIN_ERROR_CODE, e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

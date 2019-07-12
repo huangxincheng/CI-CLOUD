@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 import static com.husen.ci.framework.api.GlobalApiCode.*;
 
@@ -38,23 +37,44 @@ public class GlobalApiResponse<T> implements Serializable {
     private T payLoad;
 
     /**
+     * 异常信息内容
+     */
+    private String throwableMessage;
+
+    /**
      * 链路追踪消息ID
      */
     private String traceId;
 
     /**
-     * 成功时候返回
-     *
+     * 响应Suucess
      * @param payLoad
      * @param <T>
      * @return
      */
-    public static <T> GlobalApiResponse<T> toSuccess(T payLoad) {
-        GlobalApiResponse<T> rsp = new GlobalApiResponse<T>()
-                .setCode(SUCCESS_CODE)
-                .setMsg("SUCCESS")
-                .setPayLoad(payLoad)
-                .setTraceId(MDC.get("X-B3-TraceId"));
+    public static <T> GlobalApiResponse toSuccess(T payLoad) {
+        return toSuccess(SUCCESS_CODE, SUCCESS_CODE_MSG, payLoad);
+    }
+
+    /**
+     * 响应Suucess
+     * @param code
+     * @param msg
+     * @return
+     */
+    public static GlobalApiResponse toSuccess(int code, String msg) {
+        return toSuccess(code, msg, null);
+    }
+
+
+    /**
+     * 响应Suucess
+     * @param code
+     * @param msg
+     * @return
+     */
+    public static <T> GlobalApiResponse toSuccess(int code, String msg, T payLoad) {
+        GlobalApiResponse rsp = new GlobalApiResponse().setCode(code).setMsg(msg).setPayLoad(payLoad).setTraceId(MDC.get("X-B3-TraceId"));
         log.info("{\"logType\":{},\"rsp\":{}}", "Rsp Data Info", JSONUtils.object2Json(rsp));
         return rsp;
     }
@@ -68,6 +88,7 @@ public class GlobalApiResponse<T> implements Serializable {
         GlobalApiResponse rsp = new GlobalApiResponse()
                 .setCode(UNKNOW_CODE)
                 .setMsg(UNKONW_CODE_MSG)
+                .setThrowableMessage(e.getMessage())
                 .setTraceId(MDC.get("X-B3-TraceId"));
         log.error("{\"logType\":\"Rsp Data Info\",\"rsp\":"+JSONUtils.object2Json(rsp)+"}", e);
         return rsp;
@@ -80,22 +101,8 @@ public class GlobalApiResponse<T> implements Serializable {
      * @param errorMsg
      * @return
      */
-    public static GlobalApiResponse toFail(int code, String errorMsg) {
-        GlobalApiResponse rsp = new GlobalApiResponse().setCode(code).setMsg(errorMsg).setTraceId(MDC.get("X-B3-TraceId"));
-        log.error("{\"logType\":\"Rsp Data Info\",\"rsp\":"+JSONUtils.object2Json(rsp)+"}");
-        return rsp;
-    }
-
-
-    /**
-     * 失败时返回
-     *
-     * @param code
-     * @param errorMsg
-     * @return
-     */
     public static GlobalApiResponse toFail(int code, String errorMsg, Throwable throwable) {
-        GlobalApiResponse rsp = new GlobalApiResponse().setCode(code).setMsg(errorMsg).setTraceId(MDC.get("X-B3-TraceId"));
+        GlobalApiResponse rsp = new GlobalApiResponse().setCode(code).setMsg(errorMsg).setThrowableMessage(throwable.getMessage()).setTraceId(MDC.get("X-B3-TraceId"));
         log.error("{\"logType\":\"Rsp Data Info\",\"rsp\":"+JSONUtils.object2Json(rsp)+"}", throwable);
         return rsp;
     }
