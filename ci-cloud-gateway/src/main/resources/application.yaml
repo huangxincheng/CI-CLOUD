@@ -2,6 +2,8 @@ server:
   port: 80
 
 spring:
+  jackson:
+    default-property-inclusion: non_null
   cloud:
     gateway:
       default-filters:
@@ -38,6 +40,7 @@ spring:
           filters:
             - StripPrefix=1
             - AddRequestHeader=X-Request-Foo, Bar
+
 
 logging:
   path: ${user.home}/${spring.application.name}
