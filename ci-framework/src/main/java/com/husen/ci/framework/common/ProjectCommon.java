@@ -14,4 +14,6 @@ public interface ProjectCommon {
 
     String USER_SERVICE = "ci-cloud-user";
 
+    String SSO_SERVER = "ci-cloud-sso-server";
+
 }
