@@ -17,6 +17,9 @@ public final class SsoStoreHelper {
      */
     private static int REDIS_EXPIRE_SECOND = 86400;
 
+    /**
+     * STORE_KEY PREFIX
+     */
     private static final String STORE_KEY_PRE = "STORE_KEY:";
 
     public static void setRedisExpireSecond(int redisExpireSecond) {

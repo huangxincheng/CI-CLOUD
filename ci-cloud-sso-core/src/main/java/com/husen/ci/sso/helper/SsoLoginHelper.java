@@ -15,10 +15,19 @@ import org.springframework.util.StringUtils;
 @Slf4j
 public class SsoLoginHelper {
 
+    /**
+     * 生成TokenSessionId
+     * @param userId
+     * @return
+     */
     public static String createTokenSessionId(String userId) {
         return JwtUtils.encode(userId);
     }
 
+    /**
+     * 校验TokenSessionId
+     * @param tokenSessionId
+     */
     private static void checkTokenSessionId(String tokenSessionId) {
         Assert.notNull(tokenSessionId, "tokenSessionId not Null");
         if (!JwtUtils.checkToken(tokenSessionId)) {
@@ -26,6 +35,10 @@ public class SsoLoginHelper {
         }
     }
 
+    /**
+     * 登陆方法
+     * @param tokenSessionId
+     */
     public static void login(String tokenSessionId) {
         checkTokenSessionId(tokenSessionId);
         String userId = JwtUtils.decode(tokenSessionId);
@@ -37,6 +50,10 @@ public class SsoLoginHelper {
         SsoStoreHelper.put(userId, session);
     }
 
+    /**
+     * 登出方法
+     * @param tokenSessionId
+     */
     public static void logout(String tokenSessionId) {
         checkTokenSessionId(tokenSessionId);
         String userId = JwtUtils.decode(tokenSessionId);
@@ -44,6 +61,11 @@ public class SsoLoginHelper {
     }
 
 
+    /**
+     * 登陆检查方法
+     * @param tokenSessionId
+     * @return
+     */
     public static SsoSession loginCheck(String tokenSessionId) {
         try {
             if (StringUtils.isEmpty(tokenSessionId)) {
