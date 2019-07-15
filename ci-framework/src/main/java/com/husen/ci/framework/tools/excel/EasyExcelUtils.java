@@ -99,8 +99,8 @@ public class EasyExcelUtils {
             Sheet sheet = new Sheet(1, 0, clazz);
             writer.write(list, sheet);
             writer.finish();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            log.error("writeExcel2Xlsx fail", ex);
         }
     }
 
@@ -120,8 +120,8 @@ public class EasyExcelUtils {
             Sheet sheet = new Sheet(1, 0, clazz);
             writer.write(list, sheet);
             writer.finish();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            log.error("writeExcel2Xls fail", ex);
         }
     }
 
