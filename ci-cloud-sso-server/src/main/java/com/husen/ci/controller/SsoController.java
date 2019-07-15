@@ -1,6 +1,7 @@
 package com.husen.ci.controller;
 
 import com.husen.ci.framework.api.GlobalApiResponse;
+import com.husen.ci.framework.api.GlobalToastException;
 import com.husen.ci.response.SsoLoginRsp;
 import com.husen.ci.sso.helper.SsoLoginHelper;
 import com.husen.ci.sso.response.SsoRsp;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /***
  @Author:MrHuang
@@ -66,6 +68,10 @@ public class SsoController {
     @RequestMapping("/logincheck")
     public GlobalApiResponse logincheck(String tokenSessionId) {
         SsoSession ssoSession = SsoLoginHelper.loginCheck(tokenSessionId);
-        return GlobalApiResponse.toSuccess().map().put("ssoSession", ssoSession).put("ok", ssoSession != null);
+        if (Objects.isNull(ssoSession)) {
+            throw new GlobalToastException("请重新登录");
+        } else {
+            return GlobalApiResponse.toSuccess(ssoSession);
+        }
     }
 }
