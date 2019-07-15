@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /***
@@ -108,7 +106,7 @@ public class EasyExcelUtils {
 
     /**
      * 需要写入的Excel，有模型映射关系
-     * @param file  需要写入的Excel，格式为xls 2003版本
+     * @param file  需要写入的Excel，格式为xls 2003版本 最多支持65536行
      * @param list 写入Excel中的所有数据，继承于BaseRowModel
      */
     public static void writeExcel2Xls(final File file, List<? extends BaseRowModel> list) {
@@ -130,13 +128,15 @@ public class EasyExcelUtils {
 
 
     public static void main(String[] args) {
-        List<TestExcelRowModel> tms = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            tms.add( new TestExcelRowModel().setName("123-" + i).setPassword("123**" + i).setNickName("123" + i).setBirthday(new Date()));
-        }
-        writeExcel2Xlsx(new File("E:/MyProject2/CI-CLOUD/ci-framework/src/main/resources/2007-bak.xlsx"), tms);
-        writeExcel2Xls(new File("E:/MyProject2/CI-CLOUD/ci-framework/src/main/resources/2007-bak.xls"), tms);
-        System.out.println("pk");
+//        List<TestExcelRowModel> tms = new ArrayList<>();
+//        for (int i = 0; i < 100000; i++) {
+//            tms.add( new TestExcelRowModel().setName("123-" + i).setPassword("123**" + i).setNickName("123" + i).setBirthday(new Date()));
+//        }
+//        writeExcel2Xlsx(new File("E:/MyProject2/CI-CLOUD/ci-framework/src/main/resources/2007-bak.xlsx"), tms);
+//        writeExcel2Xls(new File("E:/MyProject2/CI-CLOUD/ci-framework/src/main/resources/2007-bak.xls"), tms);
+//        System.out.println("pk");
+        List<Object> read = read("E:/MyProject2/CI-CLOUD/ci-framework/src/main/resources/2007-bak.xlsx", 1, 1);
+        System.out.println(read.size());
     }
 
 }
