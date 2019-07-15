@@ -22,6 +22,15 @@ public final class SsoStoreHelper {
      */
     private static final String STORE_KEY_PRE = "STORE_KEY:";
 
+    /**
+     * REDIS_KEY
+     * @param storeKey
+     * @return
+     */
+    private static String redisKey(String storeKey) {
+        return STORE_KEY_PRE + storeKey;
+    }
+
     public static void setRedisExpireSecond(int redisExpireSecond) {
         SsoStoreHelper.REDIS_EXPIRE_SECOND = redisExpireSecond;
     }
@@ -30,23 +39,33 @@ public final class SsoStoreHelper {
         return SsoStoreHelper.REDIS_EXPIRE_SECOND;
     }
 
+    /**
+     * 从缓存中获取ssoSession
+     * @param storeKey
+     * @return
+     */
     public static SsoSession get(String storeKey) {
         String redisKey = redisKey(storeKey);
         String stringValue = JedisUtils.getStringValue(redisKey);
         return JSONUtils.json2Bean(stringValue, SsoSession.class);
     }
 
+    /**
+     * 设置ssoSession到缓存中
+     * @param storeKey
+     * @param ssoSession
+     */
     public static void put(String storeKey, SsoSession ssoSession) {
         String redisKey = redisKey(storeKey);
         JedisUtils.setStringValue(redisKey, JSONUtils.object2Json(ssoSession), REDIS_EXPIRE_SECOND);
     }
 
+    /**
+     * 从缓存中删除ssoSession
+     * @param storeKey
+     */
     public static void remove(String storeKey) {
         String redisKey = redisKey(storeKey);
         JedisUtils.del(redisKey);
-    }
-
-    private static String redisKey(String storeKey) {
-       return STORE_KEY_PRE + storeKey;
     }
 }
