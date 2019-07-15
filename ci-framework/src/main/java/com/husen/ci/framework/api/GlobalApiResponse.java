@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.husen.ci.framework.api.GlobalApiCode.SUCCESS_CODE;
 import static com.husen.ci.framework.api.GlobalApiCode.SUCCESS_CODE_MSG;
@@ -46,6 +48,11 @@ public class GlobalApiResponse<T> implements Serializable {
      * 链路追踪消息ID
      */
     private String traceId;
+
+
+    public static GlobalApiResponse toSuccess() {
+        return toSuccess(SUCCESS_CODE, SUCCESS_CODE_MSG);
+    }
 
     /**
      * 响应Suucess
@@ -100,5 +107,16 @@ public class GlobalApiResponse<T> implements Serializable {
      */
     public boolean ok() {
         return this.code == SUCCESS_CODE;
+    }
+
+
+    public GlobalApiResponse<T> map() {
+        this.payLoad = (T)new HashMap<>();
+        return this;
+    }
+
+    public GlobalApiResponse put(String key, Object value) {
+        ((Map)this.payLoad).put(key, value);
+        return this;
     }
 }

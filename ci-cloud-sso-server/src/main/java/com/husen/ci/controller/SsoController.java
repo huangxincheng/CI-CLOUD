@@ -66,6 +66,6 @@ public class SsoController {
     @RequestMapping("/logincheck")
     public GlobalApiResponse logincheck(String tokenSessionId) {
         SsoSession ssoSession = SsoLoginHelper.loginCheck(tokenSessionId);
-        return GlobalApiResponse.toSuccess(ssoSession);
+        return GlobalApiResponse.toSuccess().map().put("ssoSession", ssoSession).put("ok", ssoSession != null);
     }
 }
