@@ -1,6 +1,8 @@
 package com.husen.ci.framework.xml;
 
+import com.husen.ci.framework.json.JSONUtils;
 import com.husen.ci.framework.net.bean.HttpResult;
+import com.husen.ci.framework.utils.BeanUtils;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
@@ -24,7 +26,9 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /***
@@ -245,16 +249,11 @@ public class XmlUtils {
 
     public static void main(String[] args) throws Exception {
         HttpResult result = new HttpResult().setCode(200).setContent("OK");
-        String x1 = XmlUtils.toXml(result);
-        System.out.println(x1);
-        String x2 = XmlUtils.toXmlWithCData(result);
-        System.out.println(x2);
-        Map<String, String> m1 = XmlUtils.xmlToMap(x1);
-        System.out.println(m1);
-        Map<String, String> m2 = XmlUtils.xmlToMap(x2);
-        System.out.println(m2);
+        Map<String, Object> resultMap = BeanUtils.bean2Map(result);
+        List<HttpResult> resultList = Collections.singletonList(result);
 
-        HttpResult hr1 = XmlUtils.toBean(x1, HttpResult.class);
-        System.out.println(hr1);
+        System.out.println("bean : " + JSONUtils.object2Json(result));
+        System.out.println("map : " + JSONUtils.object2Json(resultMap));
+        System.out.println("list : " + JSONUtils.object2Json(resultList));
     }
 }
