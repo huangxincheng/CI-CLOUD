@@ -25,10 +25,10 @@ public class SsoLoginHelper {
     }
 
     /**
-     * 校验TokenSessionId
+     * 校验TokenSessionId 校验失败抛出异常
      * @param tokenSessionId
      */
-    private static void checkTokenSessionId(String tokenSessionId) {
+    private static void checkTokenSessionIdWithThrow(String tokenSessionId) {
         Assert.notNull(tokenSessionId, "tokenSessionId not Null");
         if (!JwtUtils.checkToken(tokenSessionId)) {
             Assert.notNull(tokenSessionId, "tokenSessionId check fail");
@@ -36,11 +36,23 @@ public class SsoLoginHelper {
     }
 
     /**
+     * 校验TokenSessionId 校验失败 返回false
+     * @param tokenSessionId
+     * @return
+     */
+    private static boolean checkTokenSessionIdWithBoolean(String tokenSessionId) {
+        if (StringUtils.isEmpty(tokenSessionId)) {
+            return false;
+        }
+        return JwtUtils.checkToken(tokenSessionId);
+    }
+
+    /**
      * 登陆方法
      * @param tokenSessionId
      */
     public static void login(String tokenSessionId) {
-        checkTokenSessionId(tokenSessionId);
+        checkTokenSessionIdWithThrow(tokenSessionId);
         String userId = JwtUtils.decode(tokenSessionId);
         SsoSession session = new SsoSession()
                 .setUserId(userId)
@@ -55,7 +67,7 @@ public class SsoLoginHelper {
      * @param tokenSessionId
      */
     public static void logout(String tokenSessionId) {
-        checkTokenSessionId(tokenSessionId);
+        checkTokenSessionIdWithThrow(tokenSessionId);
         String userId = JwtUtils.decode(tokenSessionId);
         SsoStoreHelper.remove(userId);
     }
@@ -68,10 +80,8 @@ public class SsoLoginHelper {
      */
     public static SsoSession loginCheck(String tokenSessionId) {
         try {
-            if (StringUtils.isEmpty(tokenSessionId)) {
-                return null;
-            }
-            if (!JwtUtils.checkToken(tokenSessionId)) {
+            boolean check = checkTokenSessionIdWithBoolean(tokenSessionId);
+            if (!check) {
                 return null;
             }
             String userId = JwtUtils.decode(tokenSessionId);
