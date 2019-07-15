@@ -133,10 +133,10 @@ public class EasyExcelUtils {
 //            tms.add( new TestExcelRowModel().setName("123-" + i).setPassword("123**" + i).setNickName("123" + i).setBirthday(new Date()));
 //        }
 //        writeExcel2Xlsx(new File("E:/MyProject2/CI-CLOUD/ci-framework/src/main/resources/2007-bak.xlsx"), tms);
-//        writeExcel2Xls(new File("E:/MyProject2/CI-CLOUD/ci-framework/src/main/resources/2007-bak.xls"), tms);
+////        writeExcel2Xls(new File("E:/MyProject2/CI-CLOUD/ci-framework/src/main/resources/2007-bak.xls"), tms);
 //        System.out.println("pk");
-        List<Object> read = read("E:/MyProject2/CI-CLOUD/ci-framework/src/main/resources/2007-bak.xlsx", 1, 1);
-        System.out.println(read.size());
+//        List<Object> read = read("E:/MyProject2/CI-CLOUD/ci-framework/src/main/resources/2007-bak.xlsx", 1, 1);
+//        System.out.println(read.size());
     }
 
 }
