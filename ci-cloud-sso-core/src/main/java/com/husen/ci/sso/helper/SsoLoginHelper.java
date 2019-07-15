@@ -3,7 +3,6 @@ package com.husen.ci.sso.helper;
 import com.husen.ci.framework.auth.JwtUtils;
 import com.husen.ci.sso.session.SsoSession;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /***
@@ -29,9 +28,11 @@ public class SsoLoginHelper {
      * @param tokenSessionId
      */
     private static void checkTokenSessionIdWithThrow(String tokenSessionId) {
-        Assert.notNull(tokenSessionId, "tokenSessionId not Null");
+        if (StringUtils.isEmpty(tokenSessionId)) {
+            throw new IllegalArgumentException("凭证不能为空");
+        }
         if (!JwtUtils.checkToken(tokenSessionId)) {
-            Assert.notNull(tokenSessionId, "tokenSessionId check fail");
+            throw new IllegalArgumentException("凭证校验失败");
         }
     }
 
