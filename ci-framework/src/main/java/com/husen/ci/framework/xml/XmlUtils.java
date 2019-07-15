@@ -183,11 +183,10 @@ public class XmlUtils {
      * @throws Exception
      */
     public static Map<String, String> xmlToMap(String strXML) throws Exception {
-        try {
+        try (InputStream stream = new ByteArrayInputStream(strXML.getBytes(StandardCharsets.UTF_8.name()))) {
             Map<String, String> data = new HashMap<>(16);
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            InputStream stream = new ByteArrayInputStream(strXML.getBytes(StandardCharsets.UTF_8.name()));
             org.w3c.dom.Document doc = documentBuilder.parse(stream);
             doc.getDocumentElement().normalize();
             NodeList nodeList = doc.getDocumentElement().getChildNodes();
@@ -198,14 +197,7 @@ public class XmlUtils {
                     data.put(element.getNodeName(), element.getTextContent());
                 }
             }
-            try {
-                stream.close();
-            } catch (Exception ex) {
-                // do nothing
-            }
             return data;
-        } catch (Exception ex) {
-            throw ex;
         }
     }
 
@@ -251,9 +243,18 @@ public class XmlUtils {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         HttpResult result = new HttpResult().setCode(200).setContent("OK");
-        System.out.println(XmlUtils.toXml(result));
-        System.out.println(XmlUtils.toXmlWithCData(result));
+        String x1 = XmlUtils.toXml(result);
+        System.out.println(x1);
+        String x2 = XmlUtils.toXmlWithCData(result);
+        System.out.println(x2);
+        Map<String, String> m1 = XmlUtils.xmlToMap(x1);
+        System.out.println(m1);
+        Map<String, String> m2 = XmlUtils.xmlToMap(x2);
+        System.out.println(m2);
+
+        HttpResult hr1 = XmlUtils.toBean(x1, HttpResult.class);
+        System.out.println(hr1);
     }
 }
