@@ -7,7 +7,6 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /***
@@ -28,7 +27,7 @@ public class SsoConfig implements InitializingBean, DisposableBean {
     @Value("${sso.excluded.paths}")
     private String ssoExcludedPaths;
 
-    @Bean
+//    @Bean
     public FilterRegistrationBean ssoFilterRegistrationBean() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setName("ssoFilter");

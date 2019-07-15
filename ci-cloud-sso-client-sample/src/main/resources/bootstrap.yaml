@@ -3,6 +3,19 @@ spring:
     name: ci-cloud-sso-client-sample
   jackson:
     default-property-inclusion: non_null
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: \
+      classpath:/META-INF/resources/,\
+      classpath:/resources/,\
+      classpath:/static/,\
+      classpath:/public/
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+
 
 server:
   port: 30084
@@ -22,3 +35,4 @@ sso:
   server: http://localhost:30083
   excluded:
     paths:
+
