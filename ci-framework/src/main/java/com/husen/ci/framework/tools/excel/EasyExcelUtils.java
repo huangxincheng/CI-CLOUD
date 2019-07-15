@@ -6,6 +6,7 @@ import com.alibaba.excel.metadata.BaseRowModel;
 import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -90,6 +91,9 @@ public class EasyExcelUtils {
      * @param list 写入Excel中的所有数据，继承于BaseRowModel
      */
     public static void writeExcel2Xlsx(final File file, List<? extends BaseRowModel> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            throw new IllegalArgumentException("导出的数据不能为空");
+        }
         try (OutputStream out = new FileOutputStream(file); BufferedOutputStream bos = new BufferedOutputStream(out)){
             ExcelWriter writer = EasyExcelFactory.getWriter(bos);
             //写第一个sheet,  有模型映射关系
@@ -108,6 +112,9 @@ public class EasyExcelUtils {
      * @param list 写入Excel中的所有数据，继承于BaseRowModel
      */
     public static void writeExcel2Xls(final File file, List<? extends BaseRowModel> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            throw new IllegalArgumentException("导出的数据不能为空");
+        }
         try (OutputStream out = new FileOutputStream(file); BufferedOutputStream bos = new BufferedOutputStream(out)){
             ExcelWriter writer = EasyExcelFactory.getWriter(bos, ExcelTypeEnum.XLS, true);
             //写第一个sheet,  有模型映射关系
@@ -119,6 +126,7 @@ public class EasyExcelUtils {
             e.printStackTrace();
         }
     }
+
 
 
     public static void main(String[] args) {
