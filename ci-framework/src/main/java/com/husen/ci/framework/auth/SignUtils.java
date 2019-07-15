@@ -14,19 +14,21 @@ import java.util.*;
  **/
 public class SignUtils {
 
+    private static final String API_KEY = "API_KEY";
+
     public static String sign(Map<String, Serializable> keyValueMap, String apikey) {
         List<String> keyList  = new ArrayList<>(keyValueMap.keySet());
         Collections.sort(keyList);
         StringBuilder sb = new StringBuilder();
         for (String key : keyList) {
             if (keyValueMap.get(key) != null) {
-                if (sb.length() >= 0) {
+                if (sb.length() > 0) {
                     sb.append("&");
                 }
                 sb.append(key).append("=").append(keyValueMap.get(key));
             }
         }
-        sb.append("&apikey=").append(apikey);
+        sb.append("&" + API_KEY + "=").append(apikey);
         return CryptoUtils.encodeMD5(sb.toString()).toUpperCase();
     }
 
