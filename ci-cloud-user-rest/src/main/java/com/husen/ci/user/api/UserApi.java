@@ -9,10 +9,7 @@ import com.husen.ci.order.pojo.Order;
 import com.husen.ci.user.pojo.User;
 import com.husen.ci.user.service.IUserService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,19 +47,17 @@ public class UserApi {
 
 
     @ApiOperation(value="创建用户", notes="保存用户信息")
-    @ApiImplicitParam(name = "request", value = "详细的Request信息内包含user", required = true, dataType = "GlobalApiRequest")
     @PostMapping("/saveUser")
     @HystrixCommand(defaultFallback = "defaultFallback")
-    public GlobalApiResponse saveUser(@RequestBody GlobalApiRequest<User> request) {
+    public GlobalApiResponse saveUser(@RequestBody @ApiParam GlobalApiRequest<User> request) {
         return GlobalApiResponse.toSuccess(userService.createUser(request.getPayLoad()));
     }
 
 
     @ApiOperation(value="保存订单", notes="保存订单信息")
-    @ApiImplicitParam(name = "request", value = "详细的Request信息内包含order", required = true, dataType = "GlobalApiRequest")
     @PostMapping("/saveOrder")
     @HystrixCommand(defaultFallback = "defaultFallback")
-    public GlobalApiResponse saveOrder(@RequestBody GlobalApiRequest<Order> request) {
+    public @ApiParam GlobalApiResponse saveOrder(@RequestBody  @ApiParam GlobalApiRequest<Order> request) {
         return GlobalApiResponse.toSuccess(orderClient.saveOrder(request.getPayLoad()));
     }
 
