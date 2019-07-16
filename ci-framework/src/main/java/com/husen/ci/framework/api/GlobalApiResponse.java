@@ -1,8 +1,6 @@
 package com.husen.ci.framework.api;
 
 import com.husen.ci.framework.json.JSONUtils;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
@@ -24,19 +22,16 @@ import static com.husen.ci.framework.api.GlobalApiCode.SUCCESS_CODE_MSG;
 @Data
 @Accessors(chain = true)
 @Slf4j
-@ApiModel("统一响应Rsp Data")
 public class GlobalApiResponse<T> implements Serializable {
 
     /**
      * 业务响应Code
      */
-    @ApiModelProperty(value = "响应码", notes = "0:成功  !0:失败")
     private int code;
 
     /**
      * 业务响应Msg与Code对应
      */
-    @ApiModelProperty("响应码信息")
     private String msg;
 
     /**
@@ -47,13 +42,11 @@ public class GlobalApiResponse<T> implements Serializable {
     /**
      * 异常信息内容
      */
-    @ApiModelProperty("异常信息")
     private String throwableMessage;
 
     /**
      * 链路追踪消息ID
      */
-    @ApiModelProperty("链路追踪ID")
     private String traceId;
 
 
