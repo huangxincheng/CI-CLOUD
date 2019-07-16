@@ -9,6 +9,10 @@ import com.husen.ci.order.pojo.Order;
 import com.husen.ci.user.pojo.User;
 import com.husen.ci.user.service.IUserService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
  ***/
 @RestController
 @RequestMapping("/api/v1/user")
+@Api(tags = "用户相关API")
 public class UserApi {
 
     @Autowired
@@ -28,12 +33,15 @@ public class UserApi {
     @Autowired
     private IOrderClient orderClient;
 
+    @ApiOperation(value="获取用户详细信息", notes="根据userId获取用户详细信息")
+    @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "String", paramType = "path")
     @GetMapping("/get/{userId}")
     @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse get(@PathVariable String userId) {
         return GlobalApiResponse.toSuccess(userService.getOneById(userId));
     }
 
+    @ApiOperation(value="获取用户列表", notes="获取用户列表")
     @GetMapping("/getAll")
     @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse getAll() {
@@ -41,6 +49,8 @@ public class UserApi {
     }
 
 
+    @ApiOperation(value="创建用户", notes="保存用户信息")
+    @ApiImplicitParam(name = "request", value = "详细的Request信息内包含user", required = true, dataType = "GlobalApiRequest")
     @PostMapping("/saveUser")
     @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse saveUser(@RequestBody GlobalApiRequest<User> request) {
@@ -48,12 +58,16 @@ public class UserApi {
     }
 
 
-    @RequestMapping("/saveOrder")
+    @ApiOperation(value="保存订单", notes="保存订单信息")
+    @ApiImplicitParam(name = "request", value = "详细的Request信息内包含order", required = true, dataType = "GlobalApiRequest")
+    @PostMapping("/saveOrder")
     @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse saveOrder(@RequestBody GlobalApiRequest<Order> request) {
         return GlobalApiResponse.toSuccess(orderClient.saveOrder(request.getPayLoad()));
     }
 
+    @ApiOperation(value="查询订单", notes="根据订单ID查询订单")
+    @ApiImplicitParam(name = "orderNo", value = "订单ID", required = true, dataType = "Long", paramType = "path")
     @GetMapping("/queryOrder/{orderNo}")
     @HystrixCommand(defaultFallback = "defaultFallback")
     public GlobalApiResponse queryOrder(@PathVariable Long orderNo) {
@@ -62,6 +76,12 @@ public class UserApi {
 
     @GetMapping("/sendMQ/{topic}/{tags}/{msg}")
     @HystrixCommand(defaultFallback = "defaultFallback")
+    @ApiOperation(value="更新信息", notes="根据url的id来指定更新用户信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "topic", value = "MQ的topic", required = true, dataType = "String",paramType = "path"),
+            @ApiImplicitParam(name = "tags", value = "MQ的tags", required = true, dataType = "String", paramType = "path"),
+            @ApiImplicitParam(name = "msg", value = "MQ的msg", required = true, dataType = "String", paramType = "path")
+    })
     public GlobalApiResponse sendMQ(@PathVariable String topic, @PathVariable String tags, @PathVariable String msg) {
          return GlobalApiResponse.toSuccess(MqUtils.syncSendDelay(topic, tags, msg, 2));
     }
