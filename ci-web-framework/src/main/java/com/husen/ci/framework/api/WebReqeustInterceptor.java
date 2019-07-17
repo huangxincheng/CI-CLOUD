@@ -30,7 +30,7 @@ public class WebReqeustInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        WebRequestContext.WebRequest wrb = new WebRequestContext.WebRequest()
+        WebRequestLocal wrb = new WebRequestLocal()
                 .setServerIp(IpUtils.getInstance().getServerIP())
                 .setClientIp(IpUtils.getInstance().getClientIP(request))
                 .setClientReqTime(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli())
@@ -38,7 +38,7 @@ public class WebReqeustInterceptor implements HandlerInterceptor {
                 .setSpanId(Optional.ofNullable(MDC.get("X-B3-SpanId")).orElse(""))
                 .setTokenId(request.getHeader("tokenId"))
                 .setClientReqType(request.getHeader("clientReqType"));
-        WebRequestContext.setContext(wrb);
+        WebRequestContextHodler.setWebRequest(wrb);
         log.info("{} preHadnle wrb = {}", "[WebReqeustInterceptor]", wrb);
         return true;
     }
@@ -62,6 +62,6 @@ public class WebReqeustInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         log.info("{} afterCompletion remove context", "[WebReqeustInterceptor]");
-        WebRequestContext.removeContext();
+        WebRequestContextHodler.removeWebRequest();
     }
 }
