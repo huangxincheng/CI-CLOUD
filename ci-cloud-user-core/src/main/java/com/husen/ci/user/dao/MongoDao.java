@@ -37,7 +37,10 @@ public class MongoDao<T, F> {
      */
     private Class<F> clazzF;
 
-    public void buildTFClass() {
+    /**
+     * 写入泛型Class类型
+     */
+    private void writeClassType() {
         clazzT = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         clazzF = (Class<F>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
@@ -62,7 +65,7 @@ public class MongoDao<T, F> {
      * @return
      */
     public T findById(F id) {
-        buildTFClass();
+        writeClassType();
         return mongoTemplate.findById(id, clazzT);
     }
 
@@ -82,7 +85,7 @@ public class MongoDao<T, F> {
      * @return
      */
     public T findOneByQuery(Query query) {
-        buildTFClass();
+        writeClassType();
         return mongoTemplate.findOne(query, clazzT);
     }
 
@@ -102,7 +105,7 @@ public class MongoDao<T, F> {
      * @return
      */
     public List<T> findByQuery(Query query) {
-        buildTFClass();
+        writeClassType();
         return mongoTemplate.find(query, clazzT);
     }
 
@@ -120,7 +123,7 @@ public class MongoDao<T, F> {
      * @return
      */
     public List<T> findAll() {
-        buildTFClass();
+        writeClassType();
         return mongoTemplate.findAll(clazzT);
     }
 
@@ -154,7 +157,7 @@ public class MongoDao<T, F> {
      * @return
      */
     public boolean updateById(T t) {
-        buildTFClass();
+        writeClassType();
         Map<String, Object> map = BeanUtils.bean2Map(t);
         String containIdKey = null;
         Object containIdValue = null;
@@ -162,8 +165,8 @@ public class MongoDao<T, F> {
             field.setAccessible(true);
             Id id = field.getDeclaredAnnotation(Id.class);
             if (id != null) {
-                containIdKey = field.getName();
                 try {
+                    containIdKey = field.getName();
                     containIdValue = field.get(t);
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
@@ -194,7 +197,7 @@ public class MongoDao<T, F> {
      * @return
      */
     public boolean updateFirst(Query query, Update update) {
-        buildTFClass();
+        writeClassType();
         return mongoTemplate.updateFirst(query, update, clazzT).getModifiedCount() >= 0;
     }
 
@@ -216,7 +219,7 @@ public class MongoDao<T, F> {
      * @return
      */
     public boolean updateMulti(Query query, Update update) {
-        buildTFClass();
+        writeClassType();
         return mongoTemplate.updateMulti(query, update, clazzT).getModifiedCount() >= 0;
     }
 
@@ -237,7 +240,7 @@ public class MongoDao<T, F> {
      * @return
      */
     public boolean deleteById(F id) {
-        buildTFClass();
+        writeClassType();
         return mongoTemplate.remove(Query.query(Criteria.where("_id").is(id)), clazzT).getDeletedCount() >= 0;
     }
 
@@ -257,7 +260,7 @@ public class MongoDao<T, F> {
      * @return
      */
     public boolean deleteByQuery(Query query) {
-        buildTFClass();
+        writeClassType();
         return mongoTemplate.remove(query, clazzT).getDeletedCount() >= 0;
     }
 }
