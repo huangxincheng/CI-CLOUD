@@ -26,7 +26,7 @@ public class TestAuthority {
     @Test
     public void testAdd() {
         CustomerDTO dto = new CustomerDTO().setCname("Husen").setStatus(1);
-        authorityService.addCustomer(dto);
+        dto = authorityService.addCustomer(dto);
         System.out.println(dto);
     }
 
@@ -34,14 +34,12 @@ public class TestAuthority {
     public void testUpdateInfo() {
         CustomerDTO customerDTO = new CustomerDTO().setCid("5d2ef13f29144334c882a5bd").setCname("Husen2").setStatus(2);
         authorityService.updateCustomerInfo(customerDTO);
-        System.out.println(customerDTO);
     }
 
     @Test
     public void testUpdateRole() {
-        CustomerDTO customerDTO = new CustomerDTO().setCid("5d2ef13f29144334c882a5bd").setBindRoleIds(Arrays.asList("213123123dasda"));
-        boolean b = authorityService.updateCustomerRole(customerDTO);
-        System.out.println(b);
+        CustomerDTO customerDTO = new CustomerDTO().setCid("5d2ef13f29144334c882a5bd").setBindRoleIds(Arrays.asList("213123123dasda","cacsacw"));
+        authorityService.updateCustomerRole(customerDTO);
     }
 
     @Test

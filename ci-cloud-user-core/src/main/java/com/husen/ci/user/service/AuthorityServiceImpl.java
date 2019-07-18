@@ -28,21 +28,18 @@ public class AuthorityServiceImpl implements IAuthorityService {
     private MenuDao menuDao;
 
     @Override
-    public boolean addCustomer(CustomerDTO customerDTO) {
-        customerDao.insert(customerDTO);
-        return true;
+    public CustomerDTO addCustomer(CustomerDTO customerDTO) {
+        return customerDao.insert(customerDTO);
     }
 
     @Override
-    public boolean updateCustomerInfo(CustomerDTO customerDTO) {
+    public void updateCustomerInfo(CustomerDTO customerDTO) {
         customerDao.updateById(customerDTO);
-        return true;
     }
 
     @Override
-    public boolean updateCustomerRole(CustomerDTO customerDTO) {
+    public void updateCustomerRole(CustomerDTO customerDTO) {
         customerDao.updateById(customerDTO);
-        return true;
     }
 
     @Override
@@ -51,21 +48,18 @@ public class AuthorityServiceImpl implements IAuthorityService {
     }
 
     @Override
-    public boolean addRole(RoleDTO roleDTO) {
-        roleDao.insert(roleDTO);
-        return true;
+    public RoleDTO addRole(RoleDTO roleDTO) {
+        return roleDao.insert(roleDTO);
     }
 
     @Override
-    public boolean updateRoleInfo(RoleDTO roleDTO) {
+    public void updateRoleInfo(RoleDTO roleDTO) {
         roleDao.updateById(roleDTO);
-        return true;
     }
 
     @Override
-    public boolean updateRoleMenu(RoleDTO roleDTO) {
+    public void updateRoleMenu(RoleDTO roleDTO) {
         roleDao.updateById(roleDTO);
-        return true;
     }
 
     @Override
@@ -74,15 +68,13 @@ public class AuthorityServiceImpl implements IAuthorityService {
     }
 
     @Override
-    public boolean addMenu(MenuDTO menuDTO) {
-        menuDao.insert(menuDTO);
-        return true;
+    public MenuDTO addMenu(MenuDTO menuDTO) {
+        return menuDao.insert(menuDTO);
     }
 
     @Override
-    public boolean updateMenuInfo(MenuDTO menuDTO) {
+    public void updateMenuInfo(MenuDTO menuDTO) {
         menuDao.updateById(menuDTO);
-        return true;
     }
 
     @Override

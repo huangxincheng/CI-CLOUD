@@ -12,25 +12,25 @@ import com.husen.ci.user.entity.RoleDTO;
  ***/
 public interface IAuthorityService {
 
-    boolean addCustomer(CustomerDTO customerDTO);
+    CustomerDTO addCustomer(CustomerDTO customerDTO);
 
-    boolean updateCustomerInfo(CustomerDTO customerDTO);
+    void updateCustomerInfo(CustomerDTO customerDTO);
 
-    boolean updateCustomerRole(CustomerDTO customerDTO);
+    void updateCustomerRole(CustomerDTO customerDTO);
 
     CustomerDTO findCustomeById(String id);
 
-    boolean addRole(RoleDTO roleDTO);
+    RoleDTO addRole(RoleDTO roleDTO);
 
-    boolean updateRoleInfo(RoleDTO roleDTO);
+    void updateRoleInfo(RoleDTO roleDTO);
 
-    boolean updateRoleMenu(RoleDTO roleDTO);
+    void updateRoleMenu(RoleDTO roleDTO);
 
     RoleDTO findRoleById(String id);
 
-    boolean addMenu(MenuDTO menuDTO);
+    MenuDTO addMenu(MenuDTO menuDTO);
 
-    boolean updateMenuInfo(MenuDTO menuDTO);
+    void updateMenuInfo(MenuDTO menuDTO);
 
     MenuDTO findMenuById(String id);
 }
