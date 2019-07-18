@@ -3,6 +3,7 @@ package com.husen.ci.framework.utils;
 import com.husen.ci.framework.json.JSONUtils;
 import com.husen.ci.framework.net.bean.HttpResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cglib.beans.BeanMap;
 
 import java.util.Map;
 
@@ -35,15 +36,16 @@ public class BeanUtils {
     }
 
     /**
-     * 生成不能remove的map
+     * 不能remove
      * @param bean
      * @return
      */
-//    public static Map<String, Object> bean2Map(Object bean) {
-//        return BeanMap.create(bean);
-//    }
+    public static BeanMap bean2BeanMap(Object bean) {
+        return BeanMap.create(bean);
+    }
 
     /**
+     * bean2map map读写
      * @param bean
      * @return
      */
