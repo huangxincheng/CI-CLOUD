@@ -1,14 +1,18 @@
 package com.husen.ci;
 
+import com.husen.ci.user.dao.CustomerDao;
 import com.husen.ci.user.entity.CustomerDTO;
 import com.husen.ci.user.service.IAuthorityService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.List;
 
 /***
  @Author:MrHuang
@@ -22,6 +26,9 @@ public class TestAuthority {
 
     @Autowired
     private IAuthorityService authorityService;
+
+    @Autowired
+    private CustomerDao customerDao;
 
     @Test
     public void testAdd() {
@@ -46,5 +53,24 @@ public class TestAuthority {
     public void findCustomeById() {
         CustomerDTO customeById = authorityService.findCustomeById("5d2ef13f29144334c882a5bd");
         System.out.println(customeById);
+    }
+
+    @Test
+    public void customerDao() {
+        /**
+         * all 必须要全部包含
+         */
+        List<CustomerDTO> bindRoleIds = customerDao.findByQuery(
+                Query.query(Criteria.where("bindRoleIds").all("213123123dasda","cacsacw"))
+        );
+        System.out.println(bindRoleIds);
+
+        /**
+         * in 有一个即可
+         */
+        List<CustomerDTO> bindRoleIds2 = customerDao.findByQuery(
+                Query.query(Criteria.where("bindRoleIds").in("213123123dasda","cacsacw"))
+        );
+        System.out.println(bindRoleIds2);
     }
 }
