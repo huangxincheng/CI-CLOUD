@@ -1,5 +1,6 @@
 package com.husen.ci;
 
+import com.husen.ci.framework.net.bean.HttpResult;
 import com.husen.ci.user.dao.CustomerDao;
 import com.husen.ci.user.entity.CustomerDTO;
 import com.husen.ci.user.service.IAuthorityService;
@@ -72,5 +73,13 @@ public class TestAuthority {
                 Query.query(Criteria.where("bindRoleIds").in("213123123dasda","cacsacw"))
         );
         System.out.println(bindRoleIds2);
+
+        customerDao.insert(new CustomerDTO().setBindResult(
+                Arrays.asList(new HttpResult().setCode(200).setContent("OK"),
+                        new HttpResult().setCode(404).setContent("404"))
+        ));
+
+        List<CustomerDTO> byQuery = customerDao.findByQuery(Query.query(Criteria.where("bindResult.code").is(200)));
+        System.out.println(byQuery);
     }
 }

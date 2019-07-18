@@ -1,5 +1,6 @@
 package com.husen.ci.user.entity;
 
+import com.husen.ci.framework.net.bean.HttpResult;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
@@ -30,4 +31,7 @@ public class CustomerDTO {
 
     @Field
     private List<String> bindRoleIds;
+
+    @Field
+    private List<HttpResult> bindResult;
 }
