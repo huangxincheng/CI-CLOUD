@@ -43,4 +43,10 @@ public class TestAuthority {
         boolean b = authorityService.updateCustomerRole(customerDTO);
         System.out.println(b);
     }
+
+    @Test
+    public void findCustomeById() {
+        CustomerDTO customeById = authorityService.findCustomeById("5d2ef13f29144334c882a5bd");
+        System.out.println(customeById);
+    }
 }

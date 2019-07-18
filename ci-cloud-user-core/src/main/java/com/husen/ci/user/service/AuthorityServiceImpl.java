@@ -29,64 +29,64 @@ public class AuthorityServiceImpl implements IAuthorityService {
 
     @Override
     public boolean addCustomer(CustomerDTO customerDTO) {
-        customerDao.add(customerDTO);
+        customerDao.insert(customerDTO);
         return true;
     }
 
     @Override
     public boolean updateCustomerInfo(CustomerDTO customerDTO) {
-        customerDao.updateCustomerInfo(customerDTO);
+        customerDao.updateById(customerDTO);
         return true;
     }
 
     @Override
     public boolean updateCustomerRole(CustomerDTO customerDTO) {
-        customerDao.updateCustomerBindRole(customerDTO);
+        customerDao.updateById(customerDTO);
         return true;
     }
 
     @Override
     public CustomerDTO findCustomeById(String id) {
-        return customerDao.getOneById(id);
+        return customerDao.findById(id);
     }
 
     @Override
     public boolean addRole(RoleDTO roleDTO) {
-        roleDao.add(roleDTO);
+        roleDao.insert(roleDTO);
         return true;
     }
 
     @Override
     public boolean updateRoleInfo(RoleDTO roleDTO) {
-        roleDao.updateRoleInfo(roleDTO);
+        roleDao.updateById(roleDTO);
         return true;
     }
 
     @Override
     public boolean updateRoleMenu(RoleDTO roleDTO) {
-        roleDao.updateRoleBindMenu(roleDTO);
+        roleDao.updateById(roleDTO);
         return true;
     }
 
     @Override
     public RoleDTO findRoleById(String id) {
-       return roleDao.getOneByRid(id);
+       return roleDao.findById(id);
     }
 
     @Override
     public boolean addMenu(MenuDTO menuDTO) {
-        menuDao.add(menuDTO);
+        menuDao.insert(menuDTO);
         return true;
     }
 
     @Override
     public boolean updateMenuInfo(MenuDTO menuDTO) {
-        menuDao.updateMenuInfo(menuDTO);
+        menuDao.updateById(menuDTO);
         return true;
     }
 
     @Override
     public MenuDTO findMenuById(String id) {
-        return menuDao.getOneByMid(id);
+        return menuDao.findById(id);
     }
 }
