@@ -29,6 +29,7 @@
          <module>ci-cloud-sso-client</module>
          <module>ci-cloud-sso-client-sample</module>
          <module>ci-cloud-sso-gateway-client</module>
+         <module>ci-cloud-elasticsearch</module>
      </modules>
 
     <properties>
