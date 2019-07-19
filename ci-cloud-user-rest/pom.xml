@@ -45,6 +45,21 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.husen</groupId>
+            <artifactId>ci-cloud-elasticsearch</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>7.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>7.1.1</version>
+        </dependency>
 
     </dependencies>
 

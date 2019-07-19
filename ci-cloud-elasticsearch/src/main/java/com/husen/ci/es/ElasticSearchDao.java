@@ -6,10 +6,7 @@ import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
-import org.elasticsearch.action.get.GetRequest;
-import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.get.MultiGetRequest;
-import org.elasticsearch.action.get.MultiGetResponse;
+import org.elasticsearch.action.get.*;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -19,12 +16,14 @@ import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
+import java.util.*;
 
 /***
  @Author:MrHuang
@@ -71,9 +70,7 @@ public abstract class ElasticSearchDao<T> {
         String index = esClient.getIndex(clazzT);
         String domId = esClient.getDomId(object);
         Assert.notNull(index, "domId must not be null!");
-        IndexRequest request = new IndexRequest(index);
-        request.id(domId);
-        request.source(JSONUtils.object2Json(object), XContentType.JSON);
+        IndexRequest request = new IndexRequest(index).id(domId).source(JSONUtils.object2Json(object), XContentType.JSON);
         IndexResponse rsp = esClient.restClient.index(request, RequestOptions.DEFAULT);
         return rsp;
     }
@@ -96,8 +93,7 @@ public abstract class ElasticSearchDao<T> {
         String index = esClient.getIndex(clazzT);
         String domId = esClient.getDomId(object);
         Assert.notNull(domId, "domId must not be null!");
-        UpdateRequest request = new UpdateRequest(index, domId);
-        request.doc(BeanUtils.bean2BeanMap(object));
+        UpdateRequest request = new UpdateRequest(index, domId).doc(BeanUtils.bean2BeanMap(object));
         UpdateResponse rsp = esClient.restClient.update(request, RequestOptions.DEFAULT);
         return rsp;
     }
@@ -136,6 +132,23 @@ public abstract class ElasticSearchDao<T> {
         return rsp;
     }
 
+    /**
+     * 根据DomId获取单个Dom
+     * ES 7.1的语法
+     * GET /${index}/_doc/${_id}
+     * @param domId
+     * @return
+     */
+    public T getToBean(String domId) throws IOException {
+        GetResponse rsp = get(domId);
+        if (rsp.isExists()) {
+            return JSONUtils.json2Bean(rsp.getSourceAsString(), clazzT);
+        }
+        return null;
+    }
+
+
+
 
     /**
      * 批量获取Dom
@@ -150,7 +163,7 @@ public abstract class ElasticSearchDao<T> {
      * @param domIds
      * @return
      */
-    public MultiGetResponse mget(String[] domIds) throws IOException {
+    public MultiGetResponse multiGet(String[] domIds) throws IOException {
         writeClassType();
         String index = esClient.getIndex(clazzT);
         Assert.notNull(domIds, "domIds must not be null!");
@@ -161,6 +174,63 @@ public abstract class ElasticSearchDao<T> {
         MultiGetResponse rsp = esClient.restClient.mget(request, RequestOptions.DEFAULT);
         return rsp;
     }
+
+    /**
+     * 批量获取Dom
+     * ES 7.1的语法
+     * GET /_mget
+     * {
+     *   "docs":[
+     *     {"_index":"dto_es","_id":"y92qBGwBQn3QETkmXOaX"},
+     *      {"_index":"dto_es","_id":"5188"}
+     *   ]
+     * }
+     * @param domIds
+     * @return
+     */
+    public Map<String, T> multiGetToMap(String[] domIds) throws IOException {
+        MultiGetResponse rsp = multiGet(domIds);
+        Iterator<MultiGetItemResponse> iterator = rsp.iterator();
+        Map<String, T> map = new LinkedHashMap<>();
+        while (iterator.hasNext()) {
+            MultiGetItemResponse item = iterator.next();
+            String domId = item.getId();
+            if(item.getResponse().isExists()) {
+                map.put(domId, JSONUtils.json2Bean(item.getResponse().getSourceAsString(), clazzT));
+            } else {
+                map.put(domId, null);
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 批量获取Dom
+     * ES 7.1的语法
+     * GET /_mget
+     * {
+     *   "docs":[
+     *     {"_index":"dto_es","_id":"y92qBGwBQn3QETkmXOaX"},
+     *      {"_index":"dto_es","_id":"5188"}
+     *   ]
+     * }
+     * @param domIds
+     * @return
+     */
+    public List<T> multiGetToList(String[] domIds) throws IOException {
+        MultiGetResponse rsp = multiGet(domIds);
+        Iterator<MultiGetItemResponse> iterator = rsp.iterator();
+        List<T> list = new ArrayList<>();
+        while (iterator.hasNext()) {
+            MultiGetItemResponse item = iterator.next();
+            if(item.getResponse().isExists()) {
+                list.add(JSONUtils.json2Bean(item.getResponse().getSourceAsString(), clazzT));
+            }
+        }
+        return list;
+    }
+
+
 
     /**
      * 批量Index Dom
@@ -248,25 +318,44 @@ public abstract class ElasticSearchDao<T> {
     public SearchResponse search(SearchSourceBuilder sourceBuilder) throws IOException {
         writeClassType();
         String index = esClient.getIndex(clazzT);
-//        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-//        sourceBuilder.from(0);
-//        sourceBuilder.size(10);
-//        sourceBuilder.fetchSource(new String[]{"title"}, new String[]{});
-//        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("title", "费德勒");
-//        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("tag", "体育");
-//        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery("publishTime");
-//        rangeQueryBuilder.gte("2018-01-26T08:00:00Z");
-//        rangeQueryBuilder.lte("2018-01-26T20:00:00Z");
-//        BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
-//        boolBuilder.must(matchQueryBuilder);
-//        boolBuilder.must(termQueryBuilder);
-//        boolBuilder.must(rangeQueryBuilder);
-//        sourceBuilder.query(boolBuilder);
         SearchRequest request = new SearchRequest(index).source(sourceBuilder);
         SearchResponse rsp = esClient.restClient.search(request, RequestOptions.DEFAULT);
         return rsp;
     }
 
+    /**
+     * Search
+     * @param sourceBuilder
+     * @return
+     * @throws IOException
+     */
+    public List<T> searchToList(SearchSourceBuilder sourceBuilder) throws IOException {
+        SearchResponse rsp = search(sourceBuilder);
+        List<T> list = new ArrayList<>();
+        Iterator<SearchHit> iterator = rsp.getHits().iterator();
+        while (iterator.hasNext()) {
+            SearchHit hit = iterator.next();
+            list.add(JSONUtils.json2Bean(hit.getSourceAsString(), clazzT));
+        }
+        return list;
+    }
+
+    /**
+     * Search
+     * @param sourceBuilder
+     * @return
+     * @throws IOException
+     */
+    public Map<String, T> searchToMap(SearchSourceBuilder sourceBuilder) throws IOException {
+        SearchResponse rsp = search(sourceBuilder);
+        Map<String, T> map = new LinkedHashMap<>();
+        Iterator<SearchHit> iterator = rsp.getHits().iterator();
+        while (iterator.hasNext()) {
+            SearchHit hit = iterator.next();
+            map.put(hit.getId(), JSONUtils.json2Bean(hit.getSourceAsString(), clazzT));
+        }
+        return map;
+    }
 
 
     /**
