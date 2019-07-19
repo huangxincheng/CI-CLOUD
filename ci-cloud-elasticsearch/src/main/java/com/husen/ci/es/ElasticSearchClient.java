@@ -25,11 +25,6 @@ public class ElasticSearchClient {
 
     protected RestHighLevelClient restClient;
 
-    private static final String POST = "POST";
-    private static final String DELETE = "DELETE";
-    private static final String GET = "GET";
-
-
     private ElasticSearchClient() {
         restClient = new RestHighLevelClient(RestClient.builder(ElasticSearchClient.httpHosts));
     }
@@ -38,7 +33,7 @@ public class ElasticSearchClient {
      * Init
      * @param httpHosts
      */
-    public static void init(HttpHost ... httpHosts) {
+    public static void init(HttpHost[] httpHosts) {
         ElasticSearchClient.httpHosts = httpHosts;
         getInstance();
     }
@@ -115,49 +110,6 @@ public class ElasticSearchClient {
 
 
     /**
-     * index
-     * @param endpoint
-     * @param entity
-     * @return
-     * @throws IOException
-     */
-    public Response index(String endpoint, String entity) throws IOException {
-        return doSendRequest(POST, endpoint, entity);
-    }
-
-    /**
-     * update
-     * @param endpoint
-     * @param entity
-     * @return
-     * @throws IOException
-     */
-    public Response update(String endpoint, String entity) throws IOException {
-        return doSendRequest(POST, endpoint, entity);
-    }
-
-    /**
-     * delete
-     * @param endpoint
-     * @return
-     * @throws IOException
-     */
-    public Response delete(String endpoint) throws IOException {
-        return doSendRequest(DELETE, endpoint, null);
-    }
-
-    /**
-     * get
-     * @param endpoint
-     * @return
-     * @throws IOException
-     */
-    public Response get(String endpoint) throws IOException {
-        return doSendRequest(GET, endpoint, null);
-    }
-
-
-    /**
      * Query语法
      * @param method 请求方法类型 POST GET DELETE PUT ...
      * @param endpoint 断点 即 /${index}/_update/${_id} ...
@@ -165,7 +117,7 @@ public class ElasticSearchClient {
      * @return
      * @throws IOException
      */
-    public Response query(String method, String endpoint, String entity) throws IOException {
+    public Response execute(String method, String endpoint, String entity) throws IOException {
         return doSendRequest(method, endpoint, entity);
     }
 
