@@ -23,10 +23,15 @@ public class ElasticSearchClient {
 
     private volatile static ElasticSearchClient esClient;
 
-    protected RestHighLevelClient restClient;
+    private RestHighLevelClient restClient;
+
+
+    public RestHighLevelClient getRestClient() {
+        return restClient;
+    }
 
     private ElasticSearchClient() {
-        restClient = new RestHighLevelClient(RestClient.builder(ElasticSearchClient.httpHosts));
+        System.out.println("-------------ES-构造函数");
     }
 
     /**
@@ -34,8 +39,9 @@ public class ElasticSearchClient {
      * @param httpHosts
      */
     public static void init(HttpHost[] httpHosts) {
+        System.out.println("-------------ES-INIT");
         ElasticSearchClient.httpHosts = httpHosts;
-        getInstance();
+        getInstance().restClient = new RestHighLevelClient(RestClient.builder(ElasticSearchClient.httpHosts));
     }
 
     /**

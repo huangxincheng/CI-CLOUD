@@ -85,7 +85,7 @@ public abstract class ElasticSearchDao<T> {
         String domId = esClient.getDomId(object);
         Assert.notNull(index, "domId must not be null!");
         IndexRequest request = new IndexRequest(index).id(domId).source(JSONUtils.object2Json(object), XContentType.JSON);
-        IndexResponse rsp = esClient.restClient.index(request, RequestOptions.DEFAULT);
+        IndexResponse rsp = esClient.getRestClient().index(request, RequestOptions.DEFAULT);
         return rsp;
     }
 
@@ -108,7 +108,7 @@ public abstract class ElasticSearchDao<T> {
         String domId = esClient.getDomId(object);
         Assert.notNull(domId, "domId must not be null!");
         UpdateRequest request = new UpdateRequest(index, domId).doc(BeanUtils.bean2BeanMap(object));
-        UpdateResponse rsp = esClient.restClient.update(request, RequestOptions.DEFAULT);
+        UpdateResponse rsp = esClient.getRestClient().update(request, RequestOptions.DEFAULT);
         return rsp;
     }
 
@@ -126,7 +126,7 @@ public abstract class ElasticSearchDao<T> {
         String index = esClient.getIndex(clazzT);
         Assert.notNull(domId, "domId must not be null!");
         DeleteRequest request = new DeleteRequest(index, domId);
-        DeleteResponse rsp = esClient.restClient.delete(request, RequestOptions.DEFAULT);
+        DeleteResponse rsp = esClient.getRestClient().delete(request, RequestOptions.DEFAULT);
         return rsp;
     }
 
@@ -142,7 +142,7 @@ public abstract class ElasticSearchDao<T> {
         String index = esClient.getIndex(clazzT);
         Assert.notNull(domId, "domId must not be null!");
         GetRequest request = new GetRequest(index, domId);
-        GetResponse rsp = esClient.restClient.get(request, RequestOptions.DEFAULT);
+        GetResponse rsp = esClient.getRestClient().get(request, RequestOptions.DEFAULT);
         return rsp;
     }
 
@@ -185,7 +185,7 @@ public abstract class ElasticSearchDao<T> {
         for (String domId : domIds) {
             request.add(index, domId);
         }
-        MultiGetResponse rsp = esClient.restClient.mget(request, RequestOptions.DEFAULT);
+        MultiGetResponse rsp = esClient.getRestClient().mget(request, RequestOptions.DEFAULT);
         return rsp;
     }
 
@@ -269,7 +269,7 @@ public abstract class ElasticSearchDao<T> {
             Assert.notNull(domId, "domId must not be null!");
             request.add(new IndexRequest(index).id(domId).source(JSONUtils.object2Json(t), XContentType.JSON));
         }
-        BulkResponse rsp = esClient.restClient.bulk(request, RequestOptions.DEFAULT);
+        BulkResponse rsp = esClient.getRestClient().bulk(request, RequestOptions.DEFAULT);
         return rsp;
     }
 
@@ -292,7 +292,7 @@ public abstract class ElasticSearchDao<T> {
             Assert.notNull(domId, "domId must not be null!");
             request.add(new DeleteRequest(index, domId));
         }
-        BulkResponse rsp = esClient.restClient.bulk(request, RequestOptions.DEFAULT);
+        BulkResponse rsp = esClient.getRestClient().bulk(request, RequestOptions.DEFAULT);
         return rsp;
     }
 
@@ -318,7 +318,7 @@ public abstract class ElasticSearchDao<T> {
             Assert.notNull(domId, "domId must not be null!");
             request.add(new UpdateRequest(index, domId).doc(BeanUtils.bean2BeanMap(t)));
         }
-        BulkResponse rsp = esClient.restClient.bulk(request, RequestOptions.DEFAULT);
+        BulkResponse rsp = esClient.getRestClient().bulk(request, RequestOptions.DEFAULT);
         return rsp;
     }
 
@@ -334,7 +334,7 @@ public abstract class ElasticSearchDao<T> {
         writeSearchSourceBuilder(sourceBuilder);
         String index = esClient.getIndex(clazzT);
         SearchRequest request = new SearchRequest(index).source(sourceBuilder);
-        SearchResponse rsp = esClient.restClient.search(request, RequestOptions.DEFAULT);
+        SearchResponse rsp = esClient.getRestClient().search(request, RequestOptions.DEFAULT);
         return rsp;
     }
 
@@ -428,7 +428,7 @@ public abstract class ElasticSearchDao<T> {
         String index = esClient.getIndex(clazzT);
         GetMappingsRequest request = new GetMappingsRequest();
         request.indices(index);
-        return esClient.restClient.indices().getMapping(request, RequestOptions.DEFAULT).mappings();
+        return esClient.getRestClient().indices().getMapping(request, RequestOptions.DEFAULT).mappings();
     }
 
 

@@ -1,6 +1,5 @@
-package com.husen.ci;
+package com.husen.ci.es;
 
-import com.husen.ci.es.ElasticSearchClient;
 import org.apache.http.HttpHost;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;

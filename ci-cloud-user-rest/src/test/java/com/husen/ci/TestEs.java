@@ -2,7 +2,7 @@ package com.husen.ci;
 
 import com.husen.ci.es.ElasticSearchPage;
 import com.husen.ci.framework.json.JSONUtils;
-import org.elasticsearch.client.indices.GetMappingsResponse;
+import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -12,6 +12,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Map;
 
 /***
  @Author:MrHuang
@@ -59,15 +61,15 @@ public class TestEs {
         ElasticSearchPage SEARCH = esBeanDao.searchToPage(searchSourceBuilder);
         System.out.println("SEARCH:" + JSONUtils.object2Json(SEARCH));
 
-        GetMappingsResponse mapping = esBeanDao.getMapping();
-        System.out.println(JSONUtils.object2Json(mapping.mappings()));
+        Map<String, MappingMetaData> mapping = esBeanDao.getMapping();
+        System.out.println(JSONUtils.object2Json(mapping));
 //        List<EsBean> SEARCHLIST = esBeanDao.searchToList(searchSourceBuilder);
 //        System.out.println("SEARCHLIST:" + JSONUtils.object2Json(SEARCHLIST));
 //
 //        Map<String, EsBean> SEARCHMAP = esBeanDao.searchToMap(searchSourceBuilder);
 //        System.out.println("SEARCHMAP:" + JSONUtils.object2Json(SEARCHMAP));
 
-//        while (true) {
+//        while (true) {s
 //            long i = System.currentTimeMillis();
 //            Map<String, EsBean> mgetMap = esBeanDao.multiGetToMap(
 //        new String[]{"6d734eea-bcf1-4eca-a64b-6fd5a20b40ee", "046d7cd3-28e6-4cc5-b2a0-b6ac2c07e388",
