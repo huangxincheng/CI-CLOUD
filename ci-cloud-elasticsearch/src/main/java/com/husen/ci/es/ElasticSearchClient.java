@@ -77,6 +77,8 @@ public class ElasticSearchClient {
      * @throws IOException
      */
     public Response doSendRequest(String method, String endpoint, String entity) throws IOException {
+        Assert.hasLength(method, "method must not be null or empth! ");
+        Assert.hasLength(method, "endpoint must not be null or empth! ");
         Request request = new Request(method, endpoint);
         if (StringUtils.hasText(entity)){
             request.setJsonEntity(entity);
