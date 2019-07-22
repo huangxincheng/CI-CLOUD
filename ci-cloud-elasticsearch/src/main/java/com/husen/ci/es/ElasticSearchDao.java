@@ -28,8 +28,8 @@ import java.util.*;
 /***
  @Author:MrHuang
  @Date: 2019/7/19 11:02
- @DESC: TODO
  @VERSION: 1.0
+ @DESC: TODO
  ***/
 @Repository
 public abstract class ElasticSearchDao<T> {
@@ -39,6 +39,9 @@ public abstract class ElasticSearchDao<T> {
      */
     private Class<T> clazzT;
 
+    private static final int DEFAULT_PAGE_FROM = 0;
+
+    private static final int DEFAULT_PAGE_SIZE = 20;
 
     private ElasticSearchClient esClient = ElasticSearchClient.getInstance();
 
@@ -309,14 +312,15 @@ public abstract class ElasticSearchDao<T> {
     }
 
     /**
-     * Search
-     * ES 7.1的语法
+     * Search To Response
+     * 搜索结果为SearchResponse对象
      * @param sourceBuilder
      * @return
      * @throws IOException
      */
     public SearchResponse search(SearchSourceBuilder sourceBuilder) throws IOException {
         writeClassType();
+        writeSearchSourceBuild(sourceBuilder);
         String index = esClient.getIndex(clazzT);
         SearchRequest request = new SearchRequest(index).source(sourceBuilder);
         SearchResponse rsp = esClient.restClient.search(request, RequestOptions.DEFAULT);
@@ -324,7 +328,8 @@ public abstract class ElasticSearchDao<T> {
     }
 
     /**
-     * Search
+     * Search To List
+     * 搜索结果为List对象
      * @param sourceBuilder
      * @return
      * @throws IOException
@@ -332,16 +337,15 @@ public abstract class ElasticSearchDao<T> {
     public List<T> searchToList(SearchSourceBuilder sourceBuilder) throws IOException {
         SearchResponse rsp = search(sourceBuilder);
         List<T> list = new ArrayList<>();
-        Iterator<SearchHit> iterator = rsp.getHits().iterator();
-        while (iterator.hasNext()) {
-            SearchHit hit = iterator.next();
+        for (SearchHit hit : rsp.getHits()) {
             list.add(JSONUtils.json2Bean(hit.getSourceAsString(), clazzT));
         }
         return list;
     }
 
     /**
-     * Search
+     * Search To Map
+     * 搜索结果为Map对象
      * @param sourceBuilder
      * @return
      * @throws IOException
@@ -349,12 +353,33 @@ public abstract class ElasticSearchDao<T> {
     public Map<String, T> searchToMap(SearchSourceBuilder sourceBuilder) throws IOException {
         SearchResponse rsp = search(sourceBuilder);
         Map<String, T> map = new LinkedHashMap<>();
-        Iterator<SearchHit> iterator = rsp.getHits().iterator();
-        while (iterator.hasNext()) {
-            SearchHit hit = iterator.next();
+        for (SearchHit hit : rsp.getHits()) {
             map.put(hit.getId(), JSONUtils.json2Bean(hit.getSourceAsString(), clazzT));
         }
         return map;
+    }
+
+    /**
+     * Search To Page
+     * 搜索结果为Page对象
+     * @param sourceBuilder
+     * @return
+     * @throws IOException
+     */
+    public ElasticSearchPage searchToPage(SearchSourceBuilder sourceBuilder) throws IOException {
+        SearchResponse rsp = search(sourceBuilder);
+        int pageFrom = sourceBuilder.from();
+        int pageSize = sourceBuilder.size();
+        long totalRecord = rsp.getHits().getTotalHits().value;
+        int totalPage = getTotalPage(totalRecord, pageSize);
+        int pageNo = getPageNo(pageFrom, pageSize);
+        List<T> list = new ArrayList<>();
+        for (SearchHit hit : rsp.getHits()) {
+            list.add(JSONUtils.json2Bean(hit.getSourceAsString(), clazzT));
+        }
+        return new ElasticSearchPage().setPageFrom(pageFrom).setPageNo(pageNo)
+                .setPageSize(pageSize).setTotalRecord(totalRecord).setTotalPage(totalPage)
+                .setRecords(list);
     }
 
 
@@ -368,5 +393,34 @@ public abstract class ElasticSearchDao<T> {
      */
     public Response execute(String method, String endpoint, String entity) throws IOException {
         return esClient.execute(method, endpoint, entity);
+    }
+
+    /**
+     * 写入SearchSourceBuild
+     * @param builder
+     */
+    private void writeSearchSourceBuild(SearchSourceBuilder builder) {
+        builder.from(builder.from() < 0 ? DEFAULT_PAGE_FROM : builder.from());
+        builder.size(builder.size() < 0 ? DEFAULT_PAGE_SIZE : builder.size());
+    }
+
+    /**
+     * 获取页码
+     * @param pageFrom 起始页索引
+     * @param pageSize 每页大小
+     * @return
+     */
+    private int getPageNo(int pageFrom, int pageSize) {
+        return (pageFrom + pageSize - 1) / pageSize;
+    }
+
+    /**
+     * 获取总页数
+     * @param totalRecord 总记录条数
+     * @param pageSize 每页大小
+     * @return
+     */
+    private int getTotalPage(long totalRecord, int pageSize) {
+        return (int) ((totalRecord  +  pageSize  - 1) / pageSize);
     }
 }
