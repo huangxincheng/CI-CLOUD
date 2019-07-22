@@ -2,6 +2,9 @@ CI-CLOUD模块
 
     ---ci-cloud-cache
         缓存模块- 封装Redis工具使用
+        
+    ---ci-cloud-elasticsearch
+        ES模块- 封装ES工具使用 CRUD及批量CRUD及SEARCH
     
     ---ci-cloud-gateway
         网关模块- 统一入口，鉴权，限流
