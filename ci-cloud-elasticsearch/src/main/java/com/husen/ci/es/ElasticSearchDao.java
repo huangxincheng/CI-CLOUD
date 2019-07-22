@@ -45,12 +45,7 @@ public abstract class ElasticSearchDao<T> {
 
     private ElasticSearchClient esClient = ElasticSearchClient.getInstance();
 
-    /**
-     * 写入泛型Class类型
-     */
-    private void writeClassType() {
-        clazzT = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
+
 
     /**
      * 创建Dom
@@ -393,6 +388,13 @@ public abstract class ElasticSearchDao<T> {
      */
     public Response execute(String method, String endpoint, String entity) throws IOException {
         return esClient.execute(method, endpoint, entity);
+    }
+
+    /**
+     * 写入泛型Class类型
+     */
+    private void writeClassType() {
+        clazzT = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     /**
