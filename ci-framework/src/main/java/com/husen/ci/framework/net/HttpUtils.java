@@ -75,22 +75,7 @@ public class HttpUtils {
     }
 
     /**
-     * 封装同步执行方法
-     * @param call
-     * @return
-     */
-    private HttpResult syncExecute(Call call) {
-        try {
-            Response response = call.execute();
-            return this.toResult(response);
-        } catch (IOException e) {
-            log.error("HttpUtils execute fail",e);
-        }
-        return null;
-    }
-
-    /**
-     * 生成BodyBuilder
+     * 生成rawBodyBuilder
      * @param headers
      * @return
      */
@@ -119,6 +104,21 @@ public class HttpUtils {
         return builder;
     }
 
+
+    /**
+     * 封装同步执行方法
+     * @param call
+     * @return
+     */
+    private HttpResult syncExecute(Call call) {
+        try {
+            Response response = call.execute();
+            return this.toResult(response);
+        } catch (IOException e) {
+            log.error("HttpUtils execute fail",e);
+        }
+        return null;
+    }
 
     /**
      * 封装异步执行方法
