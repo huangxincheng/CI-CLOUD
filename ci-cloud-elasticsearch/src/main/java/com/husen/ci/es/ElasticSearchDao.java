@@ -39,12 +39,24 @@ public abstract class ElasticSearchDao<T> {
      */
     private Class<T> clazzT;
 
+    /**
+     * 默认的页起始Index
+     */
     private static final int DEFAULT_PAGE_FROM = 0;
 
+    /**
+     * 默认的页码
+     */
     private static final int DEFAULT_PAGE_NO = 1;
 
+    /**
+     * 默认的每页大小
+     */
     private static final int DEFAULT_PAGE_SIZE = 20;
 
+    /**
+     * 单例的esCLient
+     */
     private ElasticSearchClient esClient = ElasticSearchClient.getInstance();
 
 
