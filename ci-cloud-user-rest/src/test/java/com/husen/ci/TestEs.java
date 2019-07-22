@@ -2,6 +2,7 @@ package com.husen.ci;
 
 import com.husen.ci.es.ElasticSearchPage;
 import com.husen.ci.framework.json.JSONUtils;
+import org.elasticsearch.client.indices.GetMappingsResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -11,8 +12,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.io.IOException;
 
 /***
  @Author:MrHuang
@@ -28,7 +27,7 @@ public class TestEs {
     private EsBeanDao esBeanDao;
 
     @Test
-    public void test() throws IOException {
+    public void test() throws Exception {
 //        String uuid = UUID.randomUUID().toString();
 //        EsBean bean = new EsBean().setId(uuid).setBeanName("BeanName:" + uuid).setBeanTitle("BeanTitle:" + uuid).setBeanSize(uuid.length());
 //        IndexResponse index = esBeanDao.index(bean);
@@ -59,7 +58,9 @@ public class TestEs {
 //        SearchResponse SEARCH = esBeanDao.search(searchSourceBuilder);
         ElasticSearchPage SEARCH = esBeanDao.searchToPage(searchSourceBuilder);
         System.out.println("SEARCH:" + JSONUtils.object2Json(SEARCH));
-//
+
+        GetMappingsResponse mapping = esBeanDao.getMapping();
+        System.out.println(JSONUtils.object2Json(mapping.mappings()));
 //        List<EsBean> SEARCHLIST = esBeanDao.searchToList(searchSourceBuilder);
 //        System.out.println("SEARCHLIST:" + JSONUtils.object2Json(SEARCHLIST));
 //

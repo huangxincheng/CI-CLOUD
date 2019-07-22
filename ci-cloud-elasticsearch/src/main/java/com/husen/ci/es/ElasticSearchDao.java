@@ -15,6 +15,8 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.Response;
+import org.elasticsearch.client.indices.GetMappingsRequest;
+import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -393,8 +395,48 @@ public abstract class ElasticSearchDao<T> {
 
 
     /**
+     * 获取mapping
+     * ES 7.1的语法
+     * GET /${index}/_mapping
+     *
+     *  创建mapping
+     * PUT /es_bean2/
+     * {
+     *   "mappings": {
+     *      "properties": {
+     *       "t_no":{
+     *           "type":"long"
+     *       }
+     *     }
+     *   }
+     * }
+     *
+     * 更新mapping
+     * PUT /es_bean2/_mapping
+     * {
+     *     "properties": {
+     *       "t_no2":{
+     *           "type":"long"
+     *       }
+     *     }
+     * }
+     * @return
+     * @throws IOException
+     */
+    public Map<String, MappingMetaData> getMapping() throws IOException {
+        writeClassType();
+        String index = esClient.getIndex(clazzT);
+        GetMappingsRequest request = new GetMappingsRequest();
+        request.indices(index);
+        return esClient.restClient.indices().getMapping(request, RequestOptions.DEFAULT).mappings();
+    }
+
+
+
+
+    /**
      * execute 通用执行入口
-     * @param method
+    * @param method
      * @param endpoint
      * @param entity
      * @return
