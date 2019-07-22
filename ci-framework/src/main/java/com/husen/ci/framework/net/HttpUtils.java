@@ -36,6 +36,8 @@ public class HttpUtils {
 
     private OkHttpClient okHttpClient;
 
+    private static final int MAX_CONNECTION = 50;
+
     /**
      * 单例模式获取OkHttp3Util
      * @return
@@ -57,7 +59,7 @@ public class HttpUtils {
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
-                .connectionPool(new ConnectionPool(50, 5, TimeUnit.MINUTES));
+                .connectionPool(new ConnectionPool(MAX_CONNECTION, 5, TimeUnit.MINUTES));
 //        支持HTTPS请求，跳过证书验证
         clientBuilder.sslSocketFactory(createSSLSocketFactory(), new MyX509TrustManager());
         clientBuilder.hostnameVerifier((s, sslSession) -> true);
