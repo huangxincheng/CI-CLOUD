@@ -382,9 +382,11 @@ public class HttpUtils {
 //                        System.out.println("onResponse call = " + call.toString() + "response =" + response);
 //                    }
 //                });
-
-        String esUrl = "http://node1.es.sizne.net:9200/";
-        HttpResult result = HttpUtils.getInstance().doGet(esUrl);
-        System.out.println(result);
+        while (true) {
+            long i = System.currentTimeMillis();
+            String esUrl = "http://node1.es.sizne.net:9200/";
+            HttpResult result = HttpUtils.getInstance().doGet(esUrl);
+            System.out.println((System.currentTimeMillis() - i) + " ms   " + result);
+        }
     }
 }
