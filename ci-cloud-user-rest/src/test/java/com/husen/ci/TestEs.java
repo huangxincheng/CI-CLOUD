@@ -1,7 +1,7 @@
 package com.husen.ci;
 
+import com.husen.ci.es.ElasticSearchPage;
 import com.husen.ci.framework.json.JSONUtils;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -56,7 +56,8 @@ public class TestEs {
         MatchAllQueryBuilder matchAllQueryBuilder = QueryBuilders.matchAllQuery();
         boolQueryBuilder.must(matchAllQueryBuilder);
         SearchSourceBuilder searchSourceBuilder = sourceBuilder.query(boolQueryBuilder);
-        SearchResponse SEARCH = esBeanDao.search(searchSourceBuilder);
+//        SearchResponse SEARCH = esBeanDao.search(searchSourceBuilder);
+        ElasticSearchPage SEARCH = esBeanDao.searchToPage(searchSourceBuilder);
         System.out.println("SEARCH:" + JSONUtils.object2Json(SEARCH));
 //
 //        List<EsBean> SEARCHLIST = esBeanDao.searchToList(searchSourceBuilder);

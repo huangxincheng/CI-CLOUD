@@ -41,6 +41,8 @@ public abstract class ElasticSearchDao<T> {
 
     private static final int DEFAULT_PAGE_FROM = 0;
 
+    private static final int DEFAULT_PAGE_NO = 1;
+
     private static final int DEFAULT_PAGE_SIZE = 20;
 
     private ElasticSearchClient esClient = ElasticSearchClient.getInstance();
@@ -315,7 +317,7 @@ public abstract class ElasticSearchDao<T> {
      */
     public SearchResponse search(SearchSourceBuilder sourceBuilder) throws IOException {
         writeClassType();
-        writeSearchSourceBuild(sourceBuilder);
+        writeSearchSourceBuilder(sourceBuilder);
         String index = esClient.getIndex(clazzT);
         SearchRequest request = new SearchRequest(index).source(sourceBuilder);
         SearchResponse rsp = esClient.restClient.search(request, RequestOptions.DEFAULT);
@@ -401,19 +403,41 @@ public abstract class ElasticSearchDao<T> {
      * 写入SearchSourceBuild
      * @param builder
      */
-    private void writeSearchSourceBuild(SearchSourceBuilder builder) {
+    private void writeSearchSourceBuilder(SearchSourceBuilder builder) {
         builder.from(builder.from() < 0 ? DEFAULT_PAGE_FROM : builder.from());
         builder.size(builder.size() < 0 ? DEFAULT_PAGE_SIZE : builder.size());
     }
 
     /**
-     * 获取页码
+     * 获取页起始索引
+     * @param pageNo 页码
+     * @param pageSize 每页大小
+     * @return
+     */
+    private int getPageFrom(int pageNo, int pageSize) {
+        if (pageNo <= 0) {
+            pageNo = DEFAULT_PAGE_NO;
+        }
+        if (pageSize <= 0) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+        return (pageNo - 1) * pageSize;
+    }
+
+    /**
+     * 获取页数
      * @param pageFrom 起始页索引
      * @param pageSize 每页大小
      * @return
      */
     private int getPageNo(int pageFrom, int pageSize) {
-        return (pageFrom + pageSize - 1) / pageSize;
+        if (pageFrom < 0) {
+            pageFrom = DEFAULT_PAGE_FROM;
+        }
+        if (pageSize <= 0) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+        return  (pageFrom + pageSize) / pageSize;
     }
 
     /**
