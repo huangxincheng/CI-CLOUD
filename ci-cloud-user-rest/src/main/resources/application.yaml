@@ -42,3 +42,6 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 5000
+
+es:
+  address: node1.es.sizne.net:9200,node2.es.sizne.net:9200,node3.es.sizne.net:9200
