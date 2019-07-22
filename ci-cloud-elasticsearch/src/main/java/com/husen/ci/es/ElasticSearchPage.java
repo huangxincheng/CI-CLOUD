@@ -17,7 +17,7 @@ import java.util.List;
 public class ElasticSearchPage implements Serializable {
 
     /**
-     * 当前索引
+     * 当前页起始位置
      */
     private int pageFrom;
 
