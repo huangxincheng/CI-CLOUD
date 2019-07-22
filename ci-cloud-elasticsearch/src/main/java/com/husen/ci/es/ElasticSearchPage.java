@@ -44,5 +44,5 @@ public class ElasticSearchPage implements Serializable {
     /**
      * 记录对象
      */
-    private List<? extends  Object> records;
+    private List<?> records;
 }
