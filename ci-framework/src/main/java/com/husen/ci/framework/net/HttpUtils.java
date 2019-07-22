@@ -56,6 +56,7 @@ public class HttpUtils {
         clientBuilder.readTimeout(10, TimeUnit.SECONDS)
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
                 .connectionPool(new ConnectionPool(50, 5, TimeUnit.MINUTES));
 //        支持HTTPS请求，跳过证书验证
         clientBuilder.sslSocketFactory(createSSLSocketFactory(), new MyX509TrustManager());
