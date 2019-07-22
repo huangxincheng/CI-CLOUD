@@ -15,6 +15,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ElasticSearchDomId {
 
-    String value() default "";
 
 }
