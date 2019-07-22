@@ -91,7 +91,7 @@ public class HttpUtils {
      * @param headers
      * @return
      */
-    private Request.Builder bodyBuilder(Map<String,Serializable> headers) {
+    private Request.Builder rawBodyBuilder(Map<String,Serializable> headers) {
         Request.Builder builder = new Request.Builder();
         if (headers != null && headers.size() > 0) {
             headers.forEach((s, o) -> {
@@ -159,7 +159,7 @@ public class HttpUtils {
      */
     public HttpResult doPostBody(String url, String bodyData, Map<String, Serializable> headers) {
         RequestBody body = RequestBody.create(applicationJsonMediaType, bodyData);
-        Request.Builder builder = bodyBuilder(headers);
+        Request.Builder builder = rawBodyBuilder(headers);
         Request request = builder.post(body).url(url).build();
         Call call = okHttpClient.newCall(request);
         return syncExecute(call);
@@ -174,7 +174,7 @@ public class HttpUtils {
      */
     public void doPostBodyWithAsync(String url, String bodyData, Map<String, Serializable> headers, Callback callback) {
         RequestBody body = RequestBody.create(applicationJsonMediaType, bodyData);
-        Request.Builder builder = bodyBuilder(headers);
+        Request.Builder builder = rawBodyBuilder(headers);
         Request request = builder.post(body).url(url).build();
         Call call = okHttpClient.newCall(request);
         asyncExecute(call, callback);
@@ -219,7 +219,7 @@ public class HttpUtils {
      */
     public HttpResult doPutBody(String url, String bodyData, Map<String,Serializable> headers)  {
         RequestBody body = RequestBody.create(applicationJsonMediaType, bodyData);
-        Request.Builder builder = bodyBuilder(headers);
+        Request.Builder builder = rawBodyBuilder(headers);
         Request request = builder.put(body).url(url).build();
         Call call = okHttpClient.newCall(request);
         return syncExecute(call);
@@ -234,7 +234,7 @@ public class HttpUtils {
      */
     public void doPutBodyWithAsync(String url, String bodyData, Map<String,Serializable> headers, Callback callback)  {
         RequestBody body = RequestBody.create(applicationJsonMediaType, bodyData);
-        Request.Builder builder = bodyBuilder(headers);
+        Request.Builder builder = rawBodyBuilder(headers);
         Request request = builder.put(body).url(url).build();
         Call call = okHttpClient.newCall(request);
         asyncExecute(call, callback);
@@ -247,7 +247,7 @@ public class HttpUtils {
      * @return
      */
     public HttpResult doDelete(String url, Map<String, Serializable> headers)  {
-        Request.Builder builder = bodyBuilder(headers);
+        Request.Builder builder = rawBodyBuilder(headers);
         Request request = builder.delete().url(url).build();
         Call call = okHttpClient.newCall(request);
         return syncExecute(call);
@@ -262,7 +262,7 @@ public class HttpUtils {
      */
     public HttpResult doDeleteBody(String url, String bodyData, Map<String,Serializable> headers)  {
         RequestBody body = RequestBody.create(applicationJsonMediaType, bodyData);
-        Request.Builder builder = bodyBuilder(headers);
+        Request.Builder builder = rawBodyBuilder(headers);
         Request request = builder.delete(body).url(url).build();
         Call call = okHttpClient.newCall(request);
         return syncExecute(call);
@@ -275,7 +275,7 @@ public class HttpUtils {
      * @param callback
      */
     public void doDeleteWithAsync(String url, Map<String, Serializable> headers, Callback callback) {
-        Request.Builder builder = bodyBuilder(headers);
+        Request.Builder builder = rawBodyBuilder(headers);
         Request request = builder.delete().url(url).build();
         Call call = okHttpClient.newCall(request);
         asyncExecute(call, callback);
@@ -290,7 +290,7 @@ public class HttpUtils {
      */
     public void doDeleteBodyWithAsync(String url, String bodyData, Map<String,Serializable> headers, Callback callback) {
         RequestBody body = RequestBody.create(applicationJsonMediaType, bodyData);
-        Request.Builder builder = bodyBuilder(headers);
+        Request.Builder builder = rawBodyBuilder(headers);
         Request request = builder.delete(body).url(url).build();
         Call call = okHttpClient.newCall(request);
         asyncExecute(call, callback);
