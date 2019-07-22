@@ -87,13 +87,13 @@ public class ElasticSearchClient {
     }
 
 
-    protected String getIndex(Class clazz) {
+    String getIndex(Class clazz) {
         ElasticSearchIndex annotation = AnnotationUtils.findAnnotation(clazz, ElasticSearchIndex.class);
         Assert.notNull(annotation, "index must not be null!");
         return annotation.index();
     }
 
-    protected String getDomId(Object object) {
+    String getDomId(Object object) {
         String domIdValue = null;
         for (Field field : object.getClass().getDeclaredFields()) {
             field.setAccessible(true);
