@@ -55,7 +55,7 @@ public class JacksonUtils {
         Map<String, Map<String, Object>> map = OBJECT_MAPPER.readValue(jsonStr,
                 new TypeReference<Map<String, T>>() {
                 });
-        Map<String, T> result = new HashMap<String, T>();
+        Map<String, T> result = new HashMap<>(map.size());
         for (Map.Entry<String, Map<String, Object>> entry : map.entrySet()) {
             result.put(entry.getKey(), map2pojo(entry.getValue(), clazz));
         }
@@ -70,7 +70,7 @@ public class JacksonUtils {
         List<Map<String, Object>> list = OBJECT_MAPPER.readValue(jsonArrayStr,
                 new TypeReference<List<T>>() {
                 });
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
         for (Map<String, Object> map : list) {
             result.add(map2pojo(map, clazz));
         }
