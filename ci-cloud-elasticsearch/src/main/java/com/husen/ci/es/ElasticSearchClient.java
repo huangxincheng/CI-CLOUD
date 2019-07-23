@@ -49,7 +49,9 @@ public class ElasticSearchClient {
      */
     public static void destroy() {
         try {
-            ElasticSearchClient.getInstance().restClient.close();
+            if (ElasticSearchClient.getInstance().restClient != null) {
+                ElasticSearchClient.getInstance().restClient.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
