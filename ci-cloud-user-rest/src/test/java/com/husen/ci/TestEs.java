@@ -49,7 +49,10 @@ public class TestEs {
 //                new String[]{"6d734eea-bcf1-4eca-a64b-6fd5a20b40ee", "046d7cd3-28e6-4cc5-b2a0-b6ac2c07e388",
 //                        "5b9c901a-606c-4602-b93d-acf8fbaa94fc", "123123123213"});
 //        System.out.println("MGETMAP:" + JSONUtils.object2Json(mgetMap));
-//
+
+        boolean ping = esBeanDao.ping();
+        System.out.println(ping);
+
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         sourceBuilder.from(0);
         sourceBuilder.size(20);

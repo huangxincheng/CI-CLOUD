@@ -431,6 +431,14 @@ public abstract class ElasticSearchDao<T> {
     }
 
 
+    /**
+     * The ping
+     * @return
+     * @throws IOException
+     */
+    public boolean ping() throws IOException {
+        return esClient.getRestClient().ping(RequestOptions.DEFAULT);
+    }
 
 
     /**
