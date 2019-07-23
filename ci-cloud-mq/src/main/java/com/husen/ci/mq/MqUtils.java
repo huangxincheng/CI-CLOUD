@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
-
 /***
  @Author:MrHuang
  @Date: 2019/6/28 18:23
@@ -22,7 +20,7 @@ public class MqUtils {
 
     private static RocketMQTemplate rocketMQTemplate;
 
-    private static String buildDestination(String topic, String tags) {
+    private static String getDestination(String topic, String tags) {
         if (StringUtils.isBlank(topic)) {
             throw new MqException("The MqUtils topic not null");
         }
@@ -44,7 +42,7 @@ public class MqUtils {
      * @return
      */
     public static SendResult syncSend(String topic, String tags, Object payload) {
-       return rocketMQTemplate.syncSend(buildDestination(topic, tags), payload);
+       return rocketMQTemplate.syncSend(getDestination(topic, tags), payload);
     }
 
     /**
@@ -64,7 +62,7 @@ public class MqUtils {
      * @param sendCallback
      */
     public static void asyncSend(String topic, String tags, Object payload, SendCallback sendCallback) {
-        rocketMQTemplate.asyncSend(buildDestination(topic, tags), payload, sendCallback);
+        rocketMQTemplate.asyncSend(getDestination(topic, tags), payload, sendCallback);
     }
 
     /**
@@ -87,7 +85,7 @@ public class MqUtils {
      * messageDelayLevel=1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
      */
     public static SendResult syncSendDelay(String topic, String tags, Object payload, int delayLevel) {
-        return rocketMQTemplate.syncSend(buildDestination(topic, tags), MessageBuilder.withPayload(payload).build(),
+        return rocketMQTemplate.syncSend(getDestination(topic, tags), MessageBuilder.withPayload(payload).build(),
                 rocketMQTemplate.getProducer().getSendMsgTimeout(), delayLevel);
     }
 
@@ -113,7 +111,7 @@ public class MqUtils {
      * @param delayLevel
      */
     public static void asyncSendDelay(String topic, String tags,  Object payload, SendCallback sendCallback, int delayLevel) {
-        rocketMQTemplate.asyncSend(buildDestination(topic, tags), MessageBuilder.withPayload(payload).build(), sendCallback,
+        rocketMQTemplate.asyncSend(getDestination(topic, tags), MessageBuilder.withPayload(payload).build(), sendCallback,
                 rocketMQTemplate.getProducer().getSendMsgTimeout(), delayLevel);
     }
 
@@ -137,7 +135,7 @@ public class MqUtils {
      * @return
      */
     public static SendResult syncSendOrderly(String topic, String tags, Object payload, String hashKey) {
-        return rocketMQTemplate.syncSendOrderly(buildDestination(topic, tags), payload, hashKey);
+        return rocketMQTemplate.syncSendOrderly(getDestination(topic, tags), payload, hashKey);
     }
 
     /**
@@ -160,7 +158,7 @@ public class MqUtils {
      * @return
      */
     public static void asyncSendOrderly(String topic, String tags, Object payload, String hashKey, SendCallback sendCallback) {
-        rocketMQTemplate.asyncSendOrderly(buildDestination(topic, tags), payload, hashKey, sendCallback);
+        rocketMQTemplate.asyncSendOrderly(getDestination(topic, tags), payload, hashKey, sendCallback);
     }
 
     /**
@@ -185,7 +183,7 @@ public class MqUtils {
      * @param payload
      */
     public static void sendOneWay(String topic, String tags, Object payload) {
-        rocketMQTemplate.sendOneWay(buildDestination(topic, tags), payload);
+        rocketMQTemplate.sendOneWay(getDestination(topic, tags), payload);
     }
 
     /**
@@ -208,7 +206,7 @@ public class MqUtils {
      * @param payload
      */
     public static void sendOneWayOrderly(String topic, String tags, Object payload, String hashKey) {
-        rocketMQTemplate.sendOneWayOrderly(buildDestination(topic, tags), payload, hashKey);
+        rocketMQTemplate.sendOneWayOrderly(getDestination(topic, tags), payload, hashKey);
     }
 
     /**
@@ -233,7 +231,7 @@ public class MqUtils {
      * @return
      */
     public static TransactionSendResult sendMessageInTransaction(String txProducerGroup, String topic, String tags, Object payload, Object arg) {
-        return rocketMQTemplate.sendMessageInTransaction(txProducerGroup, buildDestination(topic,tags),MessageBuilder.withPayload(payload).build(), arg);
+        return rocketMQTemplate.sendMessageInTransaction(txProducerGroup, getDestination(topic,tags),MessageBuilder.withPayload(payload).build(), arg);
     }
 
 
