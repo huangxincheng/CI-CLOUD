@@ -426,8 +426,7 @@ public abstract class ElasticSearchDao<T> {
     public Map<String, MappingMetaData> getMapping() throws IOException {
         writeClassType();
         String index = esClient.getIndex(clazzT);
-        GetMappingsRequest request = new GetMappingsRequest();
-        request.indices(index);
+        GetMappingsRequest request = new GetMappingsRequest().indices(index);
         return esClient.getRestClient().indices().getMapping(request, RequestOptions.DEFAULT).mappings();
     }
 
