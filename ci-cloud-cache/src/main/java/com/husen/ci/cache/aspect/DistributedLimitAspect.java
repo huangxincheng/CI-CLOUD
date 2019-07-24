@@ -40,7 +40,8 @@ public class DistributedLimitAspect {
         String limitKey = StringUtils.isEmpty(annotationAttributes.get("value")) ? point.getSignature().getDeclaringTypeName() + "#" + point.getSignature().getName() : (String)annotationAttributes.get("value");
         int limitNum = distributedLimit.limitNum();
         int expireSecond = distributedLimit.expireSecond();
-        boolean isLimit = DistributedLimitUtils.isLimit(limitKey, limitNum, expireSecond);
+        String distributedLimitKey = DEFAULT_LIMIT_KEY_PRE + limitKey;
+        boolean isLimit = DistributedLimitUtils.isLimit(distributedLimitKey, limitNum, expireSecond);
         log.info("DistributedLimitAspect isLimit = {}", isLimit);
         if (isLimit) {
             throw new GlobalCallException("接口限流");
