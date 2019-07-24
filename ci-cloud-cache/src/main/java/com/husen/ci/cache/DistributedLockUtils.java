@@ -69,7 +69,7 @@ public class DistributedLockUtils {
      * @param call 执行的代码块
      * @return
      */
-    public static void tryLockWithNotBlock(String lockKey, String clientId, int expireSecond, DistributedLockCall call) {
+    public static void tryLockWithNotBlock(String lockKey, String clientId, int expireSecond, DistributedCall call) {
         boolean lock = getNoBlockLock(lockKey, clientId, expireSecond);
         if (lock) {
             try {
@@ -90,7 +90,7 @@ public class DistributedLockUtils {
      * @param call 执行的代码块
      * @return
      */
-    public static void tryLockWithBlock(String lockKey, String clientId, int expireSecond, long blockMilliSecond, long sleppMilliSecond, DistributedLockCall call) {
+    public static void tryLockWithBlock(String lockKey, String clientId, int expireSecond, long blockMilliSecond, long sleppMilliSecond, DistributedCall call) {
         boolean lock = getBlockLock(lockKey, clientId, expireSecond, blockMilliSecond, sleppMilliSecond);
         if (lock) {
             try {

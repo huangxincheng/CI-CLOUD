@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.*;
-import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -32,39 +31,6 @@ public class RedisUtils {
     private static SetOperations<String, String> sos;
 
     private static ZSetOperations<String, String> zsos;
-
-    /**
-     * 获取不阻塞的锁成功返回：1
-     */
-    private static final Long LOCK_SUCCESS = 1L;
-
-    /**
-     * 获取不阻塞的锁lua脚本
-     */
-    private static final String NO_BLOCK_LOCK_SCRIPT = "if redis.call('set', KEYS[1], ARGV[1], 'NX', 'EX', ARGV[2]) then return 1 else return 0 end";
-
-    /**
-     * 释放锁lua脚本
-     */
-    private static final String RELEASE_LOCK_SCRIPT = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
-    /**
-     * 限流 如果已限流返回：0
-     */
-    private static final Long LIMIT_FAIL = 0L;
-    /**
-     * 限流 lua脚本
-     */
-    private static final String LIMIT_SCRIPT =
-                    "local key = KEYS[1] \n" +
-                    "local limit = tonumber(ARGV[1])\n" +
-                    "local curentLimit = tonumber(redis.call('get', key) or '0')\n" +
-                    "if curentLimit + 1 > limit then\n" +
-                    "    return 0;\n" +
-                    "else\n" +
-                    "    redis.call('INCRBY', key, 1)\n" +
-                    "    redis.call('EXPIRE', key, ARGV[2])\n" +
-                    "    return curentLimit + 1\n" +
-                    "end";
 
 
     @Autowired
@@ -189,27 +155,6 @@ public class RedisUtils {
             return null;
         }
     }
-
-
-    /**
-     * 是否限流
-     * @return
-     *      true  已达到限流标准
-     *      false 未达到限流标准
-     */
-    public static boolean isLimit(String limitKey, long limitNum, long expireSecond) {
-        RedisScript<Long> redisScript = RedisScript.of(LIMIT_SCRIPT, Long.class);
-        Long result = template.execute(redisScript, Collections.singletonList(limitKey), String.valueOf(limitNum), String.valueOf(expireSecond));
-        if(LIMIT_FAIL.equals(result)){
-            return true;
-        }
-        return false;
-    }
-
-
-
-
-
 
 
     /***--------------------------- String ------------------------------- ***/

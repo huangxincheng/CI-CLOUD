@@ -7,7 +7,7 @@ package com.husen.ci.cache;
  @VERSION: 1.0
  ***/
 @FunctionalInterface
-public interface DistributedLockCall {
+public interface DistributedCall {
 
     void call();
 }

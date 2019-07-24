@@ -25,6 +25,9 @@ import java.util.UUID;
 @Component
 public class DistributedLockAspect {
 
+    /**
+     * 分布式锁前缀
+     */
     private static final String DEFAULT_LOCK_KEY_PRE = "DistributedLock:";
 
     /**
