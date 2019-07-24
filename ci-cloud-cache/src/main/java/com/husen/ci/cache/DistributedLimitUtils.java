@@ -20,11 +20,12 @@ import java.util.Collections;
 public class DistributedLimitUtils {
 
     /**
-     * 限流 如果已限流返回：0
+     * 限流。
+     * 如果已限流返回：0
      */
     private static final Long LIMIT_FAIL = 0L;
     /**
-     * 限流 lua脚本
+     * 限流的lua脚本
      */
     private static final String LIMIT_SCRIPT =  "local key = KEYS[1] \n" +
                                                 "local limit = tonumber(ARGV[1])\n" +
@@ -54,10 +55,7 @@ public class DistributedLimitUtils {
     public static boolean isLimit(String limitKey, long limitNum, long expireSecond) {
         RedisScript<Long> redisScript = RedisScript.of(LIMIT_SCRIPT, Long.class);
         Long result = template.execute(redisScript, Collections.singletonList(limitKey), String.valueOf(limitNum), String.valueOf(expireSecond));
-        if(LIMIT_FAIL.equals(result)){
-            return true;
-        }
-        return false;
+        return LIMIT_FAIL.equals(result);
     }
 
     /**

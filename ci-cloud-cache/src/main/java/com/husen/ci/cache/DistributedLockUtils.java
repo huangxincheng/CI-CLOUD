@@ -55,10 +55,7 @@ public class DistributedLockUtils {
     public static boolean getNoBlockLock(String lockKey, String clientId, int expireSecond) {
         RedisScript<Long> redisScript = RedisScript.of(NO_BLOCK_LOCK_SCRIPT, Long.class);
         Long result = template.execute(redisScript, Collections.singletonList(lockKey), clientId, String.valueOf(expireSecond));
-        if(LOCK_SUCCESS.equals(result)){
-            return true;
-        }
-        return false;
+        return LOCK_SUCCESS.equals(result);
     }
 
     /**
@@ -137,9 +134,6 @@ public class DistributedLockUtils {
     public static boolean releaseLock(String lockKey, String clientId){
         RedisScript<Long> redisScript = new DefaultRedisScript<>(RELEASE_LOCK_SCRIPT, Long.class);
         Long result = template.execute(redisScript, Collections.singletonList(lockKey), clientId);
-        if(LOCK_SUCCESS.equals(result)) {
-            return true;
-        }
-        return false;
+        return LOCK_SUCCESS.equals(result);
     }
 }
