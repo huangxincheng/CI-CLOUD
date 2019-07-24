@@ -1,5 +1,6 @@
 package com.husen.ci.user.service;
 
+import com.husen.ci.cache.annotation.DistributedLimit;
 import com.husen.ci.user.dao.CustomerDao;
 import com.husen.ci.user.dao.MenuDao;
 import com.husen.ci.user.dao.RoleDao;
@@ -42,6 +43,7 @@ public class AuthorityServiceImpl implements IAuthorityService {
         customerDao.updateById(customerDTO);
     }
 
+    @DistributedLimit(limitNum = 1, expireSecond = 10000)
     @Override
     public CustomerDTO findCustomeById(String id) {
         return customerDao.findById(id);

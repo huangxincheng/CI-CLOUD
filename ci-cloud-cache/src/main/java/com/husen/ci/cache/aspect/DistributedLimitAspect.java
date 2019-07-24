@@ -4,7 +4,7 @@ import com.husen.ci.cache.DistributedLimitUtils;
 import com.husen.ci.cache.annotation.DistributedLimit;
 import com.husen.ci.framework.api.GlobalCallException;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -34,7 +34,7 @@ public class DistributedLimitAspect {
      * @annotation(distributedLock) 切入点
      */
     @Before("@annotation(distributedLimit)")
-    public void before(ProceedingJoinPoint point, DistributedLimit distributedLimit){
+    public void before(JoinPoint point, DistributedLimit distributedLimit){
         // 获取注解值
         Map<String, Object> annotationAttributes = AnnotationUtils.getAnnotationAttributes(distributedLimit);
         String limitKey = StringUtils.isEmpty(annotationAttributes.get("value")) ? point.getSignature().getDeclaringTypeName() + "#" + point.getSignature().getName() : (String)annotationAttributes.get("value");

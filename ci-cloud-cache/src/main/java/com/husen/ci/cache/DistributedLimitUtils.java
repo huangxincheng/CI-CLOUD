@@ -1,9 +1,11 @@
 package com.husen.ci.cache;
 
 import com.husen.ci.framework.api.GlobalCallException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 
@@ -13,6 +15,8 @@ import java.util.Collections;
  @DESC: TODO
  @VERSION: 1.0
  ***/
+@Slf4j
+@Component
 public class DistributedLimitUtils {
 
     /**
